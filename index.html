@@ -706,11 +706,13 @@
         };
         // 점수 저장/불러오기 함수
         function saveScore(score) {
-            const today = new Date().toDateString();
+            const now = new Date();
+            const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+            const today = kst.toDateString();
             const scoreData = {
                 score: score,
                 date: today,
-                timestamp: new Date().getTime()
+                timestamp: kst.getTime()
             };
             localStorage.setItem('dailyScore', JSON.stringify(scoreData));
         }
@@ -719,7 +721,9 @@
             const saved = localStorage.getItem('dailyScore');
             if (saved) {
                 const scoreData = JSON.parse(saved);
-                const today = new Date().toDateString();
+                const now = new Date();
+                const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+                const today = kst.toDateString();
                 
                 // 오늘 날짜와 같으면 불러오기
                 if (scoreData.date === today) {
@@ -742,7 +746,9 @@
             const saved = localStorage.getItem('dailyScore');
             if (saved) {
                 const scoreData = JSON.parse(saved);
-                const yesterday = new Date();
+                const now = new Date();
+                const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+                const yesterday = new Date(kst);
                 yesterday.setDate(yesterday.getDate() - 1);
                 
                 if (scoreData.date === yesterday.toDateString()) {

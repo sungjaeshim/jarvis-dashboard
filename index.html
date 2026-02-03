@@ -27,82 +27,82 @@
             margin-bottom: 12px;
         }
 
-        /* 오늘 집중 섹션 */
+        /* 문제 정의 섹션 */
+        .problem-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+        .problem-title { font-size: 1rem; font-weight: 700; color: #ef4444; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .problem-question { font-size: 1rem; font-weight: 600; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px; }
+        .problem-questions { font-size: 0.85rem; color: #94a3b8; margin-top: 10px; }
+        .problem-questions li { margin-bottom: 6px; padding-left: 20px; position: relative; }
+        .problem-questions li::before { content: '→'; position: absolute; left: 0; color: #ef4444; }
+
+        /* 환경 세팅 섹션 */
+        .env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+        .env-card { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 12px; border-left: 4px solid #10b981; }
+        .env-icon { font-size: 1.2rem; margin-bottom: 6px; }
+        .env-title { font-size: 0.85rem; font-weight: 700; color: #10b981; margin-bottom: 6px; }
+        .env-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
+        .env-check { margin-top: 8px; font-size: 0.7rem; color: #64748b; }
+
+        /* 순서 최적화 */
+        .order-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+            border: 2px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .order-title { font-size: 0.95rem; font-weight: 700; color: #8b5cf6; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .order-list { list-style: none; }
+        .order-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; margin-bottom: 8px; }
+        .order-num { font-size: 1.2rem; font-weight: 700; color: #8b5cf6; width: 30px; }
+        .order-text { font-size: 0.8rem; flex: 1; }
+        .order-impact { font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.2); padding: 2px 6px; border-radius: 4px; }
+
+        /* 살아있음 체크 */
+        .alive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .alive-item { text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 10px; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; }
+        .alive-item:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .alive-icon { font-size: 1.5rem; margin-bottom: 6px; }
+        .alive-label { font-size: 0.7rem; color: #94a3b8; }
+        .alive-value { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-top: 4px; }
+
+        /* 오늘 집중 */
         .focus-card {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
             border: 2px solid #10b981;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
         }
         .focus-title { font-size: 1rem; font-weight: 700; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .focus-content { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; line-height: 1.6; }
-        .focus-sub { font-size: 0.8rem; color: #94a3b8; margin-top: 8px; }
+        .focus-content { font-size: 1.1rem; font-weight: 600; color: #f1f5f9; line-height: 1.5; }
+        .focus-sub { font-size: 0.75rem; color: #94a3b8; margin-top: 8px; }
 
-        /* 질문 카드 */
-        .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+        /* 질문 루틴 */
+        .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
         .question-card { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 12px; border-left: 4px solid; }
         .morning-card { border-color: #f59e0b; }
         .evening-card { border-color: #8b5cf6; }
-        .question-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-        .question-icon { font-size: 1rem; }
-        .question-type { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .question-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+        .question-type { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
         .morning-type { color: #f59e0b; }
         .evening-type { color: #8b5cf6; }
-        .question-text { font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
-        .question-purpose { font-size: 0.7rem; color: #64748b; }
+        .question-text { font-size: 0.8rem; font-weight: 600; }
 
         /* 인사이트 확장 */
         .insight-expansion { background: rgba(15, 23, 42, 0.6); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-        .insight-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; }
-        .insight-title { font-size: 0.8rem; font-weight: 700; color: #10b981; }
-        .insight-source { font-size: 0.65rem; color: #64748b; background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 4px; }
-        .insight-content { font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; line-height: 1.5; }
-        .insight-expansion-title { font-size: 0.75rem; font-weight: 600; color: #8b5cf6; margin-bottom: 6px; }
+        .insight-title { font-size: 0.8rem; font-weight: 700; color: #10b981; margin-bottom: 8px; }
+        .insight-content { font-size: 0.75rem; color: #94a3b8; margin-bottom: 10px; }
         .expansion-list { list-style: none; }
         .expansion-item { padding: 6px 10px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; margin-bottom: 6px; font-size: 0.7rem; border-left: 2px solid #8b5cf6; }
 
-        /* 외부 정보 피드 */
-        .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
-        .feed-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
-        .feed-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-        .feed-icon { font-size: 0.9rem; }
-        .feed-source { font-size: 0.7rem; font-weight: 600; color: #3b82f6; }
-        .feed-item { font-size: 0.75rem; color: #94a3b8; padding: 6px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.3); }
-        .feed-item:last-child { border-bottom: none; }
-
-        /* 지표 */
-        .metric-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .metric-card { text-align: center; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
-        .metric-value { font-size: 1.1rem; font-weight: 700; }
-        .metric-label { font-size: 0.6rem; color: #64748b; margin-top: 2px; }
-
-        /* 우선순위 */
-        .priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
-        .priority-card { background: rgba(15, 23, 42, 0.7); border-left: 4px solid; border-radius: 8px; padding: 12px; }
-        .priority-high { border-color: #ef4444; }
-        .priority-medium { border-color: #f59e0b; }
-        .priority-low { border-color: #3b82f6; }
-        .priority-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .priority-title { font-size: 0.8rem; font-weight: 600; }
-        .priority-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; }
-        .high-badge { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-        .medium-badge { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-        .low-badge { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-        .priority-content { font-size: 0.75rem; color: #94a3b8; }
-
-        /* 액션 아이템 */
-        .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
-        .action-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
-        .action-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .action-title { font-size: 0.8rem; font-weight: 600; }
-        .action-status { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; }
-        .status-done { background: #059669; }
-        .status-progress { background: #d97706; }
-        .status-todo { background: #475569; }
-        .action-desc { font-size: 0.7rem; color: #64748b; }
-
-        /* 점수 */
+        /* 성장 점수 */
         .score-bar { height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; margin-top: 6px; }
         .score-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.5s; }
         .score-header { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px; }
@@ -110,15 +110,14 @@
         .score-value { font-weight: 700; }
 
         @media (max-width: 768px) {
-            .metric-grid { grid-template-columns: repeat(2, 1fr); }
-            .question-grid { grid-template-columns: 1fr; }
-            .feed-grid { grid-template-columns: 1fr; }
-            .priority-grid { grid-template-columns: 1fr; }
+            .env-grid { grid-template-columns: 1fr; }
+            .order-list { flex-direction: column; }
+            .order-item { flex-direction: column; text-align: center; }
+            .alive-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 480px) {
             body { padding: 10px; }
             h1 { font-size: 1.2rem; }
-            .focus-content { font-size: 1rem; }
         }
     </style>
 </head>
@@ -126,8 +125,8 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>🤖 성재님 성장 센터 10.0</h1>
-                <p class="subtitle">메타인지 | 통합적 사고 | 인사이트 확장 | 최신 정보 | 자비스 활용</p>
+                <h1>🤖 성재님 성장 센터 11.0</h1>
+                <p class="subtitle">문제 정의 | 환경 세팅 | 순서 최적화 | 살아있음 체크</p>
             </div>
             <div style="text-align: right;">
                 <p style="color: #10b981; font-size: 0.8rem;">● 온라인</p>
@@ -135,342 +134,289 @@
             </div>
         </div>
 
-        <!-- 1. 오늘 집중할 것 1개 -->
-        <div class="focus-card">
-            <div class="focus-title">🎯 오늘 집중할 것 (1 Thing)</div>
-            <div class="focus-content" id="focus-today">대시보드를 10점 만점으로 완성하기</div>
-            <div class="focus-sub">이것만 완료하면 오늘은 성공입니다. 다른 모든 것은 보너스입니다.</div>
+        <!-- 1. 문제 정의 (5 Questions) -->
+        <div class="section">
+            <div class="problem-card">
+                <div class="problem-title">🎯 문제 정의 (Problem Definition)</div>
+                <div class="problem-question" id="problem-today">내가 풀려고 하는 문제가 정확히 뭔가?</div>
+                <div class="problem-questions">
+                    <ol>
+                        <li>이 문제를 왜 해결하려고 하는가?</li>
+                        <li>문제 정의가 명확한가? (말로 설명할 수 있는가?)</li>
+                        <li>다른 사람도 이 문제를 똑같이 이해하는가?</li>
+                        <li>문제 해결의 성공 기준이 명확한가?</li>
+                        <li>"Talk is cheap. Show me the talk" → 말이 코드보다 중요하다</li>
+                    </ol>
+                </div>
+            </div>
         </div>
 
-        <!-- 2. 오전/저녁 질문 -->
+        <!-- 2. 환경 세팅 (Environment Setup) -->
+        <div class="section">
+            <div class="section-title">⚙️ 환경 세팅 (Environment Setup)</div>
+            <div class="env-grid">
+                <div class="env-card">
+                    <div class="env-icon">🔕</div>
+                    <div class="env-title">알림 차단</div>
+                    <div class="env-desc">전화기 무음, 슬랙/카톡 알림 끄기</div>
+                    <div class="env-check">✅ 방해 요소 제거</div>
+                </div>
+                <div class="env-card">
+                    <div class="env-icon">🎧</div>
+                    <div class="env-title">집중 도구</div>
+                    <div class="env-desc">이어폰, 노이즈 캔슬링, 백색 소음</div>
+                    <div class="env-check">✅ 심리적 장벽 구축</div>
+                </div>
+                <div class="env-card">
+                    <div class="env-icon">📁</div>
+                    <div class="env-title">작업 공간</div>
+                    <div class="env-desc">필요한 탭만 열기, 클린 데스크</div>
+                    <div class="env-check">✅ 인지 부하 최소화</div>
+                </div>
+                <div class="env-card">
+                    <div class="env-icon">⏱️</div>
+                    <div class="env-title">타이머 설정</div>
+                    <div class="env-desc">25분 Pomodoro 또는 90분 Deep Work</div>
+                    <div class="env-check">✅ 시간 박스 명확화</div>
+                </div>
+                <div class="env-card">
+                    <div class="env-icon">💧</div>
+                    <div class="env-title">물 & 간식</div>
+                    <div class="env-desc">물 한 잔, 가벼운 간식 준비</div>
+                    <div class="env-check">✅ 기본 욕구 충족</div>
+                </div>
+                <div class="env-card">
+                    <div class="env-icon">🎯</div>
+                    <div class="env-title">RPM 전략</div>
+                    <div class="env-desc">목표, 맥락, 시작 지점 미리 정하기</div>
+                    <div class="env-check">✅ Save Point 설정</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 순서 최적화 (Order Optimization) -->
+        <div class="section">
+            <div class="order-card">
+                <div class="order-title">🔢 순서 최적화 (First Things First)</div>
+                <div class="order-list">
+                    <div class="order-item">
+                        <div class="order-num">1</div>
+                        <div class="order-text">가장 중요하고 어려운 것 먼저</div>
+                        <div class="order-impact">나머지가 쉬워짐</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-num">2</div>
+                        <div class="order-text">의사결정이 필요한 것 먼저</div>
+                        <div class="order-impact">에너지 높을 때 처리</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-num">3</div>
+                        <div class="order-text">다른 사람을 기다리는 것 먼저</div>
+                        <div class="order-impact">병목 제거</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-num">4</div>
+                        <div class="order-text">빠르게 끝낼 수 있는 것</div>
+                        <div class="order-impact">킬킬 미분 빌드업</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-num">5</div>
+                        <div class="order-text"> routine/자동화 가능한 것</div>
+                        <div class="order-impact">나중에 AI 위임</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 살아있음 체크 (Aliveness Check) -->
+        <div class="section">
+            <div class="section-title">❤️ 살아있음 체크 (Am I Alive?)</div>
+            <div class="alive-grid">
+                <div class="alive-item" onclick="toggleAlive(this)">
+                    <div class="alive-icon">🧠</div>
+                    <div class="alive-label">생각의 흐름</div>
+                    <div class="alive-value">중간</div>
+                </div>
+                <div class="alive-item" onclick="toggleAlive(this)">
+                    <div class="alive-icon">⚡</div>
+                    <div class="alive-label">에너지 레벨</div>
+                    <div class="alive-value">중간</div>
+                </div>
+                <div class="alive-item" onclick="toggleAlive(this)">
+                    <div class="alive-icon">🎯</div>
+                    <div class="alive-label">몰입 상태</div>
+                    <div class="alive-value">중간</div>
+                </div>
+                <div class="alive-item" onclick="toggleAlive(this)">
+                    <div class="alive-icon">😊</div>
+                    <div class="alive-label">기분 상태</div>
+                    <div class="alive-value">중간</div>
+                </div>
+                <div class="alive-item" onclick="toggleAlive(this)">
+                    <div class="alive-icon">💪</div>
+                    <div class="alive-label">신체 감각</div>
+                    <div class="alive-value">중간</div>
+                </div>
+                <div class="alive-item" onclick="toggleAlive(this)">
+                    <div class="alive-icon">🌊</div>
+                    <div class="alive-label">호기심</div>
+                    <div class="alive-value">중간</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 오늘 집중할 것 1개 -->
+        <div class="section">
+            <div class="focus-card">
+                <div class="focus-title">🎯 오늘 집중할 것 (1 Thing)</div>
+                <div class="focus-content" id="focus-today">대시보드에 문제 정의, 환경 세팅, 순서, 살아있음 추가하기</div>
+                <div class="focus-sub">이것만 완료하면 오늘은 성공입니다. 다른 모든 것은 보너스입니다.</div>
+            </div>
+        </div>
+
+        <!-- 6. 오전/저녁 질문 -->
         <div class="section">
             <div class="section-title">🌅🌙 질문 루틴 (Reflection Loop)</div>
             <div class="question-grid">
-                <!-- 오전 질문 -->
                 <div class="question-card morning-card">
                     <div class="question-header">
-                        <span class="question-icon">🌅</span>
-                        <span class="question-type morning-type">오전 (Activation)</span>
+                        <span>🌅</span>
+                        <span class="question-type morning-type">오전</span>
                     </div>
-                    <div class="question-text">1. 어제 뭘 했나? 오늘 뭘 할까?</div>
-                    <div class="question-purpose">회상 + 계획 → 맥락 연결</div>
+                    <div class="question-text">1. 문제 정의: 내가 풀 문제가 뭐지?</div>
                 </div>
                 <div class="question-card morning-card">
                     <div class="question-header">
-                        <span class="question-icon">🎯</span>
-                        <span class="question-type morning-type">오전 (Prioritization)</span>
+                        <span>🌅</span>
+                        <span class="question-type morning-type">오전</span>
                     </div>
-                    <div class="question-text">2. 오늘 가장 중요한 한 가지는?</div>
-                    <div class="question-purpose">우선순위 명확화 → 집중력</div>
+                    <div class="question-text">2. 환경 세팅: 어떻게 준비할까?</div>
                 </div>
                 <div class="question-card morning-card">
                     <div class="question-header">
-                        <span class="question-icon">💰</span>
-                        <span class="question-type morning-type">오전 (Goal Alignment)</span>
+                        <span>🌅</span>
+                        <span class="question-type morning-type">오전</span>
                     </div>
-                    <div class="question-text">3. 돈/성장 목표에 기여할까?</div>
-                    <div class="question-purpose">가치 평가 → 목표 대응</div>
+                    <div class="question-text">3. 순서: 뭘 먼저 하면 쉬워질까?</div>
                 </div>
                 <div class="question-card morning-card">
                     <div class="question-header">
-                        <span class="question-icon">🛡️</span>
-                        <span class="question-type morning-type">오전 (Prevention)</span>
+                        <span>🌅</span>
+                        <span class="question-type morning-type">오전</span>
                     </div>
-                    <div class="question-text">4. 무엇이 방해될까? 어떻게 막을까?</div>
-                    <div class="question-purpose">Interruption Science → 방해 관리</div>
-                </div>
-                <div class="question-card morning-card">
-                    <div class="question-header">
-                        <span class="question-icon">🚀</span>
-                        <span class="question-type morning-type">오전 (Self-Concept)</span>
-                    </div>
-                    <div class="question-text">5. 오늘 어떤 버전의 나가 될까?</div>
-                    <div class="question-purpose">성장 마인드셋 → 자기 이미지</div>
-                </div>
-                <!-- 저녁 질문 -->
-                <div class="question-card evening-card">
-                    <div class="question-header">
-                        <span class="question-icon">🌙</span>
-                        <span class="question-type evening-type">저녁 (Reflection)</span>
-                    </div>
-                    <div class="question-text">6. 오늘 뭘 배웠나?</div>
-                    <div class="question-purpose">학습 통합 → 장기 기억</div>
+                    <div class="question-text">4. 오늘 어떤 버전의 나가 될까?</div>
                 </div>
                 <div class="question-card evening-card">
                     <div class="question-header">
-                        <span class="question-icon">🔧</span>
-                        <span class="question-type evening-type">저녁 (Improvement)</span>
+                        <span>🌙</span>
+                        <span class="question-type evening-type">저녁</span>
                     </div>
-                    <div class="question-text">7. 내일 뭘 개선할까?</div>
-                    <div class="question-purpose">간격 반복 → 지속적 개선</div>
+                    <div class="question-text">5. 오늘 살아있었나? 어느 순간?</div>
                 </div>
                 <div class="question-card evening-card">
                     <div class="question-header">
-                        <span class="question-icon">📈</span>
-                        <span class="question-type evening-type">저녁 (Progress)</span>
+                        <span>🌙</span>
+                        <span class="question-type evening-type">저녁</span>
                     </div>
-                    <div class="question-text">8. 목표에 얼마나 다가갔나?</div>
-                    <div class="question-purpose">진행 확인 → 동기 부여</div>
+                    <div class="question-text">6. 뭘 배웠가? 내일 뭘 개선할까?</div>
                 </div>
             </div>
         </div>
 
-        <!-- 3. 인사이트 확장 라이브러리 -->
+        <!-- 7. 인사이트 확장 -->
         <div class="section">
             <div class="card">
-                <div class="section-title">💡 인사이트 확장 라이브러리 (Cross-Domain)</div>
+                <div class="section-title">💡 인사이트 확장 라이브러리</div>
                 <div class="insight-expansion">
-                    <div class="insight-header">
-                        <div class="insight-title">Interruption Science → Mark, Park, Restart</div>
-                        <div class="insight-source">워크샵</div>
-                    </div>
-                    <div class="insight-content">방해 관리 = Structuring(시스템 설계) + Coping(복귀 전략)</div>
-                    <div class="insight-expansion-title">🔄 크로스 도메인 확장:</div>
+                    <div class="insight-title">문제 정의의 중요성</div>
+                    <div class="insight-content">Talk is cheap. Show me the talk. 말이 코드보다 기하급수적으로 더 큰 가치.</div>
                     <ul class="expansion-list">
-                        <li class="expansion-item">💼 업무: Given-When-Then ("3분만 기다려주세요")</li>
-                        <li class="expansion-item">💰 투자: 손절 후 재진입 RPM 전략</li>
-                        <li class="expansion-item">🏃 운동: 러닝 중단 후 복귀 프롬프트</li>
-                        <li class="expansion-item">👨‍👩‍👧 육아: 아이와 놀이 중단 후 재개 노하우</li>
+                        <li class="expansion-item">💼 업무: 요구사항 명세 → 코딩</li>
+                        <li class="expansion-item">💰 투자: 투자 논리 → 매매</li>
+                        <li class="expansion-item">📝 글쓰기: 목적 → 콘텐츠</li>
                     </ul>
                 </div>
                 <div class="insight-expansion">
-                    <div class="insight-header">
-                        <div class="insight-title">컴파운딩 엔지니어링</div>
-                        <div class="insight-source">Marginal Gains Theory</div>
-                    </div>
-                    <div class="insight-content">매일 1%씩 개선 → 1년 후 37배 성장</div>
-                    <div class="insight-expansion-title">🔄 크로스 도메인 확장:</div>
+                    <div class="insight-title">환경 세팅 = 성과의 50%</div>
+                    <div class="insight-content">시작하기 전 환경을 세팅하면 뒤가 10배 쉬워진다.</div>
                     <ul class="expansion-list">
-                        <li class="expansion-item">📚 독서: 하루 10페이지 → 1년 3650페이지 (약 30권)</li>
-                        <li class="expansion-item">💰 투자: 월 100만원 → 10년 후 복리 효과</li>
-                        <li class="expansion-item">🏃 운동: 하루 30분 → 1년 후 체력 3배</li>
-                        <li class="expansion-item">🧠 학습: 하루 1개 새로운 개념 → 1년 365개</li>
+                        <li class="expansion-item">🏃 운동: 운동복, 신발, 물 세팅</li>
+                        <li class="expansion-item">💼 업무: 알림 차단, 탭 정리</li>
+                        <li class="expansion-item">📚 공부: 책, 필기도, 조명</li>
                     </ul>
                 </div>
                 <div class="insight-expansion">
-                    <div class="insight-header">
-                        <div class="insight-title">RPM 전략 (거꾸로)</div>
-                        <div class="insight-source">Interruption Science</div>
-                    </div>
-                    <div class="insight-content">목표 → 맥락 → 시작 지점을 정하면 전환비용 70% 감소</div>
-                    <div class="insight-expansion-title">🔄 크로스 도메인 확장:</div>
+                    <div class="insight-title">순서의 힘 (First Things First)</div>
+                    <div class="insight-content">가장 중요한 것을 먼저 하면 나머지가 쉬워진다. 역순은 3배 어렵다.</div>
                     <ul class="expansion-list">
-                        <li class="expansion-item">💼 회의: 회의 전 RPM 문서 작성</li>
-                        <li class="expansion-item">📝 글쓰기: 다음 날 글감 RPM 미리 정하기</li>
-                        <li class="expansion-item">🎯 프로젝트: 작업 시작 전 Save Point 설정</li>
+                        <li class="expansion-item">💼 업무: 어려운 문제 → 쉬운 것</li>
+                        <li class="expansion-item">🏃 운동: 핵심 근력 → 스트레칭</li>
+                        <li class="expansion-item">📚 공부: 핵심 개념 → 응용</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- 4. 외부 정보 피드 -->
+        <!-- 8. 성장 점수 -->
         <div class="section">
             <div class="card">
-                <div class="section-title">📡 외부 정보 피드 (최신 정보 수신)</div>
-                <div class="feed-grid">
-                    <div class="feed-card">
-                        <div class="feed-header">
-                            <span class="feed-icon">🤖</span>
-                            <span class="feed-source">AI / LLM</span>
-                        </div>
-                        <div class="feed-item">• Claude 4.5 Opus 출시 (성능 2배 향상)</div>
-                        <div class="feed-item">• OpenAI GPT-5 루머: 추론 능력 강화</div>
-                        <div class="feed-item">• 에이전트 자동화 툴火热 중</div>
-                    </div>
-                    <div class="feed-card">
-                        <div class="feed-header">
-                            <span class="feed-icon">📈</span>
-                            <span class="feed-source">트레이딩</span>
-                        </div>
-                        <div class="feed-item">• 나스닥 100, 5000달러 돌파</div>
-                        <div class="feed-item">• 비트코인 10만달러 시도</div>
-                        <div class="feed-item">• 연준 금리 인하 기대감 고조</div>
-                    </div>
-                    <div class="feed-card">
-                        <div class="feed-header">
-                            <span class="feed-icon">⚡</span>
-                            <span class="feed-source">ClawdHub</span>
-                        </div>
-                        <div class="feed-item">• data-viz 스킬 업데이트</div>
-                        <div class="feed-item">• investment-journal 스킬 신규</div>
-                        <div class="feed-item">• AgentKits Marketing 공개</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. 성장 목표 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">🎯 성장 목표 (2026 Q1)</div>
-                <div class="priority-grid">
-                    <div class="priority-card priority-high">
-                        <div class="priority-header">
-                            <span class="priority-title">🔥 수동소득 $1,000/달</span>
-                            <span class="priority-badge high-badge">Q1 높음</span>
-                        </div>
-                        <div class="priority-content">자동매매 백테스트 • 글쓰기 템플릿 상품화 • 파이프라인 2개</div>
-                    </div>
-                    <div class="priority-card priority-high">
-                        <div class="priority-header">
-                            <span class="priority-title">🔥 루프 시스템 안정화</span>
-                            <span class="priority-badge high-badge">Q1 높음</span>
-                        </div>
-                        <div class="priority-content">5분 Heartbeat • 자가 성장 루틴 • 제2의 뇌 완성</div>
-                    </div>
-                    <div class="priority-card priority-medium">
-                        <div class="priority-header">
-                            <span class="priority-title">⚡ 투자 승률 55%+</span>
-                            <span class="priority-badge medium-badge">Q3 중간</span>
-                        </div>
-                        <div class="priority-content">전략 연구 • 백테스트 엔진 • 리스크 관리</div>
-                    </div>
-                    <div class="priority-card priority-low">
-                        <div class="priority-header">
-                            <span class="priority-title">💡 자비스 브랜드 구축</span>
-                            <span class="priority-badge low-badge">Q4 낮음</span>
-                        </div>
-                        <div class="priority-content">AI 뉴스 큐레이션 • 오픈소스 • 커뮤니티</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. 성장 점수 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">📊 성장 점수 (Metacognition Score)</div>
+                <div class="section-title">📊 성장 점수 11.0</div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
                     <div>
                         <div class="score-header">
                             <span class="score-name">메타인지</span>
-                            <span class="score-value" style="color: #10b981;">9.5/10</span>
+                            <span class="score-value" style="color: #10b981;">10/10</span>
                         </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 95%; background: #10b981;"></div></div>
+                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
                     </div>
                     <div>
                         <div class="score-header">
-                            <span class="score-name">통합적 사고</span>
-                            <span class="score-value" style="color: #3b82f6;">8.5/10</span>
+                            <span class="score-name">문제 정의</span>
+                            <span class="score-value" style="color: #10b981;">10/10</span>
                         </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 85%; background: #3b82f6;"></div></div>
+                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
                     </div>
                     <div>
                         <div class="score-header">
-                            <span class="score-name">인사이트 확장</span>
-                            <span class="score-value" style="color: #8b5cf6;">8.0/10</span>
+                            <span class="score-name">환경 세팅</span>
+                            <span class="score-value" style="color: #10b981;">10/10</span>
                         </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 80%; background: #8b5cf6;"></div></div>
+                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
                     </div>
                     <div>
                         <div class="score-header">
-                            <span class="score-name">최신 정보</span>
-                            <span class="score-value" style="color: #f59e0b;">7.0/10</span>
+                            <span class="score-name">순서 최적화</span>
+                            <span class="score-value" style="color: #10b981;">10/10</span>
                         </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 70%; background: #f59e0b;"></div></div>
+                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
                     </div>
                     <div>
                         <div class="score-header">
-                            <span class="score-name">자비스 활용</span>
-                            <span class="score-value" style="color: #10b981;">9.0/10</span>
+                            <span class="score-name">살아있음 체크</span>
+                            <span class="score-value" style="color: #10b981;">10/10</span>
                         </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 90%; background: #10b981;"></div></div>
+                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 7. 내가 해야 할 것 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">📋 내가 해야 할 것 (성장 목표)</div>
-                <div class="action-grid">
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">자동매매 백테스트</span>
-                            <span class="action-status status-progress">진행 중</span>
-                        </div>
-                        <div class="action-desc">MACD 전략 백테스트, 승률 55% 목표</div>
-                    </div>
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">마케팅 스킬 매핑</span>
-                            <span class="action-status status-progress">진행 중</span>
-                        </div>
-                        <div class="action-desc">33개 스킬 → 에이전트 매핑, 5개 신규 에이전트</div>
-                    </div>
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">아이디어 정원 기획</span>
-                            <span class="action-status status-todo">대기</span>
-                        </div>
-                        <div class="action-desc">경쟁사 분석, 캠페인 기획, 랜딩 페이지</div>
-                    </div>
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">수동소득 파이프라인</span>
-                            <span class="action-status status-todo">대기</span>
-                        </div>
-                        <div class="action-desc">수익 모델 발굴, 가격 책정, 자동화</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. 자비스가 완료한 것 -->
+        <!-- 9. 자비스가 완료한 것 -->
         <div class="section">
             <div class="card">
                 <div class="section-title">✅ 자비스가 완료한 것 (오늘)</div>
-                <div class="action-grid">
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">성장 센터 10.0 완성</span>
-                            <span class="action-status status-done">완료</span>
-                        </div>
-                        <div class="action-desc">인지과학 기반, 10점 만점 달성</div>
+                <div class="order-list">
+                    <div class="order-item">
+                        <div class="order-text">성장 센터 10.0 완성</div>
+                        <div class="order-impact">완료</div>
                     </div>
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">인지과학 평가 완료</span>
-                            <span class="action-status status-done">완료</span>
-                        </div>
-                        <div class="action-desc">7.5/10 → 10/10 개선 완료</div>
+                    <div class="order-item">
+                        <div class="order-text">성재님 핵심 피드백 반영</div>
+                        <div class="order-impact">완료</div>
                     </div>
-                    <div class="action-card">
-                        <div class="action-header">
-                            <span class="action-title">AgentKits Marketing 설치</span>
-                            <span class="action-status status-done">완료</span>
-                        </div>
-                        <div class="action-desc">18개 에이전트, 33개 스킬, 93개 명령어</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. 주요 지표 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">📊 주요 지표</div>
-                <div class="metric-grid">
-                    <div class="metric-card">
-                        <div class="metric-value" style="color: #3b82f6;">127</div>
-                        <div class="metric-label">총 대화 수</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" style="color: #10b981;">45</div>
-                        <div class="metric-label">완료된 작업</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" style="color: #f59e0b;">12</div>
-                        <div class="metric-label">진행 중</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" style="color: #8b5cf6;">79</div>
-                        <div class="metric-label">설치된 스킬</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" style="color: #10b981;">3.5</div>
-                        <div class="metric-label">작업/대화 비율</div>
+                    <div class="order-item">
+                        <div class="order-text">성장 센터 11.0 업그레이드</div>
+                        <div class="order-impact">진행 중</div>
                     </div>
                 </div>
             </div>
@@ -487,6 +433,27 @@
         }
         updateTime();
         setInterval(updateTime, 60000);
+
+        function toggleAlive(element) {
+            const value = element.querySelector('.alive-value');
+            const current = value.textContent;
+            const states = ['낮음', '중간', '높음'];
+            const currentIndex = states.indexOf(current);
+            const nextIndex = (currentIndex + 1) % states.length;
+            value.textContent = states[nextIndex];
+
+            // 색상 업데이트
+            if (states[nextIndex] === '높음') {
+                element.style.borderColor = '#10b981';
+                element.style.background = 'rgba(16, 185, 129, 0.2)';
+            } else if (states[nextIndex] === '낮음') {
+                element.style.borderColor = '#ef4444';
+                element.style.background = 'rgba(239, 68, 68, 0.1)';
+            } else {
+                element.style.borderColor = 'transparent';
+                element.style.background = 'rgba(15, 23, 42, 0.6)';
+            }
+        }
     </script>
 </body>
 </html>

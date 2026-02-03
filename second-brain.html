@@ -301,28 +301,25 @@
             }
         }
 
-        // 인사이트 로드
+        // 인사이트 로드 (내장 데이터)
         async function loadInsights() {
-            const dateFilter = document.getElementById('dateFilter').value;
             const resultInfo = document.getElementById('resultInfo');
             const grid = document.getElementById('insightsGrid');
             
             grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">로딩 중...</div></div>';
             
             try {
-                let url = `${API_BASE}/api/second-brain?limit=50`;
-                if (dateFilter) {
-                    url += `&date=${dateFilter}`;
-                }
-                
-                const res = await fetch(url);
+                // 내장 데이터 파일 로드
+                const res = await fetch('/data/second-brain-data.json');
                 const data = await res.json();
                 
                 allInsights = data.insights;
                 renderInsights(allInsights);
                 
-                resultInfo.textContent = `총 ${data.count}개의 인사이트`;
-                document.getElementById('statShowing').textContent = data.count;
+                resultInfo.textContent = `총 ${data.total_insights}개의 인사이트`;
+                document.getElementById('statShowing').textContent = data.total_insights;
+                document.getElementById('statTotal').textContent = data.total_insights;
+                document.getElementById('statTags').textContent = data.total_tags;
                 
             } catch (error) {
                 console.error('로드 실패:', error);
@@ -330,9 +327,9 @@
             }
         }
 
-        // 검색
+        // 검색 (내장 데이터)
         async function searchInsights() {
-            const query = document.getElementById('searchInput').value.trim();
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
             const grid = document.getElementById('insightsGrid');
             const resultInfo = document.getElementById('resultInfo');
             
@@ -344,12 +341,20 @@
             grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">검색 중...</div></div>';
             
             try {
-                const res = await fetch(`${API_BASE}/api/second-brain/search?q=${encodeURIComponent(query)}`);
+                // 내장 데이터에서 검색
+                const res = await fetch('/data/second-brain-data.json');
                 const data = await res.json();
                 
-                renderInsights(data.insights);
-                resultInfo.textContent = `"${query}" 검색 결과: ${data.count}개`;
-                document.getElementById('statShowing').textContent = data.count;
+                // 검색 필터링
+                const results = data.insights.filter(insight => 
+                    insight.title.toLowerCase().includes(query) ||
+                    insight.content.toLowerCase().includes(query) ||
+                    insight.tags.some(tag => tag.toLowerCase().includes(query))
+                );
+                
+                renderInsights(results);
+                resultInfo.textContent = `"${query}" 검색 결과: ${results.length}개`;
+                document.getElementById('statShowing').textContent = results.length;
                 
             } catch (error) {
                 console.error('검색 실패:', error);

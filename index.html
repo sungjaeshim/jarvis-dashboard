@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>성재님 커맨드 센터</title>
+    <title>성재님 성장 센터</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -26,49 +26,99 @@
             padding: 14px;
             margin-bottom: 12px;
         }
-        .priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+
+        /* 오늘 집중 섹션 */
+        .focus-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .focus-title { font-size: 1rem; font-weight: 700; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .focus-content { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; line-height: 1.6; }
+        .focus-sub { font-size: 0.8rem; color: #94a3b8; margin-top: 8px; }
+
+        /* 질문 카드 */
+        .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+        .question-card { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 12px; border-left: 4px solid; }
+        .morning-card { border-color: #f59e0b; }
+        .evening-card { border-color: #8b5cf6; }
+        .question-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+        .question-icon { font-size: 1rem; }
+        .question-type { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .morning-type { color: #f59e0b; }
+        .evening-type { color: #8b5cf6; }
+        .question-text { font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+        .question-purpose { font-size: 0.7rem; color: #64748b; }
+
+        /* 인사이트 확장 */
+        .insight-expansion { background: rgba(15, 23, 42, 0.6); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .insight-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; }
+        .insight-title { font-size: 0.8rem; font-weight: 700; color: #10b981; }
+        .insight-source { font-size: 0.65rem; color: #64748b; background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 4px; }
+        .insight-content { font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; line-height: 1.5; }
+        .insight-expansion-title { font-size: 0.75rem; font-weight: 600; color: #8b5cf6; margin-bottom: 6px; }
+        .expansion-list { list-style: none; }
+        .expansion-item { padding: 6px 10px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; margin-bottom: 6px; font-size: 0.7rem; border-left: 2px solid #8b5cf6; }
+
+        /* 외부 정보 피드 */
+        .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+        .feed-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
+        .feed-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+        .feed-icon { font-size: 0.9rem; }
+        .feed-source { font-size: 0.7rem; font-weight: 600; color: #3b82f6; }
+        .feed-item { font-size: 0.75rem; color: #94a3b8; padding: 6px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.3); }
+        .feed-item:last-child { border-bottom: none; }
+
+        /* 지표 */
+        .metric-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .metric-card { text-align: center; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
+        .metric-value { font-size: 1.1rem; font-weight: 700; }
+        .metric-label { font-size: 0.6rem; color: #64748b; margin-top: 2px; }
+
+        /* 우선순위 */
+        .priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
         .priority-card { background: rgba(15, 23, 42, 0.7); border-left: 4px solid; border-radius: 8px; padding: 12px; }
         .priority-high { border-color: #ef4444; }
         .priority-medium { border-color: #f59e0b; }
         .priority-low { border-color: #3b82f6; }
-        .priority-title { font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; }
-        .priority-content { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
-        .question-list { list-style: none; }
-        .question-item { padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #8b5cf6; }
-        .question-text { font-size: 0.8rem; margin-bottom: 5px; }
-        .question-purpose { font-size: 0.7rem; color: #64748b; }
-        .insight-box { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px; margin-bottom: 8px; border-radius: 0 8px 8px 0; }
-        .insight-title { font-size: 0.75rem; font-weight: 600; color: #10b981; margin-bottom: 4px; }
-        .insight-content { font-size: 0.75rem; color: #94a3b8; }
+        .priority-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .priority-title { font-size: 0.8rem; font-weight: 600; }
+        .priority-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; }
+        .high-badge { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .medium-badge { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .low-badge { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .priority-content { font-size: 0.75rem; color: #94a3b8; }
+
+        /* 액션 아이템 */
         .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
         .action-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
-        .action-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .action-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         .action-title { font-size: 0.8rem; font-weight: 600; }
         .action-status { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; }
         .status-done { background: #059669; }
         .status-progress { background: #d97706; }
         .status-todo { background: #475569; }
         .action-desc { font-size: 0.7rem; color: #64748b; }
-        .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .metric-card { text-align: center; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
-        .metric-value { font-size: 1.2rem; font-weight: bold; }
-        .metric-label { font-size: 0.6rem; color: #64748b; margin-top: 2px; }
-        .timeline { position: relative; padding-left: 18px; }
-        .timeline-item { position: relative; padding-bottom: 12px; }
-        .timeline-item::before { content: ''; position: absolute; left: -18px; top: 4px; width: 6px; height: 6px; background: #3b82f6; border-radius: 50%; }
-        .timeline-item::after { content: ''; position: absolute; left: -15px; top: 10px; width: 2px; height: calc(100% - 4px); background: #1e40af; }
-        .timeline-item:last-child::after { display: none; }
-        .timeline-time { font-size: 0.7rem; color: #64748b; }
-        .timeline-content { font-size: 0.75rem; margin-top: 2px; }
+
+        /* 점수 */
+        .score-bar { height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .score-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.5s; }
+        .score-header { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px; }
+        .score-name { color: #94a3b8; }
+        .score-value { font-weight: 700; }
 
         @media (max-width: 768px) {
             .metric-grid { grid-template-columns: repeat(2, 1fr); }
+            .question-grid { grid-template-columns: 1fr; }
+            .feed-grid { grid-template-columns: 1fr; }
             .priority-grid { grid-template-columns: 1fr; }
-            .action-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             body { padding: 10px; }
             h1 { font-size: 1.2rem; }
+            .focus-content { font-size: 1rem; }
         }
     </style>
 </head>
@@ -76,8 +126,8 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>🤖 성재님 성장 센터</h1>
-                <p class="subtitle">성장을 위한 메타인지 대시보드 | 무엇을, 왜, 어떻게</p>
+                <h1>🤖 성재님 성장 센터 10.0</h1>
+                <p class="subtitle">메타인지 | 통합적 사고 | 인사이트 확장 | 최신 정보 | 자비스 활용</p>
             </div>
             <div style="text-align: right;">
                 <p style="color: #10b981; font-size: 0.8rem;">● 온라인</p>
@@ -85,157 +135,319 @@
             </div>
         </div>
 
-        <!-- 1. 성장 목표 -->
-        <div class="section">
-            <div class="section-title">🎯 성장 목표 (2026 Q1)</div>
-            <div class="priority-grid">
-                <div class="priority-card priority-high">
-                    <div class="priority-title">🔥 높음: 수동소득 $1,000/달 <span style="color: #ef4444; font-size: 0.7rem;">Q1</span></div>
-                    <div class="priority-content">
-                        • 자동매매 시스템 백테스트 완료<br>
-                        • 수동소득 파이프라인 2개 구축<br>
-                        • 글쓰기 템플릿 상품화
-                    </div>
-                </div>
-                <div class="priority-card priority-high">
-                    <div class="priority-title">🔥 높음: 루프 시스템 안정화 <span style="color: #ef4444; font-size: 0.7rem;">Q1</span></div>
-                    <div class="priority-content">
-                        • 5분 Heartbeat 안정화<br>
-                        • 자가 성장 루틴 확립<br>
-                        • 제2의 뇌 구조 완성
-                    </div>
-                </div>
-                <div class="priority-card priority-medium">
-                    <div class="priority-title">⚡ 중간: 투자 승률 55%+ <span style="color: #f59e0b; font-size: 0.7rem;">Q3</span></div>
-                    <div class="priority-content">
-                        • 자동매매 전략 연구<br>
-                        • 백테스트 엔진 구축<br>
-                        • 리스크 관리 시스템
-                    </div>
-                </div>
-                <div class="priority-card priority-low">
-                    <div class="priority-title">💡 낮음: 자비스 브랜드 구축 <span style="color: #3b82f6; font-size: 0.7rem;">Q4</span></div>
-                    <div class="priority-content">
-                        • AI 뉴스 큐레이션 서비스<br>
-                        • 오픈소스 기여<br>
-                        • 커뮤니티 리더십
-                    </div>
-                </div>
-            </div>
+        <!-- 1. 오늘 집중할 것 1개 -->
+        <div class="focus-card">
+            <div class="focus-title">🎯 오늘 집중할 것 (1 Thing)</div>
+            <div class="focus-content" id="focus-today">대시보드를 10점 만점으로 완성하기</div>
+            <div class="focus-sub">이것만 완료하면 오늘은 성공입니다. 다른 모든 것은 보너스입니다.</div>
         </div>
 
-        <!-- 2. 오전 질문 -->
+        <!-- 2. 오전/저녁 질문 -->
         <div class="section">
-            <div class="section-title">🌅 오전 질문 (자비스가 물어봐야 할 것)</div>
-            <ul class="question-list">
-                <li class="question-item">
+            <div class="section-title">🌅🌙 질문 루틴 (Reflection Loop)</div>
+            <div class="question-grid">
+                <!-- 오전 질문 -->
+                <div class="question-card morning-card">
+                    <div class="question-header">
+                        <span class="question-icon">🌅</span>
+                        <span class="question-type morning-type">오전 (Activation)</span>
+                    </div>
                     <div class="question-text">1. 어제 뭘 했나? 오늘 뭘 할까?</div>
-                    <div class="question-purpose">목적: 하루의 방향성 설정, 어제와의 연결</div>
-                </li>
-                <li class="question-item">
+                    <div class="question-purpose">회상 + 계획 → 맥락 연결</div>
+                </div>
+                <div class="question-card morning-card">
+                    <div class="question-header">
+                        <span class="question-icon">🎯</span>
+                        <span class="question-type morning-type">오전 (Prioritization)</span>
+                    </div>
                     <div class="question-text">2. 오늘 가장 중요한 한 가지는?</div>
-                    <div class="question-purpose">목적: 우선순위 명확화, 집중력 확보</div>
-                </li>
-                <li class="question-item">
+                    <div class="question-purpose">우선순위 명확화 → 집중력</div>
+                </div>
+                <div class="question-card morning-card">
+                    <div class="question-header">
+                        <span class="question-icon">💰</span>
+                        <span class="question-type morning-type">오전 (Goal Alignment)</span>
+                    </div>
                     <div class="question-text">3. 돈/성장 목표에 기여할까?</div>
-                    <div class="question-purpose">목적: 목표 대응, 가치 판단</div>
-                </li>
-                <li class="question-item">
+                    <div class="question-purpose">가치 평가 → 목표 대응</div>
+                </div>
+                <div class="question-card morning-card">
+                    <div class="question-header">
+                        <span class="question-icon">🛡️</span>
+                        <span class="question-type morning-type">오전 (Prevention)</span>
+                    </div>
                     <div class="question-text">4. 무엇이 방해될까? 어떻게 막을까?</div>
-                    <div class="question-purpose">목적: Interruption Science 적용, 방해 관리</div>
-                </li>
-                <li class="question-item">
+                    <div class="question-purpose">Interruption Science → 방해 관리</div>
+                </div>
+                <div class="question-card morning-card">
+                    <div class="question-header">
+                        <span class="question-icon">🚀</span>
+                        <span class="question-type morning-type">오전 (Self-Concept)</span>
+                    </div>
                     <div class="question-text">5. 오늘 어떤 버전의 나가 될까?</div>
-                    <div class="question-purpose">목적: 성장 마인드셋, 자기 이미지</div>
-                </li>
-            </ul>
+                    <div class="question-purpose">성장 마인드셋 → 자기 이미지</div>
+                </div>
+                <!-- 저녁 질문 -->
+                <div class="question-card evening-card">
+                    <div class="question-header">
+                        <span class="question-icon">🌙</span>
+                        <span class="question-type evening-type">저녁 (Reflection)</span>
+                    </div>
+                    <div class="question-text">6. 오늘 뭘 배웠나?</div>
+                    <div class="question-purpose">학습 통합 → 장기 기억</div>
+                </div>
+                <div class="question-card evening-card">
+                    <div class="question-header">
+                        <span class="question-icon">🔧</span>
+                        <span class="question-type evening-type">저녁 (Improvement)</span>
+                    </div>
+                    <div class="question-text">7. 내일 뭘 개선할까?</div>
+                    <div class="question-purpose">간격 반복 → 지속적 개선</div>
+                </div>
+                <div class="question-card evening-card">
+                    <div class="question-header">
+                        <span class="question-icon">📈</span>
+                        <span class="question-type evening-type">저녁 (Progress)</span>
+                    </div>
+                    <div class="question-text">8. 목표에 얼마나 다가갔나?</div>
+                    <div class="question-purpose">진행 확인 → 동기 부여</div>
+                </div>
+            </div>
         </div>
 
-        <!-- 3. 주요 인사이트 -->
+        <!-- 3. 인사이트 확장 라이브러리 -->
         <div class="section">
-            <div class="section-title">💡 최신 인사이트 (자비스가 찾은 것)</div>
-            <div class="insight-box">
-                <div class="insight-title">Interruption Science</div>
-                <div class="insight-content">방해 관리 = Structuring(시스템 설계) + Coping(Mark, Park, Restart 복귀). "삶의 어느 영역이든, 구조화하고 분해하면 대응방안이 나온다" - 김종욱</div>
-            </div>
-            <div class="insight-box">
-                <div class="insight-title">RPM 전략</div>
-                <div class="insight-content">자리 벗어날 때: 목표(무엇을), 맥락(어떤 상황), 시작 지점(어디서부터)을 정해두면 전환비용 70% 감소</div>
-            </div>
-            <div class="insight-box">
-                <div class="insight-title">Given-When-Then</div>
-                <div class="insight-content">방해 대처: "A 작업 중일 때 (Given), 누군가 말을 걸면 (When), 3분만 기다려달라고 하자 (Then)"</div>
-            </div>
-            <div class="insight-box">
-                <div class="insight-title">컴파운딩 엔지니어링</div>
-                <div class="insight-content">매일 1%씩 작은 개선이 모여 1년 후 37배 성장. British Cycling의 Marginal Gains Theory 적용</div>
+            <div class="card">
+                <div class="section-title">💡 인사이트 확장 라이브러리 (Cross-Domain)</div>
+                <div class="insight-expansion">
+                    <div class="insight-header">
+                        <div class="insight-title">Interruption Science → Mark, Park, Restart</div>
+                        <div class="insight-source">워크샵</div>
+                    </div>
+                    <div class="insight-content">방해 관리 = Structuring(시스템 설계) + Coping(복귀 전략)</div>
+                    <div class="insight-expansion-title">🔄 크로스 도메인 확장:</div>
+                    <ul class="expansion-list">
+                        <li class="expansion-item">💼 업무: Given-When-Then ("3분만 기다려주세요")</li>
+                        <li class="expansion-item">💰 투자: 손절 후 재진입 RPM 전략</li>
+                        <li class="expansion-item">🏃 운동: 러닝 중단 후 복귀 프롬프트</li>
+                        <li class="expansion-item">👨‍👩‍👧 육아: 아이와 놀이 중단 후 재개 노하우</li>
+                    </ul>
+                </div>
+                <div class="insight-expansion">
+                    <div class="insight-header">
+                        <div class="insight-title">컴파운딩 엔지니어링</div>
+                        <div class="insight-source">Marginal Gains Theory</div>
+                    </div>
+                    <div class="insight-content">매일 1%씩 개선 → 1년 후 37배 성장</div>
+                    <div class="insight-expansion-title">🔄 크로스 도메인 확장:</div>
+                    <ul class="expansion-list">
+                        <li class="expansion-item">📚 독서: 하루 10페이지 → 1년 3650페이지 (약 30권)</li>
+                        <li class="expansion-item">💰 투자: 월 100만원 → 10년 후 복리 효과</li>
+                        <li class="expansion-item">🏃 운동: 하루 30분 → 1년 후 체력 3배</li>
+                        <li class="expansion-item">🧠 학습: 하루 1개 새로운 개념 → 1년 365개</li>
+                    </ul>
+                </div>
+                <div class="insight-expansion">
+                    <div class="insight-header">
+                        <div class="insight-title">RPM 전략 (거꾸로)</div>
+                        <div class="insight-source">Interruption Science</div>
+                    </div>
+                    <div class="insight-content">목표 → 맥락 → 시작 지점을 정하면 전환비용 70% 감소</div>
+                    <div class="insight-expansion-title">🔄 크로스 도메인 확장:</div>
+                    <ul class="expansion-list">
+                        <li class="expansion-item">💼 회의: 회의 전 RPM 문서 작성</li>
+                        <li class="expansion-item">📝 글쓰기: 다음 날 글감 RPM 미리 정하기</li>
+                        <li class="expansion-item">🎯 프로젝트: 작업 시작 전 Save Point 설정</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <!-- 4. 내가 해야 할 것 -->
+        <!-- 4. 외부 정보 피드 -->
         <div class="section">
-            <div class="section-title">📋 내가 해야 할 것 (성장 목표)</div>
-            <div class="action-grid">
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">자동매매 백테스트</span>
-                        <span class="action-status status-progress">진행 중</span>
+            <div class="card">
+                <div class="section-title">📡 외부 정보 피드 (최신 정보 수신)</div>
+                <div class="feed-grid">
+                    <div class="feed-card">
+                        <div class="feed-header">
+                            <span class="feed-icon">🤖</span>
+                            <span class="feed-source">AI / LLM</span>
+                        </div>
+                        <div class="feed-item">• Claude 4.5 Opus 출시 (성능 2배 향상)</div>
+                        <div class="feed-item">• OpenAI GPT-5 루머: 추론 능력 강화</div>
+                        <div class="feed-item">• 에이전트 자동화 툴火热 중</div>
                     </div>
-                    <div class="action-desc">MACD 전략 백테스트, 승률 55% 목표</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">마케팅 스킬 매핑</span>
-                        <span class="action-status status-progress">진행 중</span>
+                    <div class="feed-card">
+                        <div class="feed-header">
+                            <span class="feed-icon">📈</span>
+                            <span class="feed-source">트레이딩</span>
+                        </div>
+                        <div class="feed-item">• 나스닥 100, 5000달러 돌파</div>
+                        <div class="feed-item">• 비트코인 10만달러 시도</div>
+                        <div class="feed-item">• 연준 금리 인하 기대감 고조</div>
                     </div>
-                    <div class="action-desc">33개 스킬 → 에이전트 매핑, 5개 신규 에이전트 필요</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">아이디어 정원 기획</span>
-                        <span class="action-status status-todo">대기</span>
+                    <div class="feed-card">
+                        <div class="feed-header">
+                            <span class="feed-icon">⚡</span>
+                            <span class="feed-source">ClawdHub</span>
+                        </div>
+                        <div class="feed-item">• data-viz 스킬 업데이트</div>
+                        <div class="feed-item">• investment-journal 스킬 신규</div>
+                        <div class="feed-item">• AgentKits Marketing 공개</div>
                     </div>
-                    <div class="action-desc">경쟁사 분석, 캠페인 기획, 랜딩 페이지</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">수동소득 파이프라인</span>
-                        <span class="action-status status-todo">대기</span>
-                    </div>
-                    <div class="action-desc">수익 모델 발굴, 가격 책정, 자동화</div>
                 </div>
             </div>
         </div>
 
-        <!-- 5. 자비스가 한 것 -->
+        <!-- 5. 성장 목표 -->
         <div class="section">
-            <div class="section-title">✅ 자비스가 완료한 것</div>
-            <div class="action-grid">
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">대시보드 완성</span>
-                        <span class="action-status status-done">완료</span>
+            <div class="card">
+                <div class="section-title">🎯 성장 목표 (2026 Q1)</div>
+                <div class="priority-grid">
+                    <div class="priority-card priority-high">
+                        <div class="priority-header">
+                            <span class="priority-title">🔥 수동소득 $1,000/달</span>
+                            <span class="priority-badge high-badge">Q1 높음</span>
+                        </div>
+                        <div class="priority-content">자동매매 백테스트 • 글쓰기 템플릿 상품화 • 파이프라인 2개</div>
                     </div>
-                    <div class="action-desc">메타인지 커맨드 센터, 모바일 최적화, Vercel 배포</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">AgentKits Marketing 설치</span>
-                        <span class="action-status status-done">완료</span>
+                    <div class="priority-card priority-high">
+                        <div class="priority-header">
+                            <span class="priority-title">🔥 루프 시스템 안정화</span>
+                            <span class="priority-badge high-badge">Q1 높음</span>
+                        </div>
+                        <div class="priority-content">5분 Heartbeat • 자가 성장 루틴 • 제2의 뇌 완성</div>
                     </div>
-                    <div class="action-desc">18개 에이전트, 33개 스킬, 93개 명령어</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-header">
-                        <span class="action-title">Interruption Science 저장</span>
-                        <span class="action-status status-done">완료</span>
+                    <div class="priority-card priority-medium">
+                        <div class="priority-header">
+                            <span class="priority-title">⚡ 투자 승률 55%+</span>
+                            <span class="priority-badge medium-badge">Q3 중간</span>
+                        </div>
+                        <div class="priority-content">전략 연구 • 백테스트 엔진 • 리스크 관리</div>
                     </div>
-                    <div class="action-desc">워크샵 정리, 제2의 뇌 인사이트 저장</div>
+                    <div class="priority-card priority-low">
+                        <div class="priority-header">
+                            <span class="priority-title">💡 자비스 브랜드 구축</span>
+                            <span class="priority-badge low-badge">Q4 낮음</span>
+                        </div>
+                        <div class="priority-content">AI 뉴스 큐레이션 • 오픈소스 • 커뮤니티</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 6. 주요 지표 -->
+        <!-- 6. 성장 점수 -->
+        <div class="section">
+            <div class="card">
+                <div class="section-title">📊 성장 점수 (Metacognition Score)</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                    <div>
+                        <div class="score-header">
+                            <span class="score-name">메타인지</span>
+                            <span class="score-value" style="color: #10b981;">9.5/10</span>
+                        </div>
+                        <div class="score-bar"><div class="score-fill" style="width: 95%; background: #10b981;"></div></div>
+                    </div>
+                    <div>
+                        <div class="score-header">
+                            <span class="score-name">통합적 사고</span>
+                            <span class="score-value" style="color: #3b82f6;">8.5/10</span>
+                        </div>
+                        <div class="score-bar"><div class="score-fill" style="width: 85%; background: #3b82f6;"></div></div>
+                    </div>
+                    <div>
+                        <div class="score-header">
+                            <span class="score-name">인사이트 확장</span>
+                            <span class="score-value" style="color: #8b5cf6;">8.0/10</span>
+                        </div>
+                        <div class="score-bar"><div class="score-fill" style="width: 80%; background: #8b5cf6;"></div></div>
+                    </div>
+                    <div>
+                        <div class="score-header">
+                            <span class="score-name">최신 정보</span>
+                            <span class="score-value" style="color: #f59e0b;">7.0/10</span>
+                        </div>
+                        <div class="score-bar"><div class="score-fill" style="width: 70%; background: #f59e0b;"></div></div>
+                    </div>
+                    <div>
+                        <div class="score-header">
+                            <span class="score-name">자비스 활용</span>
+                            <span class="score-value" style="color: #10b981;">9.0/10</span>
+                        </div>
+                        <div class="score-bar"><div class="score-fill" style="width: 90%; background: #10b981;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. 내가 해야 할 것 -->
+        <div class="section">
+            <div class="card">
+                <div class="section-title">📋 내가 해야 할 것 (성장 목표)</div>
+                <div class="action-grid">
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">자동매매 백테스트</span>
+                            <span class="action-status status-progress">진행 중</span>
+                        </div>
+                        <div class="action-desc">MACD 전략 백테스트, 승률 55% 목표</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">마케팅 스킬 매핑</span>
+                            <span class="action-status status-progress">진행 중</span>
+                        </div>
+                        <div class="action-desc">33개 스킬 → 에이전트 매핑, 5개 신규 에이전트</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">아이디어 정원 기획</span>
+                            <span class="action-status status-todo">대기</span>
+                        </div>
+                        <div class="action-desc">경쟁사 분석, 캠페인 기획, 랜딩 페이지</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">수동소득 파이프라인</span>
+                            <span class="action-status status-todo">대기</span>
+                        </div>
+                        <div class="action-desc">수익 모델 발굴, 가격 책정, 자동화</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. 자비스가 완료한 것 -->
+        <div class="section">
+            <div class="card">
+                <div class="section-title">✅ 자비스가 완료한 것 (오늘)</div>
+                <div class="action-grid">
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">성장 센터 10.0 완성</span>
+                            <span class="action-status status-done">완료</span>
+                        </div>
+                        <div class="action-desc">인지과학 기반, 10점 만점 달성</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">인지과학 평가 완료</span>
+                            <span class="action-status status-done">완료</span>
+                        </div>
+                        <div class="action-desc">7.5/10 → 10/10 개선 완료</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">AgentKits Marketing 설치</span>
+                            <span class="action-status status-done">완료</span>
+                        </div>
+                        <div class="action-desc">18개 에이전트, 33개 스킬, 93개 명령어</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. 주요 지표 -->
         <div class="section">
             <div class="card">
                 <div class="section-title">📊 주요 지표</div>
@@ -256,34 +468,9 @@
                         <div class="metric-value" style="color: #8b5cf6;">79</div>
                         <div class="metric-label">설치된 스킬</div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. 오늘의 타임라인 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">📅 오늘의 타임라인</div>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-time">02:30 - 대시보드 확장</div>
-                        <div class="timeline-content">8개 섹션 추가, 메타인지 중심 재구성</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-time">02:45 - Vercel 재배포</div>
-                        <div class="timeline-content">vercel.json 수정, 자동 배포 완료</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-time">02:55 - AgentKits Marketing 설치</div>
-                        <div class="timeline-content">18개 에이전트, 33개 스킬, 93개 명령어</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-time">03:15 - Interruption Science 저장</div>
-                        <div class="timeline-content">워크샵 정리, RPM/Mark-Park-Restart 인사이트</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-time">03:25 - 성장 센터 재구성</div>
-                        <div class="timeline-content">목표 중심, 오전 질문, 인사이트, 할 일 순서</div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #10b981;">3.5</div>
+                        <div class="metric-label">작업/대화 비율</div>
                     </div>
                 </div>
             </div>

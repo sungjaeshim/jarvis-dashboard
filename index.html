@@ -164,7 +164,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div><h1>🤖 성재님 성장 센터 18.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 접이식 | 환경 세팅 우선순위 | 스킬 전체 보기 | 루틴 | localStorage 뉴스</p></div>
+            <div><h1>🤖 성재님 성장 센터 18.1</h1><p class="subtitle">펼침/닫힘 상태 기억 | 섹션 순서 재배열 | 질문 루팅 | 루틴 분리 | localStorage 상태 저장</p></div>
             <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
         </div>
 
@@ -230,11 +230,15 @@
             </div>
         </div>
 
-        <!-- 3. 접이식 도구 -->
-        <div class="collapse-section">
-            <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">🎯 문제 정의</span><span class="collapse-icon">▼</span></div>
-            <div class="collapse-content"><div class="collapse-inner"><div style="font-size: 0.85rem; font-weight: 700; color: #ef4444; margin-bottom: 10px;">"내가 풀려고 하는 문제가 정확히 뭔가?"</div><ul style="font-size: 0.8rem; color: #94a3b8; padding-left: 20px;"><li>이 문제를 왜 해결하려고 하는가?</li><li>문제 정의가 명확한가?</li><li>다른 사람도 똑같이 이해하는가?</li><li>성공 기준이 명확한가?</li></ul></div></div>
-        </div>
+        <!-- 3. 시간 여행 (이미 위에 있으므로 생략) -->
+
+        <!-- 4. 질문 루팅 -->
+        <div class="section"><div class="card"><div class="section-title">🌅🌤️🌙 질문 루팅 (한국 시간 기반)</div><div id="routine-container"></div></div></div>
+
+        <!-- 5. 살아있음 체크 -->
+        <div class="section"><div class="card"><div class="section-title">❤️ 살아있음 체크</div><div class="alive-grid"><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🧠</div><div class="alive-label">생각</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">⚡</div><div class="alive-label">에너지</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🎯</div><div class="alive-label">몰입</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">😊</div><div class="alive-label">기분</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">💪</div><div class="alive-label">신체</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🌊</div><div class="alive-label">호기심</div><div class="alive-value">중간</div></div></div></div></div>
+
+        <!-- 6. 환경 세팅 -->
         <div class="collapse-section">
             <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">⚙️ 환경 세팅</span><span class="collapse-icon">▼</span></div>
             <div class="collapse-content"><div class="collapse-inner">
@@ -275,16 +279,16 @@
             </div></div>
         </div>
 
-        <!-- 4. 살아있음 -->
-        <div class="section"><div class="card"><div class="section-title">❤️ 살아있음 체크</div><div class="alive-grid"><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🧠</div><div class="alive-label">생각</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">⚡</div><div class="alive-label">에너지</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🎯</div><div class="alive-label">몰입</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">😊</div><div class="alive-label">기분</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">💪</div><div class="alive-label">신체</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🌊</div><div class="alive-label">호기심</div><div class="alive-value">중간</div></div></div></div></div>
+        <!-- 7. 문제 정의 -->
+        <div class="collapse-section">
+            <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">🎯 문제 정의</span><span class="collapse-icon">▼</span></div>
+            <div class="collapse-content"><div class="collapse-inner"><div style="font-size: 0.85rem; font-weight: 700; color: #ef4444; margin-bottom: 10px;">"내가 풀려고 하는 문제가 정확히 뭔가?"</div><ul style="font-size: 0.8rem; color: #94a3b8; padding-left: 20px;"><li>이 문제를 왜 해결하려고 하는가?</li><li>문제 정의가 명확한가?</li><li>다른 사람도 똑같이 이해하는가?</li><li>성공 기준이 명확한가?</li></ul></div></div>
+        </div>
 
-        <!-- 5. 루틴 -->
-        <div class="section"><div class="card"><div class="section-title">🌅🌤️🌙 질문 루틴 (한국 시간 기반)</div><div id="routine-container"></div></div></div>
-
-        <!-- 6. 뉴스 (접이식) -->
+        <!-- 8. 최신 뉴스 (접이식) -->
         <div class="collapse-section">
             <div class="collapse-header" onclick="toggleCollapse(this)">
-                <span class="collapse-title">📡 최신 뉴스 & 업데이트 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></span>
+                <span class="collapse-title">📡 최신 뉴스 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></span>
                 <span class="collapse-icon">▼</span>
             </div>
             <div class="collapse-content">
@@ -308,16 +312,72 @@
             </div>
         </div>
 
-        <!-- 7. 작업 -->
-        <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 대시보드 12.0 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
+        <!-- 9. 루틴 -->
+        <div class="section">
+            <div class="card">
+                <div class="section-title">🔄 루틴</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                    <div style="background: rgba(16, 185, 129, 0.1); border-radius: 8px; padding: 12px; border-left: 3px solid #10b981;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #10b981; margin-bottom: 8px;">🌅 모닝 루틴</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8; line-height: 1.5;">
+                            • 하루 점수 체크<br>
+                            • 살아있음 상태 확인<br>
+                            • 환경 세팅
+                        </div>
+                    </div>
+                    <div style="background: rgba(59, 130, 246, 0.1); border-radius: 8px; padding: 12px; border-left: 3px solid #3b82f6;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #3b82f6; margin-bottom: 8px;">🌤️ 데일리 루틴</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8; line-height: 1.5;">
+                            • 정기 상태 체크<br>
+                            • 작업 진행 상황<br>
+                            • 문제 해결 과정
+                        </div>
+                    </div>
+                    <div style="background: rgba(139, 92, 246, 0.1); border-radius: 8px; padding: 12px; border-left: 3px solid #8b5cf6;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #8b5cf6; margin-bottom: 8px;">🌙 이브닝 루틴</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8; line-height: 1.5;">
+                            • 하루 회고<br>
+                            • 학습 정리<br>
+                            • 내일 준비
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- 8. 자비스 상태 -->
-        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">48</div><div class="growth-label">완료된 작업</div></div><div class="growth-item" onclick="openModal('version')"><div class="growth-value">18.0</div><div class="growth-label">버전</div></div></div></div></div>
+        <!-- 10. 작업 -->
+        <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 성장 센터 18.1 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
 
-        <!-- 8-1. 하드웨어 상태 -->
+        <!-- 11. 성장 통계 -->
+        <div class="section">
+            <div class="card">
+                <div class="section-title">📊 성장 통계</div>
+                <div class="growth-stats">
+                    <div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div>
+                    <div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">48</div><div class="growth-label">완료된 작업</div></div>
+                    <div class="growth-item" onclick="openModal('version')"><div class="growth-value">18.1</div><div class="growth-label">버전</div></div>
+                    <div class="growth-item" onclick="openModal('insights')"><div class="growth-value">12</div><div class="growth-label">인사이트</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. 설치된 스킬 -->
+        <div class="section">
+            <div class="card">
+                <div class="section-title">🛠️ 설치된 스킬</div>
+                <div class="growth-stats">
+                    <div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div>
+                    <div class="growth-item" onclick="openModal('skills')"><div class="growth-value">5</div><div class="growth-label">카테고리</div></div>
+                    <div class="growth-item" onclick="openModal('skills')"><div class="growth-value">23</div><div class="growth-label">활성 스킬</div></div>
+                    <div class="growth-item" onclick="openModal('skills')"><div class="growth-value">AI</div><div class="growth-label">최다 분야</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 추가. 하드웨어 상태 -->
         <div class="section"><div class="card"><div class="section-title">⚡ 하드웨어 상태</div><div class="hardware-stats" id="hardware-stats"><div class="hardware-item"><div class="hardware-icon">🖥️</div><div class="hardware-info"><div class="hardware-label">CPU</div><div class="hardware-value" id="cpu-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="cpu-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💾</div><div class="hardware-info"><div class="hardware-label">RAM</div><div class="hardware-value" id="ram-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="ram-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💽</div><div class="hardware-info"><div class="hardware-label">디스크</div><div class="hardware-value" id="disk-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="disk-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">🌐</div><div class="hardware-info"><div class="hardware-label">Gateway</div><div class="hardware-value" id="gateway-status">로딩중...</div><div class="hardware-status" id="gateway-indicator"></div></div></div></div></div></div>
 
-        <!-- 9. 인사이트 -->
+        <!-- 추가. 인사이트 -->
         <div class="section"><div class="card"><div class="section-title">💡 오늘의 인사이트</div><ul class="insight-list"><li class="insight-item"><div class="insight-text">"말이 코드보다 기하급수적으로 더 큰 가치"</div></li><li class="insight-item"><div class="insight-text">"시작하기 전 환경 세팅 = 성과의 50%"</div></li><li class="insight-item"><div class="insight-text">"역순은 3배 어렵다"</div></li></ul></div></div>
     </div>
     <script>
@@ -359,8 +419,16 @@
         function toggleCollapse(header) {
             const content = header.nextElementSibling;
             const icon = header.querySelector('.collapse-icon');
+            const sectionTitle = header.querySelector('.collapse-title').textContent.trim();
+            
             content.classList.toggle('open');
-            icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            const isOpen = content.classList.contains('open');
+            icon.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+            
+            // localStorage에 상태 저장
+            const collapseStates = JSON.parse(localStorage.getItem('collapseStates') || '{}');
+            collapseStates[sectionTitle] = isOpen;
+            localStorage.setItem('collapseStates', JSON.stringify(collapseStates));
         }
         function cycleAlive(item) {
             const levels = ['low', 'mid', 'high'];
@@ -460,8 +528,34 @@
             // 어제와 비교 표시
             updateScoreGap(score);
         });
+        // 접이식 상태 복원 함수
+        function restoreCollapseStates() {
+            const collapseStates = JSON.parse(localStorage.getItem('collapseStates') || '{}');
+            
+            document.querySelectorAll('.collapse-section').forEach(section => {
+                const header = section.querySelector('.collapse-header');
+                const content = section.querySelector('.collapse-content');
+                const icon = header.querySelector('.collapse-icon');
+                const sectionTitle = header.querySelector('.collapse-title').textContent.trim();
+                
+                if (collapseStates.hasOwnProperty(sectionTitle)) {
+                    const isOpen = collapseStates[sectionTitle];
+                    if (isOpen) {
+                        content.classList.add('open');
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.classList.remove('open');
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+        }
+
         updateTime();
         setInterval(updateTime, 60000);
+        
+        // 상태 복원 실행
+        restoreCollapseStates();
         
         // 저장된 점수 불러오기
         const savedScore = loadSavedScore();

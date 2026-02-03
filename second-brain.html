@@ -270,7 +270,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://158.247.193.74:8082';
+        const API_BASE = 'http://158.247.193.74:8085';
         let allInsights = [];
         let currentSearch = '';
 
@@ -284,7 +284,7 @@
         // 날짜 필터 로드
         async function loadDates() {
             try {
-                const res = await fetch(`${API_BASE}/api/memory/dates`);
+                const res = await fetch(`${API_BASE}/api/second-brain/dates`);
                 const data = await res.json();
                 
                 const select = document.getElementById('dateFilter');
@@ -310,7 +310,7 @@
             grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">로딩 중...</div></div>';
             
             try {
-                let url = `${API_BASE}/api/memory?limit=50`;
+                let url = `${API_BASE}/api/second-brain?limit=50`;
                 if (dateFilter) {
                     url += `&date=${dateFilter}`;
                 }
@@ -344,7 +344,7 @@
             grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">검색 중...</div></div>';
             
             try {
-                const res = await fetch(`${API_BASE}/api/memory/search?q=${encodeURIComponent(query)}`);
+                const res = await fetch(`${API_BASE}/api/second-brain/search?q=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 
                 renderInsights(data.insights);
@@ -366,7 +366,7 @@
         // 통계 로드
         async function loadStats() {
             try {
-                const res = await fetch(`${API_BASE}/api/memory/stats`);
+                const res = await fetch(`${API_BASE}/api/second-brain/stats`);
                 const data = await res.json();
                 
                 document.getElementById('statTotal').textContent = data.total_insights;

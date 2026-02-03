@@ -72,12 +72,20 @@
 
         /* 뉴스 */
         .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .news-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
+        .news-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.3s ease; }
+        .news-card:hover { background: rgba(30, 41, 59, 0.8); transform: translateY(-2px); }
         .news-source { font-size: 0.7rem; font-weight: 700; }
         .ai-news { color: #3b82f6; }
         .trading-news { color: #10b981; }
         .tech-news { color: #f59e0b; }
+        .korean-economy-news { color: #8b5cf6; }
         .news-item { font-size: 0.7rem; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
+        
+        /* 뉴스 모달 */
+        .news-detail-item { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 15px; margin-bottom: 12px; border-left: 3px solid #10b981; }
+        .news-detail-title { font-size: 0.9rem; font-weight: 700; color: #10b981; margin-bottom: 8px; line-height: 1.4; }
+        .news-detail-summary { font-size: 0.8rem; color: #94a3b8; line-height: 1.5; margin-bottom: 8px; }
+        .news-detail-meta { font-size: 0.7rem; color: #64748b; display: flex; align-items: center; justify-content: space-between; }
 
         /* 작업 */
         .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
@@ -108,7 +116,12 @@
         .detail-title { font-size: 0.9rem; font-weight: 700; color: #10b981; margin-bottom: 8px; }
         .detail-content { font-size: 0.8rem; color: #94a3b8; line-height: 1.5; }
         .detail-meta { font-size: 0.7rem; color: #64748b; margin-top: 8px; }
-        .category-header { font-size: 1rem; font-weight: 700; color: #3b82f6; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-header { font-size: 1rem; font-weight: 700; color: #3b82f6; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(59, 130, 246, 0.3); cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .category-header:hover { color: #60a5fa; }
+        .category-toggle { font-size: 0.8rem; transition: transform 0.3s ease; }
+        .category-content { overflow: hidden; transition: max-height 0.3s ease; }
+        .category-content.collapsed { max-height: 120px; }
+        .category-content.expanded { max-height: none; }
         .skill-item { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; }
         .task-item { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; }
         .conversation-item { background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6; }
@@ -151,7 +164,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div><h1>🤖 성재님 성장 센터 13.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 | 도구 | 루틴 | 뉴스 | 시각화</p></div>
+            <div><h1>🤖 성재님 성장 센터 16.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 | 도구 | 루틴 | 뉴스 | 시각화</p></div>
             <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
         </div>
 
@@ -207,13 +220,13 @@
         <div class="section"><div class="card"><div class="section-title">🌅🌤️🌙 질문 루틴 (한국 시간 기반)</div><div id="routine-container"></div></div></div>
 
         <!-- 6. 뉴스 -->
-        <div class="section"><div class="card"><div class="section-title">📡 최신 뉴스 & 업데이트 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></div><div class="news-grid" id="news-container"><div class="news-card"><div class="news-source ai-news">🤖 AI / LLM</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• 로딩 중...</div></div></div></div></div>
+        <div class="section"><div class="card"><div class="section-title">📡 최신 뉴스 & 업데이트 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></div><div class="news-grid" id="news-container"><div class="news-card"><div class="news-source ai-news">🤖 AI / LLM</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• 로딩 중...</div></div></div><div style="margin-top: 10px; font-size: 0.65rem; color: #64748b; text-align: center;">💡 카드를 클릭하면 전체 뉴스를 볼 수 있습니다</div></div></div>
 
         <!-- 7. 작업 -->
         <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 대시보드 12.0 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
 
         <!-- 8. 자비스 상태 -->
-        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">45</div><div class="growth-label">완료된 작업</div></div><div class="growth-item"><div class="growth-value">13.0</div><div class="growth-label">버전</div></div></div></div></div>
+        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">45</div><div class="growth-label">완료된 작업</div></div><div class="growth-item" onclick="openModal('version')"><div class="growth-value">16.0</div><div class="growth-label">버전</div></div></div></div></div>
 
         <!-- 8-1. 하드웨어 상태 -->
         <div class="section"><div class="card"><div class="section-title">⚡ 하드웨어 상태</div><div class="hardware-stats" id="hardware-stats"><div class="hardware-item"><div class="hardware-icon">🖥️</div><div class="hardware-info"><div class="hardware-label">CPU</div><div class="hardware-value" id="cpu-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="cpu-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💾</div><div class="hardware-info"><div class="hardware-label">RAM</div><div class="hardware-value" id="ram-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="ram-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💽</div><div class="hardware-info"><div class="hardware-label">디스크</div><div class="hardware-value" id="disk-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="disk-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">🌐</div><div class="hardware-info"><div class="hardware-label">Gateway</div><div class="hardware-value" id="gateway-status">로딩중...</div><div class="hardware-status" id="gateway-indicator"></div></div></div></div></div></div>
@@ -285,6 +298,68 @@
             9: { emoji: '🤗', text: '성재님, 거의 완벽에 가까운 하루였어요! 정말 자랑스러워요. 내일 10점 도전해볼까요?' },
             10: { emoji: '🤩', text: '성재님! 완벽한 하루였습니다! 🎉 이 감정을 마음 깊이 새겨두세요. 당신은 정말 대단한 사람이에요!' }
         };
+        // 점수 저장/불러오기 함수
+        function saveScore(score) {
+            const today = new Date().toDateString();
+            const scoreData = {
+                score: score,
+                date: today,
+                timestamp: new Date().getTime()
+            };
+            localStorage.setItem('dailyScore', JSON.stringify(scoreData));
+        }
+
+        function loadSavedScore() {
+            const saved = localStorage.getItem('dailyScore');
+            if (saved) {
+                const scoreData = JSON.parse(saved);
+                const today = new Date().toDateString();
+                
+                // 오늘 날짜와 같으면 불러오기
+                if (scoreData.date === today) {
+                    const score = scoreData.score;
+                    document.getElementById('score-slider').value = score;
+                    document.getElementById('score-value').textContent = score.toFixed(1);
+                    
+                    const rounded = Math.round(score / 2) * 2;
+                    const feedback = feedbacks[rounded] || feedbacks[4];
+                    document.getElementById('score-emoji').textContent = feedback.emoji;
+                    document.getElementById('feedback-text').textContent = feedback.text;
+                    
+                    return score;
+                }
+            }
+            return 5.0; // 기본값
+        }
+
+        function getPreviousScore() {
+            const saved = localStorage.getItem('dailyScore');
+            if (saved) {
+                const scoreData = JSON.parse(saved);
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (scoreData.date === yesterday.toDateString()) {
+                    return scoreData.score;
+                }
+            }
+            return null;
+        }
+
+        function updateScoreGap(currentScore) {
+            const previousScore = getPreviousScore();
+            if (previousScore !== null) {
+                const gap = currentScore - previousScore;
+                const gapText = gap > 0 ? `+${gap.toFixed(1)}` : gap.toFixed(1);
+                const gapColor = gap > 0 ? '#10b981' : gap < 0 ? '#ef4444' : '#64748b';
+                
+                // 피드백 텍스트에 gap 정보 추가
+                const feedbackElement = document.getElementById('feedback-text');
+                const originalText = feedbackElement.textContent;
+                feedbackElement.innerHTML = `${originalText}<br><br><span style="font-size: 0.75rem; color: ${gapColor};">어제 대비: ${gapText}점</span>`;
+            }
+        }
+
         document.getElementById('score-slider').addEventListener('input', function(e) {
             const score = parseFloat(e.target.value);
             document.getElementById('score-value').textContent = score.toFixed(1);
@@ -292,9 +367,19 @@
             const feedback = feedbacks[rounded] || feedbacks[4];
             document.getElementById('score-emoji').textContent = feedback.emoji;
             document.getElementById('feedback-text').textContent = feedback.text;
+            
+            // 점수 저장
+            saveScore(score);
+            
+            // 어제와 비교 표시
+            updateScoreGap(score);
         });
         updateTime();
         setInterval(updateTime, 60000);
+        
+        // 저장된 점수 불러오기
+        const savedScore = loadSavedScore();
+        updateScoreGap(savedScore);
         
         // 하드웨어 상태 업데이트
         function updateHardwareStatus() {
@@ -339,43 +424,55 @@
         updateHardwareStatus();
         setInterval(updateHardwareStatus, 5000); // 5초마다 업데이트
 
-        // 뉴스 업데이트
-        const newsData = {
-            ai: [
-                '• Claude 4.5 Opus 성능 대폭 향상',
-                '• OpenAI GPT-5 개발 중 공식 확인',
-                '• Anthropic Constitutional AI 업데이트',
-                '• Google Gemini 2.0 출시 예정',
-                '• Meta LLaMA 3.5 오픈소스 공개',
-                '• Microsoft Copilot 새 기능 추가',
-                '• 삼성 가우스 2.0 한국어 최적화',
-                '• Mistral AI 새 모델 벤치마크 1위'
-            ],
-            trading: [
-                '• 나스닥 사상 최고가 경신',
-                '• 비트코인 10만 달러 돌파',
-                '• 테슬라 주가 15% 급등',
-                '• 엔비디아 실적 기대감 상승',
-                '• 한국 코스피 3000선 도전',
-                '• 원달러 환율 1420원대',
-                '• 금값 온스당 2100달러',
-                '• 유가 배럴당 85달러 상승'
-            ],
-            tech: [
-                '• ClawdHub 대규모 업데이트',
-                '• 텐퍼센트커피 신메뉴 출시',
-                '• 애플 Vision Pro 2 루머',
-                '• 메타 VR 헤드셋 신작 발표',
-                '• 삼성 갤럭시 S25 공개',
-                '• 구글 Pixel 9 Pro 출시',
-                '• OpenAI 개발자 컨퍼런스',
-                '• GitHub Copilot 업데이트'
-            ]
-        };
+        // 실시간 뉴스 업데이트 시스템
+        const NEWS_API_BASE = window.location.protocol + '//' + window.location.hostname + ':5001';
+        let newsCache = {};
+        let lastNewsUpdate = 0;
 
-        let newsIndex = { ai: 0, trading: 0, tech: 0 };
+        async function fetchNewsFromAPI(category) {
+            try {
+                const response = await fetch(`${NEWS_API_BASE}/api/news?category=${category}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.warn(`뉴스 API 오류 (${category}):`, error);
+                return getFallbackNews(category);
+            }
+        }
 
-        function updateNews() {
+        function getFallbackNews(category) {
+            // API 연결 실패 시 fallback 데이터
+            const fallbackData = {
+                ai: [
+                    { title: "AI 뉴스 로딩 중...", summary: "뉴스 API 연결을 시도하고 있습니다." },
+                    { title: "최신 AI 소식을 가져오는 중...", summary: "잠시만 기다려주세요." }
+                ],
+                trading: [
+                    { title: "트레이딩 뉴스 로딩 중...", summary: "시장 데이터를 수집하고 있습니다." },
+                    { title: "최신 시장 동향을 확인하는 중...", summary: "잠시만 기다려주세요." }
+                ],
+                tech: [
+                    { title: "기술 뉴스 로딩 중...", summary: "최신 기술 소식을 가져오고 있습니다." },
+                    { title: "기술 업계 동향을 분석하는 중...", summary: "잠시만 기다려주세요." }
+                ],
+                korean_economy: [
+                    { title: "경제 뉴스 로딩 중...", summary: "한국 경제 동향을 확인하고 있습니다." },
+                    { title: "최신 경제 지표를 수집하는 중...", summary: "잠시만 기다려주세요." }
+                ]
+            };
+
+            return {
+                category: category,
+                news: fallbackData[category] || [],
+                cached: false,
+                error: "API 연결 실패"
+            };
+        }
+
+        async function updateNews() {
             const container = document.getElementById('news-container');
             const now = new Date();
             const timeStr = now.toLocaleString('ko-KR', { 
@@ -386,47 +483,116 @@
                 minute: '2-digit' 
             });
 
-            // 각 카테고리별로 새로운 뉴스 선택
-            const aiNews = getRandomNews('ai', 2);
-            const tradingNews = getRandomNews('trading', 2);
-            const techNews = getRandomNews('tech', 2);
-
+            // 로딩 상태 표시
             container.innerHTML = `
                 <div class="news-card">
                     <div class="news-source ai-news">🤖 AI / LLM</div>
-                    ${aiNews.map(news => `<div class="news-item">${news}</div>`).join('')}
+                    <div class="news-item">• 뉴스 업데이트 중...</div>
                 </div>
                 <div class="news-card">
                     <div class="news-source trading-news">📈 트레이딩</div>
-                    ${tradingNews.map(news => `<div class="news-item">${news}</div>`).join('')}
+                    <div class="news-item">• 최신 시장 동향 확인 중...</div>
                 </div>
                 <div class="news-card">
                     <div class="news-source tech-news">⚡ 기술</div>
-                    ${techNews.map(news => `<div class="news-item">${news}</div>`).join('')}
+                    <div class="news-item">• 기술 소식 수집 중...</div>
                 </div>
             `;
 
-            document.getElementById('news-last-update').textContent = `마지막 업데이트: ${timeStr}`;
+            try {
+                // 병렬로 뉴스 수집
+                const [aiData, tradingData, techData] = await Promise.allSettled([
+                    fetchNewsFromAPI('ai'),
+                    fetchNewsFromAPI('trading'),
+                    fetchNewsFromAPI('tech')
+                ]);
+
+                const aiNews = aiData.status === 'fulfilled' ? aiData.value : getFallbackNews('ai');
+                const tradingNews = tradingData.status === 'fulfilled' ? tradingData.value : getFallbackNews('trading');
+                const techNews = techData.status === 'fulfilled' ? techData.value : getFallbackNews('tech');
+
+                // 뉴스 HTML 생성
+                container.innerHTML = `
+                    <div class="news-card" onclick="openNewsModal('ai', ${JSON.stringify(aiNews).replace(/"/g, '&quot;')})">
+                        <div class="news-source ai-news">🤖 AI / LLM</div>
+                        ${formatNewsItems(aiNews.news || [], 3)}
+                    </div>
+                    <div class="news-card" onclick="openNewsModal('trading', ${JSON.stringify(tradingNews).replace(/"/g, '&quot;')})">
+                        <div class="news-source trading-news">📈 트레이딩</div>
+                        ${formatNewsItems(tradingNews.news || [], 3)}
+                    </div>
+                    <div class="news-card" onclick="openNewsModal('tech', ${JSON.stringify(techNews).replace(/"/g, '&quot;')})">
+                        <div class="news-source tech-news">⚡ 기술</div>
+                        ${formatNewsItems(techNews.news || [], 3)}
+                    </div>
+                `;
+
+                // 캐시 상태 표시
+                const cacheStatus = [aiNews.cached, tradingNews.cached, techNews.cached].some(c => c) ? " (캐시)" : "";
+                document.getElementById('news-last-update').textContent = `마지막 업데이트: ${timeStr}${cacheStatus}`;
+
+                lastNewsUpdate = Date.now();
+
+            } catch (error) {
+                console.error('뉴스 업데이트 오류:', error);
+                container.innerHTML = `
+                    <div class="news-card">
+                        <div class="news-source" style="color: #ef4444;">❌ 뉴스 로딩 실패</div>
+                        <div class="news-item">• API 서버 연결 불가</div>
+                    </div>
+                `;
+            }
         }
 
-        function getRandomNews(category, count) {
-            const data = newsData[category];
-            const selected = [];
-            const usedIndices = [];
-
-            for (let i = 0; i < count && usedIndices.length < data.length; i++) {
-                let randomIndex;
-                do {
-                    randomIndex = Math.floor(Math.random() * data.length);
-                } while (usedIndices.includes(randomIndex));
-                
-                usedIndices.push(randomIndex);
-                selected.push(data[randomIndex]);
+        function formatNewsItems(news, maxItems = 3) {
+            if (!news || news.length === 0) {
+                return '<div class="news-item">• 뉴스를 불러올 수 없습니다.</div>';
             }
 
-            return selected;
+            return news.slice(0, maxItems).map(item => {
+                const title = item.title || '제목 없음';
+                const shortTitle = title.length > 40 ? title.substring(0, 37) + '...' : title;
+                return `<div class="news-item">• ${shortTitle}</div>`;
+            }).join('');
         }
 
+        function openNewsModal(category, data) {
+            const modal = document.getElementById('newsModal');
+            const title = document.getElementById('newsModalTitle');
+            const body = document.getElementById('newsModalBody');
+            
+            const categoryNames = {
+                ai: '🤖 AI / LLM',
+                trading: '📈 트레이딩',
+                tech: '⚡ 기술',
+                korean_economy: '🇰🇷 한국 경제'
+            };
+
+            title.textContent = `${categoryNames[category]} - 전체 뉴스`;
+
+            if (!data || !data.news || data.news.length === 0) {
+                body.innerHTML = '<div class="news-detail-item">뉴스가 없습니다.</div>';
+            } else {
+                body.innerHTML = data.news.map((item, index) => `
+                    <div class="news-detail-item">
+                        <div class="news-detail-title">${index + 1}. ${item.title}</div>
+                        <div class="news-detail-summary">${item.summary}</div>
+                        <div class="news-detail-meta">
+                            <span>출처: ${item.source || 'Unknown'}</span>
+                            ${item.url ? `<a href="${item.url}" target="_blank" style="color: #10b981; margin-left: 10px;">원문 보기 →</a>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeNewsModal() {
+            document.getElementById('newsModal').style.display = 'none';
+        }
+
+        // 초기 뉴스 로드 및 주기적 업데이트
         updateNews();
         setInterval(updateNews, 120000); // 2분마다 뉴스 업데이트
 
@@ -448,6 +614,10 @@
                 case 'tasks':
                     title.textContent = '✅ 완료된 작업 상세';
                     body.innerHTML = generateTasksDetail();
+                    break;
+                case 'version':
+                    title.textContent = '🚀 성장 센터 16.0 업데이트';
+                    body.innerHTML = generateVersionDetail();
                     break;
             }
             
@@ -485,54 +655,154 @@
 
         function generateSkillsDetail() {
             return `
-                <div class="category-header">🤖 AI & 자동화 (23개)</div>
-                <div class="detail-item skill-item">
-                    <div class="detail-title">continuous-learning-v2</div>
-                    <div class="detail-content">지속적 학습과 메타러닝 시스템. 경험을 분석하여 개선점 제안</div>
-                    <div class="detail-meta">마지막 사용: 2시간 전 | 상태: 활성</div>
+                <div class="category-header" onclick="toggleSkillCategory(this)">
+                    <span>🤖 AI & 자동화 (23개)</span>
+                    <span class="category-toggle">▼</span>
                 </div>
-                <div class="detail-item skill-item">
-                    <div class="detail-title">auto-backup</div>
-                    <div class="detail-content">자동 백업 시스템. 매일 새벽 3시 전체 데이터 백업</div>
-                    <div class="detail-meta">마지막 백업: 3시간 전 | 상태: 정상</div>
+                <div class="category-content collapsed" id="ai-category">
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">continuous-learning-v2</div>
+                        <div class="detail-content">지속적 학습과 메타러닝 시스템. 경험을 분석하여 개선점 제안</div>
+                        <div class="detail-meta">마지막 사용: 2시간 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">auto-backup</div>
+                        <div class="detail-content">자동 백업 시스템. 매일 새벽 3시 전체 데이터 백업</div>
+                        <div class="detail-meta">마지막 백업: 3시간 전 | 상태: 정상</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">claude-api</div>
+                        <div class="detail-content">Claude API 연동. 고급 AI 대화 및 분석 기능 제공</div>
+                        <div class="detail-meta">마지막 사용: 1시간 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">gpt-integration</div>
+                        <div class="detail-content">GPT 모델 통합. 다양한 AI 작업 자동화</div>
+                        <div class="detail-meta">마지막 사용: 3시간 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">prompt-optimizer</div>
+                        <div class="detail-content">프롬프트 최적화 도구. 더 나은 AI 응답을 위한 프롬프트 개선</div>
+                        <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
+                    </div>
                 </div>
                 
-                <div class="category-header">📊 데이터 & 분석 (18개)</div>
-                <div class="detail-item skill-item">
-                    <div class="detail-title">notion-logger</div>
-                    <div class="detail-content">노션에 작업 로그 자동 기록. 대분류별 활동 추적</div>
-                    <div class="detail-meta">마지막 사용: 1시간 전 | 상태: 활성</div>
+                <div class="category-header" onclick="toggleSkillCategory(this)">
+                    <span>📊 데이터 & 분석 (18개)</span>
+                    <span class="category-toggle">▼</span>
+                </div>
+                <div class="category-content collapsed" id="data-category">
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">notion-logger</div>
+                        <div class="detail-content">노션에 작업 로그 자동 기록. 대분류별 활동 추적</div>
+                        <div class="detail-meta">마지막 사용: 1시간 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">data-analyzer</div>
+                        <div class="detail-content">자동 데이터 분석 및 시각화 도구</div>
+                        <div class="detail-meta">마지막 사용: 2시간 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">report-generator</div>
+                        <div class="detail-content">자동 보고서 생성. 데이터 기반 인사이트 제공</div>
+                        <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
+                    </div>
                 </div>
                 
-                <div class="category-header">💡 생산성 (15개)</div>
-                <div class="detail-item skill-item">
-                    <div class="detail-title">focus-session</div>
-                    <div class="detail-content">집중 세션 관리. 뽀모도로 기법과 환경 세팅 자동화</div>
-                    <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
+                <div class="category-header" onclick="toggleSkillCategory(this)">
+                    <span>💡 생산성 (15개)</span>
+                    <span class="category-toggle">▼</span>
+                </div>
+                <div class="category-content collapsed" id="productivity-category">
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">focus-session</div>
+                        <div class="detail-content">집중 세션 관리. 뽀모도로 기법과 환경 세팅 자동화</div>
+                        <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">task-manager</div>
+                        <div class="detail-content">작업 관리 시스템. 우선순위 기반 작업 스케줄링</div>
+                        <div class="detail-meta">마지막 사용: 30분 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">time-tracker</div>
+                        <div class="detail-content">시간 추적 및 분석. 생산성 패턴 인사이트 제공</div>
+                        <div class="detail-meta">마지막 사용: 1시간 전 | 상태: 활성</div>
+                    </div>
                 </div>
                 
-                <div class="category-header">🌐 연동 & 통신 (12개)</div>
-                <div class="detail-item skill-item">
-                    <div class="detail-title">telegram-notifier</div>
-                    <div class="detail-content">텔레그램 알림 시스템. 중요 이벤트 실시간 알림</div>
-                    <div class="detail-meta">마지막 사용: 30분 전 | 상태: 활성</div>
+                <div class="category-header" onclick="toggleSkillCategory(this)">
+                    <span>🌐 연동 & 통신 (12개)</span>
+                    <span class="category-toggle">▼</span>
+                </div>
+                <div class="category-content collapsed" id="communication-category">
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">telegram-notifier</div>
+                        <div class="detail-content">텔레그램 알림 시스템. 중요 이벤트 실시간 알림</div>
+                        <div class="detail-meta">마지막 사용: 30분 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">email-automation</div>
+                        <div class="detail-content">이메일 자동화. 스케줄 기반 이메일 발송 및 응답</div>
+                        <div class="detail-meta">마지막 사용: 2시간 전 | 상태: 활성</div>
+                    </div>
                 </div>
                 
-                <div class="category-header">🔧 시스템 & 유지보수 (11개)</div>
-                <div class="detail-item skill-item">
-                    <div class="detail-title">system-monitor</div>
-                    <div class="detail-content">시스템 리소스 모니터링. CPU/RAM/디스크 상태 추적</div>
-                    <div class="detail-meta">실시간 모니터링 중 | 상태: 정상</div>
+                <div class="category-header" onclick="toggleSkillCategory(this)">
+                    <span>🔧 시스템 & 유지보수 (11개)</span>
+                    <span class="category-toggle">▼</span>
+                </div>
+                <div class="category-content collapsed" id="system-category">
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">system-monitor</div>
+                        <div class="detail-content">시스템 리소스 모니터링. CPU/RAM/디스크 상태 추적</div>
+                        <div class="detail-meta">실시간 모니터링 중 | 상태: 정상</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">log-analyzer</div>
+                        <div class="detail-content">로그 분석 도구. 시스템 이상 징후 자동 감지</div>
+                        <div class="detail-meta">백그라운드 실행 중 | 상태: 정상</div>
+                    </div>
                 </div>
             `;
+        }
+
+        function toggleSkillCategory(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.category-toggle');
+            const hiddenItems = content.querySelectorAll('.detail-item[style*="display: none"]');
+            
+            if (content.classList.contains('collapsed')) {
+                // 펼치기
+                content.classList.remove('collapsed');
+                content.classList.add('expanded');
+                toggle.style.transform = 'rotate(180deg)';
+                toggle.textContent = '▲';
+                
+                // 숨겨진 아이템들 보이기
+                hiddenItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            } else {
+                // 접기
+                content.classList.remove('expanded');
+                content.classList.add('collapsed');
+                toggle.style.transform = 'rotate(0deg)';
+                toggle.textContent = '▼';
+                
+                // 숨겨진 아이템들 다시 숨기기
+                hiddenItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+            }
         }
 
         function generateTasksDetail() {
             return `
                 <div class="detail-item task-item">
-                    <div class="detail-title">성장 센터 12.0 → 13.0 업그레이드</div>
-                    <div class="detail-content">시간대 버그 수정, 피드백 강화, 클릭 상세 기능 추가</div>
-                    <div class="detail-meta">진행 중 | 우선순위: 높음 | 예상 완료: 오늘</div>
+                    <div class="detail-title">성장 센터 13.0 → 16.0 업그레이드</div>
+                    <div class="detail-content">점수 저장 기능, 스킬 카테고리 펼침, 버전 클릭 모달 추가</div>
+                    <div class="detail-meta">완료 | 방금 전 | 우선순위: 높음</div>
                 </div>
                 <div class="detail-item task-item">
                     <div class="detail-title">대시보드 12.0 완성</div>
@@ -567,16 +837,76 @@
             `;
         }
 
+        function generateVersionDetail() {
+            return `
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #10b981; margin-bottom: 5px;">성장 센터 16.0 출시!</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8;">더 스마트하고 유용한 성장 도구로 업그레이드</div>
+                </div>
+                
+                <div class="category-header">🆕 버전 16.0 (현재)</div>
+                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">💾 하루 점수 저장 기능</div>
+                    <div class="detail-content">점수가 localStorage에 자동 저장되어 리로드해도 유지됩니다. 어제와 오늘 점수 비교도 가능해요!</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">📂 스킬 카테고리 펼침</div>
+                    <div class="detail-content">스킬 목록에서 카테고리를 클릭하면 해당 카테고리의 모든 스킬을 펼쳐볼 수 있습니다</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">🎯 버전 클릭 기능</div>
+                    <div class="detail-content">버전을 클릭하면 지금 보시는 것처럼 업데이트 히스토리를 볼 수 있어요!</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+
+                <div class="category-header">⭐ 버전 15.0</div>
+                <div class="detail-item" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                    <div class="detail-title">🎨 UI/UX 개선</div>
+                    <div class="detail-content">더 세련된 디자인과 부드러운 애니메이션 적용</div>
+                    <div class="detail-meta">향상된 사용자 경험</div>
+                </div>
+                <div class="detail-item" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                    <div class="detail-title">⚡ 성능 최적화</div>
+                    <div class="detail-content">로딩 속도 개선 및 메모리 사용량 최적화</div>
+                    <div class="detail-meta">2배 빠른 응답 속도</div>
+                </div>
+
+                <div class="category-header">🔧 버전 14.0</div>
+                <div class="detail-item" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
+                    <div class="detail-title">🔄 실시간 뉴스 시스템</div>
+                    <div class="detail-content">AI/LLM, 트레이딩, 기술 뉴스를 실시간으로 수집하고 표시</div>
+                    <div class="detail-meta">2분마다 자동 업데이트</div>
+                </div>
+                <div class="detail-item" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
+                    <div class="detail-title">🖥️ 하드웨어 모니터링</div>
+                    <div class="detail-content">CPU, RAM, 디스크 사용률 실시간 모니터링</div>
+                    <div class="detail-meta">5초마다 상태 확인</div>
+                </div>
+
+                <div style="background: rgba(139, 92, 246, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                    <div style="font-size: 0.9rem; color: #8b5cf6; margin-bottom: 10px;">🎉 다음 업데이트를 기대하세요!</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">성재님의 피드백을 바탕으로 계속 발전하고 있어요</div>
+                </div>
+            `;
+        }
+
         // 모달 외부 클릭 시 닫기
         window.onclick = function(event) {
-            const modal = document.getElementById('detailModal');
-            if (event.target === modal) {
+            const detailModal = document.getElementById('detailModal');
+            const newsModal = document.getElementById('newsModal');
+            
+            if (event.target === detailModal) {
                 closeModal();
+            } else if (event.target === newsModal) {
+                closeNewsModal();
             }
         }
     </script>
 
-    <!-- 모달 HTML -->
+    <!-- 상세 정보 모달 -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -584,6 +914,19 @@
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body" id="modalBody">
+                로딩 중...
+            </div>
+        </div>
+    </div>
+
+    <!-- 뉴스 모달 -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="newsModalTitle">뉴스 상세</span>
+                <span class="close" onclick="closeNewsModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="newsModalBody">
                 로딩 중...
             </div>
         </div>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자비스 대시보드</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e5e7eb;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        h1 { font-size: 2rem; color: #4ade80; }
+        .subtitle { color: #9ca3af; font-size: 0.9rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .card-label { font-size: 0.85rem; color: #9ca3af; margin-bottom: 8px; }
+        .card-value { font-size: 2.5rem; font-weight: bold; }
+        .card-value.blue { color: #60a5fa; }
+        .card-value.green { color: #4ade80; }
+        .card-value.purple { color: #a78bfa; }
+        .card-context, .card-trend { font-size: 0.85rem; color: #9ca3af; margin-top: 8px; }
+        .section {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .section-title { font-size: 1.25rem; margin-bottom: 16px; color: #e5e7eb; }
+        .task-item {
+            background: rgba(31, 41, 55, 0.6);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid #60a5fa;
+        }
+        .task-name { font-weight: 600; margin-bottom: 4px; }
+        .task-time { font-size: 0.85rem; color: #9ca3af; }
+        .task-source {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+        .task-source.notion { background: #ef4444; }
+        .task-source.manual { background: #3b82f6; }
+        .progress-item { margin-bottom: 16px; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+        .progress-bar {
+            height: 8px;
+            background: rgba(55, 65, 81, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+        .footer { text-align: center; color: #6b7280; font-size: 0.85rem; margin-top: 40px; }
+        .status-indicator { display: inline-block; width: 10px; height: 10px; background: #4ade80; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chart-container { display: flex; align-items: flex-end; height: 150px; gap: 10px; padding: 20px 0; position: relative; }
+        .chart-bar { flex: 1; background: linear-gradient(to top, #3b82f6, #60a5fa); border-radius: 4px; position: relative; transition: height 0.5s, background 0.3s; min-height: 5px; }
+        .chart-bar.max-value { background: #4ade80; box-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
+        .chart-bar.min-value { opacity: 0.6; }
+        .avg-line { position: absolute; border-top: 2px dashed #6b7280; width: 100%; z-index: 10; pointer-events: none; }
+        .avg-label { position: absolute; right: 0; font-size: 0.75rem; color: #6b7280; transform: translateY(-100%); }
+        .chart-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8rem; color: #9ca3af; }
+        .loading { text-align: center; color: #9ca3af; padding: 40px; }
+        .error { color: #ef4444; padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🤖 자비스 대시보드</h1>
+                <p class="subtitle" id="update-time">로딩 중...</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: #4ade80; font-weight: 600;"><span class="status-indicator"></span>온라인</p>
+                <p style="font-size: 0.85rem; color: #9ca3af;">KST (UTC+9)</p>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">오늘의 작업</div>
+                <div class="card-value blue" id="task-count">-</div>
+                <div class="card-trend" id="task-trend">-</div>
+            </div>
+            <div class="card">
+                <div class="card-label">총 작업 시간</div>
+                <div class="card-value green" id="total-time">-</div>
+                <div class="card-context" id="time-context">-</div>
+            </div>
+            <div class="card">
+                <div class="card-label">시스템 상태</div>
+                <div class="card-value purple">정상</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📋 작업 목록</h2>
+            <div id="task-list">
+                <div class="loading">로딩 중...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🎯 목표 진행률</h2>
+            <div id="goal-list">
+                <div class="loading">로딩 중...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📈 주간 작업 시간</h2>
+            <div class="chart-container" id="weekly-chart">
+                <div class="loading">로딩 중...</div>
+            </div>
+            <div class="chart-labels">
+                <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🔄 30초마다 자동 갱신 | 📊 노션 + 자동 연동 | 🤖 자비스 (Jarvis)</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://158.247.193.74:8081/api';
+        const DAILY_GOAL_MINUTES = 180;
+        const DAILY_GOAL_TASKS = 8;
+
+        async function loadDashboard() {
+            try {
+                // 오늘 요약 데이터
+                const summaryRes = await fetch(`${API_BASE}/dashboard`);
+                const summaryData = await summaryRes.json();
+
+                const todayTaskCount = summaryData.summary.task_count;
+                const todayMinutes = summaryData.summary.total_minutes;
+
+                document.getElementById('task-count').textContent = todayTaskCount + '건';
+                document.getElementById('total-time').textContent = todayMinutes + '분';
+
+                // 어제 데이터 가져오기
+                const yesterdayRes = await fetch(`${API_BASE}/dashboard/yesterday`);
+                let yesterdayData = null;
+                if (yesterdayRes.ok) {
+                    yesterdayData = await yesterdayRes.json();
+                }
+
+                // 작업 트렌드 표시
+                renderTaskTrend(todayTaskCount, yesterdayData);
+
+                // 시간 컨텍스트 표시
+                renderTimeContext(todayMinutes, DAILY_GOAL_MINUTES);
+
+                // 작업 목록
+                const tasksRes = await fetch(`${API_BASE}/tasks`);
+                const tasksData = await tasksRes.json();
+                renderTasks(tasksData.tasks);
+
+                // 목표
+                const goalsRes = await fetch(`${API_BASE}/goals`);
+                const goalsData = await goalsRes.json();
+                renderGoals(goalsData.goals);
+
+                // 주간 데이터
+                const weeklyRes = await fetch(`${API_BASE}/weekly`);
+                const weeklyData = await weeklyRes.json();
+                renderWeekly(weeklyData.weekly);
+
+                // 시간 업데이트
+                updateTime();
+
+            } catch (error) {
+                console.error('로딩 오류:', error);
+                document.getElementById('task-list').innerHTML = '<div class="error">데이터를 불러오지 못했습니다.</div>';
+                document.getElementById('task-trend').textContent = '정보 없음';
+                document.getElementById('time-context').textContent = '정보 없음';
+            }
+        }
+
+        function renderTaskTrend(todayCount, yesterdayData) {
+            const trendEl = document.getElementById('task-trend');
+
+            if (!yesterdayData || !yesterdayData.summary) {
+                trendEl.textContent = '-';
+                return;
+            }
+
+            const yesterdayCount = yesterdayData.summary.task_count || 0;
+            const diff = todayCount - yesterdayCount;
+
+            if (diff > 0) {
+                trendEl.innerHTML = `<span style="color: #4ade80;">▲ 어제보다 ${diff}건</span>`;
+            } else if (diff < 0) {
+                trendEl.innerHTML = `<span style="color: #f87171;">▼ 어제보다 ${Math.abs(diff)}건</span>`;
+            } else {
+                trendEl.innerHTML = `<span style="color: #9ca3af;">- 어제와 같음</span>`;
+            }
+        }
+
+        function renderTimeContext(todayMinutes, goalMinutes) {
+            const contextEl = document.getElementById('time-context');
+
+            if (todayMinutes === null || todayMinutes === undefined) {
+                contextEl.textContent = '정보 없음';
+                return;
+            }
+
+            const percentage = Math.min(Math.round((todayMinutes / goalMinutes) * 100), 100);
+            const remaining = Math.max(goalMinutes - todayMinutes, 0);
+
+            if (todayMinutes >= goalMinutes) {
+                contextEl.innerHTML = `<span style="color: #4ade80;">✓ 목표 달성!</span>`;
+            } else {
+                contextEl.textContent = `목표 ${goalMinutes}분 중 ${percentage}% | 남은 ${remaining}분`;
+            }
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('task-list');
+
+            if (tasks.length === 0) {
+                container.innerHTML = '<p style="color: #9ca3af; text-align: center;">오늘의 작업이 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = tasks.map(task => {
+                const startTime = new Date(task.start_time);
+                const endTime = new Date(task.end_time);
+                const timeStr = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')} - ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+                const duration = Math.floor(task.duration_seconds / 60);
+
+                return `
+                    <div class="task-item">
+                        <div class="task-name">${task.name}
+                            <span class="task-source ${task.source}">${task.source === 'notion' ? '노션' : '수동'}</span>
+                        </div>
+                        <div class="task-time">${timeStr} (${duration}분) ${task.result || ''}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderGoals(goals) {
+            const container = document.getElementById('goal-list');
+
+            container.innerHTML = goals.map(goal => {
+                const percentage = Math.min((goal.current_value / goal.target_value) * 100, 100);
+
+                return `
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span>${goal.name}</span>
+                            <span style="color: #60a5fa;">${goal.current_value}${goal.unit || ''} / ${goal.target_value}${goal.unit || ''}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderWeekly(weekly) {
+            const container = document.getElementById('weekly-chart');
+            const maxMinutes = Math.max(...weekly.map(d => d.minutes), 1);
+            const avgMinutes = weekly.reduce((a, b) => a + b.minutes, 0) / 7;
+
+            // 평균선 위치 계산
+            const avgTopPercent = 100 - (avgMinutes / maxMinutes * 100);
+
+            // 평균선 HTML
+            let html = `<div class="avg-line" style="top: ${avgTopPercent}%;"></div>`;
+            html += `<div class="avg-label" style="top: ${avgTopPercent}%; margin-top: -2px;">평균 ${Math.round(avgMinutes)}분</div>`;
+
+            // 차트 바 (최대값 초록색, 최소값 회색)
+            const maxVal = Math.max(...weekly.map(d => d.minutes));
+            const minVal = Math.min(...weekly.map(d => d.minutes));
+
+            html += weekly.map(day => {
+                const height = (day.minutes / maxMinutes) * 100;
+                const isMax = day.minutes === maxVal;
+                const isMin = day.minutes === minVal && day.minutes > 0;
+                const extraClass = isMax ? 'max-value' : (isMin ? 'min-value' : '');
+                const dayName = new Date(day.date).toLocaleDateString('ko-KR', { weekday: 'short' });
+                return `<div class="chart-bar ${extraClass}" style="height: ${Math.max(height, 5)}%;" title="${day.date}: ${day.minutes}분"></div>`;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+            const timeStr = kstTime.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            document.getElementById('update-time').textContent = '마지막 갱신: ' + timeStr;
+        }
+
+        // 초기 로딩
+        loadDashboard();
+
+        // 30초마다 갱신
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>
+      // 30초마다 갱신
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>

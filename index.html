@@ -164,7 +164,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div><h1>🤖 성재님 성장 센터 17.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 접이식 | 환경 세팅 우선순위 | 스킬 전체 보기 | 루틴 | 뉴스</p></div>
+            <div><h1>🤖 성재님 성장 센터 18.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 접이식 | 환경 세팅 우선순위 | 스킬 전체 보기 | 루틴 | localStorage 뉴스</p></div>
             <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
         </div>
 
@@ -207,7 +207,7 @@
                     </div>
                     <div class="collapse-content open">
                         <div class="collapse-inner">
-                            <div class="day-item">1. 성장 센터 17.0 업그레이드</div>
+                            <div class="day-item">1. 성장 센터 18.0 업그레이드</div>
                             <div class="day-item">2. 어제/오늘/내일 접이식 기능 추가</div>
                             <div class="day-item">3. 환경 세팅 우선순위 질문 추가</div>
                             <div class="day-item">4. 스킬 페이지 전체 보기 모달 개선</div>
@@ -281,14 +281,38 @@
         <!-- 5. 루틴 -->
         <div class="section"><div class="card"><div class="section-title">🌅🌤️🌙 질문 루틴 (한국 시간 기반)</div><div id="routine-container"></div></div></div>
 
-        <!-- 6. 뉴스 -->
-        <div class="section"><div class="card"><div class="section-title">📡 최신 뉴스 & 업데이트 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></div><div class="news-grid" id="news-container"><div class="news-card"><div class="news-source ai-news">🤖 AI / LLM</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• 로딩 중...</div></div></div><div style="margin-top: 10px; font-size: 0.65rem; color: #64748b; text-align: center;">💡 카드를 클릭하면 전체 뉴스를 볼 수 있습니다</div></div></div>
+        <!-- 6. 뉴스 (접이식) -->
+        <div class="collapse-section">
+            <div class="collapse-header" onclick="toggleCollapse(this)">
+                <span class="collapse-title">📡 최신 뉴스 & 업데이트 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></span>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="collapse-inner">
+                    <div class="news-grid" id="news-container">
+                        <div class="news-card">
+                            <div class="news-source ai-news">🤖 AI / LLM</div>
+                            <div class="news-item">• 로딩 중...</div>
+                        </div>
+                        <div class="news-card">
+                            <div class="news-source trading-news">📈 트레이딩</div>
+                            <div class="news-item">• 로딩 중...</div>
+                        </div>
+                        <div class="news-card">
+                            <div class="news-source tech-news">⚡ 기술</div>
+                            <div class="news-item">• 로딩 중...</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.65rem; color: #64748b; text-align: center;">💡 카드를 클릭하면 전체 뉴스를 볼 수 있습니다</div>
+                </div>
+            </div>
+        </div>
 
         <!-- 7. 작업 -->
         <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 대시보드 12.0 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
 
         <!-- 8. 자비스 상태 -->
-        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">48</div><div class="growth-label">완료된 작업</div></div><div class="growth-item" onclick="openModal('version')"><div class="growth-value">17.0</div><div class="growth-label">버전</div></div></div></div></div>
+        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">48</div><div class="growth-label">완료된 작업</div></div><div class="growth-item" onclick="openModal('version')"><div class="growth-value">18.0</div><div class="growth-label">버전</div></div></div></div></div>
 
         <!-- 8-1. 하드웨어 상태 -->
         <div class="section"><div class="card"><div class="section-title">⚡ 하드웨어 상태</div><div class="hardware-stats" id="hardware-stats"><div class="hardware-item"><div class="hardware-icon">🖥️</div><div class="hardware-info"><div class="hardware-label">CPU</div><div class="hardware-value" id="cpu-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="cpu-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💾</div><div class="hardware-info"><div class="hardware-label">RAM</div><div class="hardware-value" id="ram-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="ram-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💽</div><div class="hardware-info"><div class="hardware-label">디스크</div><div class="hardware-value" id="disk-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="disk-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">🌐</div><div class="hardware-info"><div class="hardware-label">Gateway</div><div class="hardware-value" id="gateway-status">로딩중...</div><div class="hardware-status" id="gateway-indicator"></div></div></div></div></div></div>
@@ -486,123 +510,130 @@
         updateHardwareStatus();
         setInterval(updateHardwareStatus, 5000); // 5초마다 업데이트
 
-        // 실시간 뉴스 업데이트 시스템
-        const NEWS_API_BASE = window.location.protocol + '//' + window.location.hostname + ':5001';
-        let newsCache = {};
-        let lastNewsUpdate = 0;
-
-        async function fetchNewsFromAPI(category) {
-            try {
-                const response = await fetch(`${NEWS_API_BASE}/api/news?category=${category}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+        // localStorage 기반 뉴스 시스템
+        function loadNewsFromStorage() {
+            const cachedNews = localStorage.getItem('latestNews');
+            const lastUpdate = localStorage.getItem('lastNewsUpdate');
+            
+            if (cachedNews && lastUpdate) {
+                try {
+                    const newsData = JSON.parse(cachedNews);
+                    const updateTime = parseInt(lastUpdate);
+                    displayNews(newsData);
+                    updateNewsTime(updateTime);
+                    return true;
+                } catch (error) {
+                    console.warn('뉴스 캐시 파싱 오류:', error);
+                    return false;
                 }
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.warn(`뉴스 API 오류 (${category}):`, error);
-                return getFallbackNews(category);
             }
+            return false;
         }
 
-        function getFallbackNews(category) {
-            // API 연결 실패 시 fallback 데이터
-            const fallbackData = {
+        function getDemoNews() {
+            return {
                 ai: [
-                    { title: "AI 뉴스 로딩 중...", summary: "뉴스 API 연결을 시도하고 있습니다." },
-                    { title: "최신 AI 소식을 가져오는 중...", summary: "잠시만 기다려주세요." }
+                    { 
+                        title: "Claude 4.5와 GPT-5의 성능 비교 분석", 
+                        summary: "최신 대형 언어 모델들의 벤치마크 결과와 실무 적용 사례를 종합 분석했습니다.",
+                        source: "AI Research Hub"
+                    },
+                    { 
+                        title: "AI 에이전트 시대, 개발자가 알아야 할 5가지", 
+                        summary: "자율 AI 에이전트의 등장으로 변화하는 소프트웨어 개발 패러다임을 살펴봅니다.",
+                        source: "TechCrunch"
+                    },
+                    { 
+                        title: "오픈AI, 새로운 추론 모델 'o3' 공개", 
+                        summary: "복잡한 수학 문제와 코딩 작업에서 인간 수준의 성능을 보이는 o3 모델이 발표되었습니다.",
+                        source: "OpenAI"
+                    }
                 ],
                 trading: [
-                    { title: "트레이딩 뉴스 로딩 중...", summary: "시장 데이터를 수집하고 있습니다." },
-                    { title: "최신 시장 동향을 확인하는 중...", summary: "잠시만 기다려주세요." }
+                    { 
+                        title: "비트코인, 10만 달러 돌파 후 조정 국면", 
+                        summary: "역사적인 10만 달러 돌파 후 차익실현 물량 출현으로 단기 조정이 예상됩니다.",
+                        source: "CoinDesk"
+                    },
+                    { 
+                        title: "AI 반도체 주식, 2025년 전망은?", 
+                        summary: "NVIDIA와 AMD를 중심으로 한 AI 반도체 섹터의 2025년 투자 전략을 분석합니다.",
+                        source: "Bloomberg"
+                    },
+                    { 
+                        title: "한국 증시, 외국인 매수세 지속", 
+                        summary: "연말 리밸런싱과 한국 기술주 매력도 상승으로 외국인 순매수가 이어지고 있습니다.",
+                        source: "Reuters"
+                    }
                 ],
                 tech: [
-                    { title: "기술 뉴스 로딩 중...", summary: "최신 기술 소식을 가져오고 있습니다." },
-                    { title: "기술 업계 동향을 분석하는 중...", summary: "잠시만 기다려주세요." }
-                ],
-                korean_economy: [
-                    { title: "경제 뉴스 로딩 중...", summary: "한국 경제 동향을 확인하고 있습니다." },
-                    { title: "최신 경제 지표를 수집하는 중...", summary: "잠시만 기다려주세요." }
+                    { 
+                        title: "애플, M4 Pro 칩셋으로 맥북 프로 성능 대폭 향상", 
+                        summary: "새로운 M4 Pro 칩셋이 탑재된 맥북 프로의 성능 벤치마크와 개발자 경험을 리뷰합니다.",
+                        source: "Apple Insider"
+                    },
+                    { 
+                        title: "메타, 새로운 VR 헤드셋 '퀘스트 4' 개발 중", 
+                        summary: "더욱 가벼워지고 해상도가 향상된 차세대 VR 헤드셋의 출시가 임박했습니다.",
+                        source: "The Verge"
+                    },
+                    { 
+                        title: "구글, Gemini 2.0 모델로 AI 어시스턴트 혁신", 
+                        summary: "더욱 자연스러운 대화와 멀티모달 기능이 강화된 Gemini 2.0의 주요 특징을 소개합니다.",
+                        source: "Google AI"
+                    }
                 ]
-            };
-
-            return {
-                category: category,
-                news: fallbackData[category] || [],
-                cached: false,
-                error: "API 연결 실패"
             };
         }
 
-        async function updateNews() {
+        function displayNews(newsData) {
             const container = document.getElementById('news-container');
-            const now = new Date();
-            const timeStr = now.toLocaleString('ko-KR', { 
-                timeZone: 'Asia/Seoul',
-                month: 'short', 
-                day: 'numeric', 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-
-            // 로딩 상태 표시
+            
             container.innerHTML = `
-                <div class="news-card">
+                <div class="news-card" onclick="openNewsModal('ai', ${JSON.stringify({news: newsData.ai}).replace(/"/g, '&quot;')})">
                     <div class="news-source ai-news">🤖 AI / LLM</div>
-                    <div class="news-item">• 뉴스 업데이트 중...</div>
+                    ${formatNewsItems(newsData.ai || [], 3)}
                 </div>
-                <div class="news-card">
+                <div class="news-card" onclick="openNewsModal('trading', ${JSON.stringify({news: newsData.trading}).replace(/"/g, '&quot;')})">
                     <div class="news-source trading-news">📈 트레이딩</div>
-                    <div class="news-item">• 최신 시장 동향 확인 중...</div>
+                    ${formatNewsItems(newsData.trading || [], 3)}
                 </div>
-                <div class="news-card">
+                <div class="news-card" onclick="openNewsModal('tech', ${JSON.stringify({news: newsData.tech}).replace(/"/g, '&quot;')})">
                     <div class="news-source tech-news">⚡ 기술</div>
-                    <div class="news-item">• 기술 소식 수집 중...</div>
+                    ${formatNewsItems(newsData.tech || [], 3)}
                 </div>
             `;
+        }
 
-            try {
-                // 병렬로 뉴스 수집
-                const [aiData, tradingData, techData] = await Promise.allSettled([
-                    fetchNewsFromAPI('ai'),
-                    fetchNewsFromAPI('trading'),
-                    fetchNewsFromAPI('tech')
-                ]);
+        function updateNewsTime(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            const minutes = Math.floor(diff / (1000 * 60));
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
 
-                const aiNews = aiData.status === 'fulfilled' ? aiData.value : getFallbackNews('ai');
-                const tradingNews = tradingData.status === 'fulfilled' ? tradingData.value : getFallbackNews('trading');
-                const techNews = techData.status === 'fulfilled' ? techData.value : getFallbackNews('tech');
+            let timeText = '';
+            if (days > 0) {
+                timeText = `${days}일 전`;
+            } else if (hours > 0) {
+                timeText = `${hours}시간 전`;
+            } else if (minutes > 0) {
+                timeText = `${minutes}분 전`;
+            } else {
+                timeText = '방금 전';
+            }
 
-                // 뉴스 HTML 생성
-                container.innerHTML = `
-                    <div class="news-card" onclick="openNewsModal('ai', ${JSON.stringify(aiNews).replace(/"/g, '&quot;')})">
-                        <div class="news-source ai-news">🤖 AI / LLM</div>
-                        ${formatNewsItems(aiNews.news || [], 3)}
-                    </div>
-                    <div class="news-card" onclick="openNewsModal('trading', ${JSON.stringify(tradingNews).replace(/"/g, '&quot;')})">
-                        <div class="news-source trading-news">📈 트레이딩</div>
-                        ${formatNewsItems(tradingNews.news || [], 3)}
-                    </div>
-                    <div class="news-card" onclick="openNewsModal('tech', ${JSON.stringify(techNews).replace(/"/g, '&quot;')})">
-                        <div class="news-source tech-news">⚡ 기술</div>
-                        ${formatNewsItems(techNews.news || [], 3)}
-                    </div>
-                `;
+            document.getElementById('news-last-update').textContent = `마지막 업데이트: ${timeText}`;
+        }
 
-                // 캐시 상태 표시
-                const cacheStatus = [aiNews.cached, tradingNews.cached, techNews.cached].some(c => c) ? " (캐시)" : "";
-                document.getElementById('news-last-update').textContent = `마지막 업데이트: ${timeStr}${cacheStatus}`;
+        function displayDemoNews() {
+            displayNews(getDemoNews());
+            document.getElementById('news-last-update').textContent = '뉴스를 검색해주세요 (Q&A)';
+        }
 
-                lastNewsUpdate = Date.now();
-
-            } catch (error) {
-                console.error('뉴스 업데이트 오류:', error);
-                container.innerHTML = `
-                    <div class="news-card">
-                        <div class="news-source" style="color: #ef4444;">❌ 뉴스 로딩 실패</div>
-                        <div class="news-item">• API 서버 연결 불가</div>
-                    </div>
-                `;
+        function initializeNews() {
+            if (!loadNewsFromStorage()) {
+                displayDemoNews();
             }
         }
 
@@ -654,9 +685,8 @@
             document.getElementById('newsModal').style.display = 'none';
         }
 
-        // 초기 뉴스 로드 및 주기적 업데이트
-        updateNews();
-        setInterval(updateNews, 120000); // 2분마다 뉴스 업데이트
+        // 뉴스 초기화
+        initializeNews();
 
         // 모달 함수들
         function openModal(type) {
@@ -1163,25 +1193,47 @@
             return `
                 <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
                     <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
-                    <div style="font-size: 1.2rem; font-weight: 700; color: #10b981; margin-bottom: 5px;">성장 센터 17.0 출시!</div>
-                    <div style="font-size: 0.85rem; color: #94a3b8;">접이식 기능과 우선순위 사고로 더욱 똑똑해졌습니다</div>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #10b981; margin-bottom: 5px;">성장 센터 18.0 출시!</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8;">localStorage 뉴스 시스템으로 더욱 스마트해졌습니다</div>
                 </div>
                 
-                <div class="category-header">🆕 버전 17.0 (현재)</div>
+                <div class="category-header">🆕 버전 18.0 (현재)</div>
                 <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">📁 뉴스 섹션 접이식 구조</div>
+                    <div class="detail-content">뉴스 섹션이 닫힌 상태로 시작하여 필요할 때만 펼쳐볼 수 있어 더 깔끔한 대시보드를 제공합니다</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">💾 localStorage 기반 뉴스 시스템</div>
+                    <div class="detail-content">성재님이 "최신 AI 뉴스 알려줘"라고 요청하면 자비스가 검색하여 localStorage에 저장, 대시보드에서 자동으로 표시합니다</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">⏰ 마지막 업데이트 시간 표시</div>
+                    <div class="detail-content">데이터가 있으면 "마지막 업데이트: X분 전", 없으면 "뉴스를 검색해주세요 (Q&A)" 메시지 표시</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                    <div class="detail-title">📰 데모 뉴스 데이터</div>
+                    <div class="detail-content">뉴스 데이터가 없을 때 AI, 트레이딩, 기술 분야의 예시 뉴스를 보여주어 빈 화면을 방지합니다</div>
+                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                </div>
+
+                <div class="category-header">⭐ 버전 17.0</div>
+                <div class="detail-item" style="background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6;">
                     <div class="detail-title">📁 어제/오늘/내일 접이식 기능</div>
                     <div class="detail-content">각 시간대별로 개별적으로 접고 펼칠 수 있어서 필요한 정보만 집중해서 볼 수 있어요!</div>
-                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                    <div class="detail-meta">접이식 UI 개선</div>
                 </div>
-                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                <div class="detail-item" style="background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6;">
                     <div class="detail-title">💎 환경 세팅 우선순위 질문</div>
-                    <div class="detail-content">"무엇을 먼저하면 다음에 복리로 효과가 커질까?" - 컴파운딩 효과를 강조하는 핵심 질문 추가</div>
-                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                    <div class="detail-content">"무엇을 먼저하면 다음에 복리로 효과가 커질까?" - 컴파운딩 효과 강조</div>
+                    <div class="detail-meta">전략적 사고 도구</div>
                 </div>
-                <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
+                <div class="detail-item" style="background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6;">
                     <div class="detail-title">🎯 스킬 전체 보기 기능</div>
-                    <div class="detail-content">전체 펼치기/접기, 모든 스킬 한 번에 보기 버튼으로 79개 스킬을 더 쉽게 탐색할 수 있어요</div>
-                    <div class="detail-meta">상태: ✅ 적용 완료</div>
+                    <div class="detail-content">전체 펼치기/접기, 모든 스킬 한 번에 보기 버튼으로 79개 스킬 탐색 개선</div>
+                    <div class="detail-meta">스킬 관리 개선</div>
                 </div>
 
                 <div class="category-header">⭐ 버전 16.0</div>

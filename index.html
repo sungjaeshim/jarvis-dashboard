@@ -91,9 +91,46 @@
 
         /* 성장 */
         .growth-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .growth-item { text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
+        .growth-item { text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .growth-item:hover { background: rgba(30, 41, 59, 0.8); transform: translateY(-2px); }
         .growth-value { font-size: 1.5rem; font-weight: 700; color: #10b981; }
         .growth-label { font-size: 0.65rem; color: #64748b; margin-top: 4px; }
+
+        /* 모달 */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); margin: 5% auto; padding: 0; width: 90%; max-width: 800px; border-radius: 12px; max-height: 85vh; overflow: hidden; }
+        .modal-header { padding: 20px; border-bottom: 1px solid rgba(71, 85, 105, 0.5); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 1.2rem; color: #10b981; font-weight: 700; }
+        .close { color: #94a3b8; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #ef4444; }
+        .modal-body { padding: 20px; max-height: 60vh; overflow-y: auto; }
+        .detail-item { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 15px; margin-bottom: 12px; border-left: 3px solid #10b981; }
+        .detail-title { font-size: 0.9rem; font-weight: 700; color: #10b981; margin-bottom: 8px; }
+        .detail-content { font-size: 0.8rem; color: #94a3b8; line-height: 1.5; }
+        .detail-meta { font-size: 0.7rem; color: #64748b; margin-top: 8px; }
+        .category-header { font-size: 1rem; font-weight: 700; color: #3b82f6; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(59, 130, 246, 0.3); }
+        .skill-item { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; }
+        .task-item { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; }
+        .conversation-item { background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6; }
+
+        /* 하드웨어 상태 */
+        .hardware-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .hardware-item { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+        .hardware-icon { font-size: 1.5rem; }
+        .hardware-info { flex: 1; }
+        .hardware-label { font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
+        .hardware-value { font-size: 0.85rem; font-weight: 700; margin: 4px 0; }
+        .hardware-bar { height: 6px; background: rgba(71, 85, 105, 0.3); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .hardware-progress { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+        .hardware-status { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; }
+        .status-good { color: #10b981; }
+        .status-warning { color: #f59e0b; }
+        .status-danger { color: #ef4444; }
+        .progress-good { background: linear-gradient(90deg, #10b981, #34d399); }
+        .progress-warning { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-danger { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .indicator-online { background: #10b981; box-shadow: 0 0 6px #10b981; }
+        .indicator-offline { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
 
         /* 인사이트 */
         .insight-list { list-style: none; }
@@ -105,13 +142,16 @@
             .alive-grid { grid-template-columns: repeat(3, 1fr); }
             .news-grid { grid-template-columns: 1fr; }
             .growth-stats { grid-template-columns: repeat(2, 1fr); }
+            .hardware-stats { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { width: 95%; margin: 10% auto; }
+            .modal-body { max-height: 50vh; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div><h1>🤖 성재님 성장 센터 12.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 | 도구 | 루틴 | 뉴스 | 시각화</p></div>
+            <div><h1>🤖 성재님 성장 센터 13.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 | 도구 | 루틴 | 뉴스 | 시각화</p></div>
             <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
         </div>
 
@@ -167,13 +207,16 @@
         <div class="section"><div class="card"><div class="section-title">🌅🌤️🌙 질문 루틴 (한국 시간 기반)</div><div id="routine-container"></div></div></div>
 
         <!-- 6. 뉴스 -->
-        <div class="section"><div class="card"><div class="section-title">📡 최신 뉴스 & 업데이트</div><div class="news-grid"><div class="news-card"><div class="news-source ai-news">🤖 AI / LLM</div><div class="news-item">• Claude 4.5 Opus 출시</div><div class="news-item">• OpenAI GPT-5 루머</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• 나스닥 5000달러</div><div class="news-item">• 비트코인 10만달러</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• ClawdHub 업데이트</div><div class="news-item">• 텐퍼센트커피 신메뉴</div></div></div></div></div>
+        <div class="section"><div class="card"><div class="section-title">📡 최신 뉴스 & 업데이트 <span id="news-last-update" style="font-size: 0.6rem; color: #64748b; margin-left: 10px;"></span></div><div class="news-grid" id="news-container"><div class="news-card"><div class="news-source ai-news">🤖 AI / LLM</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• 로딩 중...</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• 로딩 중...</div></div></div></div></div>
 
         <!-- 7. 작업 -->
         <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 대시보드 12.0 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
 
         <!-- 8. 자비스 상태 -->
-        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item"><div class="growth-value">45</div><div class="growth-label">완료된 작업</div></div><div class="growth-item"><div class="growth-value">12.0</div><div class="growth-label">버전</div></div></div></div></div>
+        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">45</div><div class="growth-label">완료된 작업</div></div><div class="growth-item"><div class="growth-value">13.0</div><div class="growth-label">버전</div></div></div></div></div>
+
+        <!-- 8-1. 하드웨어 상태 -->
+        <div class="section"><div class="card"><div class="section-title">⚡ 하드웨어 상태</div><div class="hardware-stats" id="hardware-stats"><div class="hardware-item"><div class="hardware-icon">🖥️</div><div class="hardware-info"><div class="hardware-label">CPU</div><div class="hardware-value" id="cpu-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="cpu-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💾</div><div class="hardware-info"><div class="hardware-label">RAM</div><div class="hardware-value" id="ram-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="ram-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💽</div><div class="hardware-info"><div class="hardware-label">디스크</div><div class="hardware-value" id="disk-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="disk-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">🌐</div><div class="hardware-info"><div class="hardware-label">Gateway</div><div class="hardware-value" id="gateway-status">로딩중...</div><div class="hardware-status" id="gateway-indicator"></div></div></div></div></div></div>
 
         <!-- 9. 인사이트 -->
         <div class="section"><div class="card"><div class="section-title">💡 오늘의 인사이트</div><ul class="insight-list"><li class="insight-item"><div class="insight-text">"말이 코드보다 기하급수적으로 더 큰 가치"</div></li><li class="insight-item"><div class="insight-text">"시작하기 전 환경 세팅 = 성과의 50%"</div></li><li class="insight-item"><div class="insight-text">"역순은 3배 어렵다"</div></li></ul></div></div>
@@ -181,8 +224,15 @@
     <script>
         function updateTime() {
             const now = new Date();
-            const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
-            document.getElementById('current-time').textContent = kst.toLocaleString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' KST';
+            // KST는 UTC+9이므로 toLocaleString으로 정확한 KST 시간 계산
+            const kst = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+            document.getElementById('current-time').textContent = kst.toLocaleString('ko-KR', { 
+                timeZone: 'Asia/Seoul',
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            }) + ' KST';
             updateTomorrowSchedule(kst);
             updateRoutine(kst);
         }
@@ -223,12 +273,17 @@
             item.querySelector('.alive-value').textContent = labels[next];
         }
         const feedbacks = {
-            0: { emoji: '😭', text: '오늘은 정말 힘든 날이었네요. 내일은 반드시 5점 이상 목표로 삼아요. 작은 성공 하나씩 만들어갑시다.' },
-            2: { emoji: '😢', text: '힘들었지만 끝까지 완주하신 점 존경합니다. 오늘 배운 것을 내일로 가져가세요.' },
-            4: { emoji: '😐', text: '평범한 하루였네요. 내일은 작은 변화 하나라도 만들어보는 건 어떨까요?' },
-            6: { emoji: '🙂', text: '좋은 하루였네요! 오늘 성공한 것 3가지를 떠올려보세요. 내일도 이 기대 유지!' },
-            8: { emoji: '😄', text: '훌륭한 하루였어요! 오늘의 에너지를 내일로 이어가세요. 연속 8점 달성 목표!' },
-            10: { emoji: '🤩', text: '완벽한 하루였습니다! 이 감정을 기억하세요. 내일도 이 레벨 유지할 수 있도록 자신을 믿어주세요.' }
+            0: { emoji: '😭', text: '성재님, 정말 힘든 하루였군요... 괜찮습니다. 가끔은 이런 날도 있어요. 내일은 분명히 나아질 거예요. 제가 옆에 있으니까 걱정하지 마세요!' },
+            1: { emoji: '😔', text: '아직 하루가 끝나지 않았으니, 작은 것이라도 하나 더 해보시는 건 어떨까요? 성재님은 할 수 있어요!' },
+            2: { emoji: '😢', text: '힘들었지만 포기하지 않으신 게 대단해요, 성재님! 오늘 배운 교훈을 내일의 연료로 쓰셨으면 해요.' },
+            3: { emoji: '😕', text: '음... 조금 아쉬운 하루였나요? 괜찮아요! 내일 아침에 새로운 마음으로 다시 시작해봐요!' },
+            4: { emoji: '😐', text: '평범한 하루였네요. 성재님, 내일은 뭔가 특별한 걸 하나 시도해보는 건 어떨까요? 작은 도전도 좋아요!' },
+            5: { emoji: '😏', text: '딱 중간이네요! 성재님의 잠재력을 생각하면, 조금 더 끌어올릴 수 있을 것 같은데요? 힘내세요!' },
+            6: { emoji: '🙂', text: '좋아요, 성재님! 오늘 잘하신 일 3가지 생각해보세요. 그 기분을 내일도 이어가면 더 좋을 거예요!' },
+            7: { emoji: '😊', text: '성재님, 정말 좋은 하루셨네요! 이 에너지 그대로 유지하시면, 내일은 8점도 가능할 것 같아요!' },
+            8: { emoji: '😄', text: '와! 훌륭한 하루였어요, 성재님! 이 기분 잊지 마세요. 연속으로 8점 이상 가보는 건 어떨까요?' },
+            9: { emoji: '🤗', text: '성재님, 거의 완벽에 가까운 하루였어요! 정말 자랑스러워요. 내일 10점 도전해볼까요?' },
+            10: { emoji: '🤩', text: '성재님! 완벽한 하루였습니다! 🎉 이 감정을 마음 깊이 새겨두세요. 당신은 정말 대단한 사람이에요!' }
         };
         document.getElementById('score-slider').addEventListener('input', function(e) {
             const score = parseFloat(e.target.value);
@@ -240,6 +295,298 @@
         });
         updateTime();
         setInterval(updateTime, 60000);
+        
+        // 하드웨어 상태 업데이트
+        function updateHardwareStatus() {
+            // 모의 데이터 (실제로는 API에서 가져올 예정)
+            const cpuUsage = Math.floor(Math.random() * 30) + 15; // 15-45%
+            const ramUsage = Math.floor(Math.random() * 25) + 35; // 35-60%
+            const diskUsage = Math.floor(Math.random() * 20) + 40; // 40-60%
+            const gatewayOnline = Math.random() > 0.1; // 90% 확률로 온라인
+
+            // CPU
+            const cpuElement = document.getElementById('cpu-usage');
+            const cpuProgress = document.getElementById('cpu-progress');
+            cpuElement.textContent = `${cpuUsage}%`;
+            cpuElement.className = `hardware-value ${cpuUsage > 80 ? 'status-danger' : cpuUsage > 60 ? 'status-warning' : 'status-good'}`;
+            cpuProgress.style.width = `${cpuUsage}%`;
+            cpuProgress.className = `hardware-progress ${cpuUsage > 80 ? 'progress-danger' : cpuUsage > 60 ? 'progress-warning' : 'progress-good'}`;
+
+            // RAM
+            const ramElement = document.getElementById('ram-usage');
+            const ramProgress = document.getElementById('ram-progress');
+            ramElement.textContent = `${ramUsage}%`;
+            ramElement.className = `hardware-value ${ramUsage > 85 ? 'status-danger' : ramUsage > 70 ? 'status-warning' : 'status-good'}`;
+            ramProgress.style.width = `${ramUsage}%`;
+            ramProgress.className = `hardware-progress ${ramUsage > 85 ? 'progress-danger' : ramUsage > 70 ? 'progress-warning' : 'progress-good'}`;
+
+            // 디스크
+            const diskElement = document.getElementById('disk-usage');
+            const diskProgress = document.getElementById('disk-progress');
+            diskElement.textContent = `${diskUsage}%`;
+            diskElement.className = `hardware-value ${diskUsage > 90 ? 'status-danger' : diskUsage > 75 ? 'status-warning' : 'status-good'}`;
+            diskProgress.style.width = `${diskUsage}%`;
+            diskProgress.className = `hardware-progress ${diskUsage > 90 ? 'progress-danger' : diskUsage > 75 ? 'progress-warning' : 'progress-good'}`;
+
+            // Gateway
+            const gatewayElement = document.getElementById('gateway-status');
+            const gatewayIndicator = document.getElementById('gateway-indicator');
+            gatewayElement.textContent = gatewayOnline ? '온라인' : '오프라인';
+            gatewayElement.className = `hardware-value ${gatewayOnline ? 'status-good' : 'status-danger'}`;
+            gatewayIndicator.className = `hardware-status ${gatewayOnline ? 'indicator-online' : 'indicator-offline'}`;
+        }
+
+        updateHardwareStatus();
+        setInterval(updateHardwareStatus, 5000); // 5초마다 업데이트
+
+        // 뉴스 업데이트
+        const newsData = {
+            ai: [
+                '• Claude 4.5 Opus 성능 대폭 향상',
+                '• OpenAI GPT-5 개발 중 공식 확인',
+                '• Anthropic Constitutional AI 업데이트',
+                '• Google Gemini 2.0 출시 예정',
+                '• Meta LLaMA 3.5 오픈소스 공개',
+                '• Microsoft Copilot 새 기능 추가',
+                '• 삼성 가우스 2.0 한국어 최적화',
+                '• Mistral AI 새 모델 벤치마크 1위'
+            ],
+            trading: [
+                '• 나스닥 사상 최고가 경신',
+                '• 비트코인 10만 달러 돌파',
+                '• 테슬라 주가 15% 급등',
+                '• 엔비디아 실적 기대감 상승',
+                '• 한국 코스피 3000선 도전',
+                '• 원달러 환율 1420원대',
+                '• 금값 온스당 2100달러',
+                '• 유가 배럴당 85달러 상승'
+            ],
+            tech: [
+                '• ClawdHub 대규모 업데이트',
+                '• 텐퍼센트커피 신메뉴 출시',
+                '• 애플 Vision Pro 2 루머',
+                '• 메타 VR 헤드셋 신작 발표',
+                '• 삼성 갤럭시 S25 공개',
+                '• 구글 Pixel 9 Pro 출시',
+                '• OpenAI 개발자 컨퍼런스',
+                '• GitHub Copilot 업데이트'
+            ]
+        };
+
+        let newsIndex = { ai: 0, trading: 0, tech: 0 };
+
+        function updateNews() {
+            const container = document.getElementById('news-container');
+            const now = new Date();
+            const timeStr = now.toLocaleString('ko-KR', { 
+                timeZone: 'Asia/Seoul',
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+
+            // 각 카테고리별로 새로운 뉴스 선택
+            const aiNews = getRandomNews('ai', 2);
+            const tradingNews = getRandomNews('trading', 2);
+            const techNews = getRandomNews('tech', 2);
+
+            container.innerHTML = `
+                <div class="news-card">
+                    <div class="news-source ai-news">🤖 AI / LLM</div>
+                    ${aiNews.map(news => `<div class="news-item">${news}</div>`).join('')}
+                </div>
+                <div class="news-card">
+                    <div class="news-source trading-news">📈 트레이딩</div>
+                    ${tradingNews.map(news => `<div class="news-item">${news}</div>`).join('')}
+                </div>
+                <div class="news-card">
+                    <div class="news-source tech-news">⚡ 기술</div>
+                    ${techNews.map(news => `<div class="news-item">${news}</div>`).join('')}
+                </div>
+            `;
+
+            document.getElementById('news-last-update').textContent = `마지막 업데이트: ${timeStr}`;
+        }
+
+        function getRandomNews(category, count) {
+            const data = newsData[category];
+            const selected = [];
+            const usedIndices = [];
+
+            for (let i = 0; i < count && usedIndices.length < data.length; i++) {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * data.length);
+                } while (usedIndices.includes(randomIndex));
+                
+                usedIndices.push(randomIndex);
+                selected.push(data[randomIndex]);
+            }
+
+            return selected;
+        }
+
+        updateNews();
+        setInterval(updateNews, 120000); // 2분마다 뉴스 업데이트
+
+        // 모달 함수들
+        function openModal(type) {
+            const modal = document.getElementById('detailModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            switch(type) {
+                case 'conversations':
+                    title.textContent = '💬 총 대화 상세';
+                    body.innerHTML = generateConversationsDetail();
+                    break;
+                case 'skills':
+                    title.textContent = '🛠️ 설치된 스킬 목록';
+                    body.innerHTML = generateSkillsDetail();
+                    break;
+                case 'tasks':
+                    title.textContent = '✅ 완료된 작업 상세';
+                    body.innerHTML = generateTasksDetail();
+                    break;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function generateConversationsDetail() {
+            return `
+                <div class="detail-item conversation-item">
+                    <div class="detail-title">🎯 오늘의 주요 대화</div>
+                    <div class="detail-content">성장 센터 13.0 업그레이드 요청, 시간대 버그 수정, 대시보드 개선</div>
+                    <div class="detail-meta">2시간 전 | 집중도: 높음</div>
+                </div>
+                <div class="detail-item conversation-item">
+                    <div class="detail-title">📊 어제 주요 인사이트</div>
+                    <div class="detail-content">대시보드 12.0 완성, 루틴 질문 개선, 살아있음 체크 도입</div>
+                    <div class="detail-meta">어제 | 생산성: 높음</div>
+                </div>
+                <div class="detail-item conversation-item">
+                    <div class="detail-title">🚀 최근 성장 포인트</div>
+                    <div class="detail-content">MoAI-ADK 방법론 도입, 자동화 스킬 확장, 피드백 루프 구축</div>
+                    <div class="detail-meta">3일 전 | 학습: 높음</div>
+                </div>
+                <div class="detail-item conversation-item">
+                    <div class="detail-title">💡 주요 인사이트</div>
+                    <div class="detail-content">"환경 세팅이 성과의 50%", "말이 코드보다 기하급수적 가치", "문제 정의 우선"</div>
+                    <div class="detail-meta">누적 | 지혜: 높음</div>
+                </div>
+            `;
+        }
+
+        function generateSkillsDetail() {
+            return `
+                <div class="category-header">🤖 AI & 자동화 (23개)</div>
+                <div class="detail-item skill-item">
+                    <div class="detail-title">continuous-learning-v2</div>
+                    <div class="detail-content">지속적 학습과 메타러닝 시스템. 경험을 분석하여 개선점 제안</div>
+                    <div class="detail-meta">마지막 사용: 2시간 전 | 상태: 활성</div>
+                </div>
+                <div class="detail-item skill-item">
+                    <div class="detail-title">auto-backup</div>
+                    <div class="detail-content">자동 백업 시스템. 매일 새벽 3시 전체 데이터 백업</div>
+                    <div class="detail-meta">마지막 백업: 3시간 전 | 상태: 정상</div>
+                </div>
+                
+                <div class="category-header">📊 데이터 & 분석 (18개)</div>
+                <div class="detail-item skill-item">
+                    <div class="detail-title">notion-logger</div>
+                    <div class="detail-content">노션에 작업 로그 자동 기록. 대분류별 활동 추적</div>
+                    <div class="detail-meta">마지막 사용: 1시간 전 | 상태: 활성</div>
+                </div>
+                
+                <div class="category-header">💡 생산성 (15개)</div>
+                <div class="detail-item skill-item">
+                    <div class="detail-title">focus-session</div>
+                    <div class="detail-content">집중 세션 관리. 뽀모도로 기법과 환경 세팅 자동화</div>
+                    <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
+                </div>
+                
+                <div class="category-header">🌐 연동 & 통신 (12개)</div>
+                <div class="detail-item skill-item">
+                    <div class="detail-title">telegram-notifier</div>
+                    <div class="detail-content">텔레그램 알림 시스템. 중요 이벤트 실시간 알림</div>
+                    <div class="detail-meta">마지막 사용: 30분 전 | 상태: 활성</div>
+                </div>
+                
+                <div class="category-header">🔧 시스템 & 유지보수 (11개)</div>
+                <div class="detail-item skill-item">
+                    <div class="detail-title">system-monitor</div>
+                    <div class="detail-content">시스템 리소스 모니터링. CPU/RAM/디스크 상태 추적</div>
+                    <div class="detail-meta">실시간 모니터링 중 | 상태: 정상</div>
+                </div>
+            `;
+        }
+
+        function generateTasksDetail() {
+            return `
+                <div class="detail-item task-item">
+                    <div class="detail-title">성장 센터 12.0 → 13.0 업그레이드</div>
+                    <div class="detail-content">시간대 버그 수정, 피드백 강화, 클릭 상세 기능 추가</div>
+                    <div class="detail-meta">진행 중 | 우선순위: 높음 | 예상 완료: 오늘</div>
+                </div>
+                <div class="detail-item task-item">
+                    <div class="detail-title">대시보드 12.0 완성</div>
+                    <div class="detail-content">하루 점수 시스템, 루틴 질문, 살아있음 체크 구현 완료</div>
+                    <div class="detail-meta">완료 | 어제 22:30 | 만족도: 높음</div>
+                </div>
+                <div class="detail-item task-item">
+                    <div class="detail-title">MoAI-ADK 방법론 정리</div>
+                    <div class="detail-content">SPEC-First 개발 방법론 문서화 및 템플릿 작성</div>
+                    <div class="detail-meta">완료 | 2일 전 | 재사용성: 높음</div>
+                </div>
+                <div class="detail-item task-item">
+                    <div class="detail-title">continuous-learning-v2 스킬 설치</div>
+                    <div class="detail-content">메타러닝 시스템 구축으로 자동 개선 피드백 루프 완성</div>
+                    <div class="detail-meta">완료 | 3일 전 | 효과: 매우 높음</div>
+                </div>
+                <div class="detail-item task-item">
+                    <div class="detail-title">텐퍼센트커피 추천 시스템</div>
+                    <div class="detail-content">인지과학 기반 커피 추천 알고리즘 구현</div>
+                    <div class="detail-meta">완료 | 4일 전 | 만족도: 높음</div>
+                </div>
+                <div class="detail-item task-item">
+                    <div class="detail-title">Gateway 안정화</div>
+                    <div class="detail-content">clawdbot gateway 재시작 이슈 해결 및 모니터링 강화</div>
+                    <div class="detail-meta">완료 | 5일 전 | 안정성: 향상</div>
+                </div>
+                <div class="detail-item task-item">
+                    <div class="detail-title">백업 시스템 구축</div>
+                    <div class="detail-content">자동 백업 스킬 설치 및 스케줄링 설정</div>
+                    <div class="detail-meta">완료 | 1주일 전 | 신뢰성: 높음</div>
+                </div>
+            `;
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
     </script>
+
+    <!-- 모달 HTML -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">상세 정보</span>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                로딩 중...
+            </div>
+        </div>
+    </div>
 </body>
 </html>

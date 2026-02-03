@@ -150,6 +150,131 @@
         .insight-item { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; }
         .insight-text { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
 
+        /* ========== Phase 1: 단축키 가이드 ========== */
+        .shortcuts-guide { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        .shortcuts-toggle { width: 50px; height: 50px; background: linear-gradient(135deg, #3b82f6, #2563eb); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.4rem; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); transition: all 0.3s; border: none; }
+        .shortcuts-toggle:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6); }
+        .shortcuts-content { position: absolute; bottom: 60px; right: 0; background: rgba(15, 23, 42, 0.98); border: 2px solid rgba(59, 130, 246, 0.4); border-radius: 12px; padding: 15px; min-width: 220px; display: none; animation: slideUp 0.3s ease; }
+        .shortcuts-content.show { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .shortcuts-title { font-size: 0.9rem; font-weight: 700; color: #3b82f6; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(59, 130, 246, 0.3); display: flex; align-items: center; gap: 6px; }
+        .shortcut-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 0.8rem; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
+        .shortcut-item:last-child { border-bottom: none; }
+        .shortcut-key { background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3)); color: #93c5fd; padding: 4px 10px; border-radius: 6px; font-family: monospace; font-weight: 700; font-size: 0.85rem; }
+        .shortcut-desc { color: #94a3b8; }
+
+        /* ========== Phase 1: 원클릭 템플릿 ========== */
+        .template-buttons { display: flex; gap: 10px; margin-bottom: 15px; }
+        .template-btn { flex: 1; padding: 14px 12px; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .template-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .template-btn:active { transform: translateY(0); }
+        .template-morning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+        .template-noon { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
+        .template-evening { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; }
+        .template-icon { font-size: 1.5rem; }
+        .template-label { font-size: 0.75rem; opacity: 0.9; }
+
+        /* ========== Phase 2: TOP 3 하이라이트 ========== */
+        .top3-section { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%); border: 2px solid #f59e0b; border-radius: 14px; padding: 16px; margin-bottom: 15px; }
+        .top3-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .top3-title { font-size: 1rem; font-weight: 700; color: #f59e0b; display: flex; align-items: center; gap: 8px; }
+        .top3-badge { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; }
+        .top3-progress { height: 8px; background: rgba(71, 85, 105, 0.3); border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
+        .top3-progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 4px; transition: width 0.5s ease; }
+        .top3-list { display: flex; flex-direction: column; gap: 8px; }
+        .top3-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; background: rgba(15, 23, 42, 0.6); transition: all 0.3s; }
+        .top3-item:hover { background: rgba(15, 23, 42, 0.8); }
+        .top3-item.priority-high { border-left: 4px solid #ef4444; }
+        .top3-item.priority-medium { border-left: 4px solid #f59e0b; }
+        .top3-item.priority-low { border-left: 4px solid #3b82f6; }
+        .top3-item.completed { opacity: 0.6; }
+        .top3-item.completed .top3-text { text-decoration: line-through; }
+        .top3-rank { font-size: 1.1rem; font-weight: 800; width: 28px; text-align: center; }
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .top3-text { flex: 1; font-size: 0.85rem; font-weight: 500; color: #e2e8f0; }
+        .top3-check { width: 26px; height: 26px; border: 2px solid #64748b; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; background: transparent; font-size: 0.9rem; }
+        .top3-check:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.2); }
+        .top3-check.checked { background: #10b981; border-color: #10b981; color: white; }
+        .top3-delete { color: #64748b; cursor: pointer; font-size: 1.2rem; padding: 4px; transition: color 0.2s; }
+        .top3-delete:hover { color: #ef4444; }
+        .top3-add { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(71, 85, 105, 0.3); }
+        .top3-input { flex: 1; padding: 10px 14px; border: 2px solid rgba(71, 85, 105, 0.3); border-radius: 8px; background: rgba(15, 23, 42, 0.8); color: #e2e8f0; font-size: 0.85rem; }
+        .top3-input:focus { outline: none; border-color: #f59e0b; }
+        .top3-input::placeholder { color: #64748b; }
+        .top3-select { padding: 10px; border: 2px solid rgba(71, 85, 105, 0.3); border-radius: 8px; background: rgba(15, 23, 42, 0.8); color: #e2e8f0; font-size: 0.8rem; cursor: pointer; }
+        .top3-btn { padding: 10px 18px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .top3-btn:hover { transform: scale(1.05); }
+
+        /* ========== Phase 2: 필터 버튼 ========== */
+        .filter-buttons { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .filter-btn { padding: 6px 14px; border: 2px solid; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s; background: transparent; }
+        .filter-btn.active { color: white !important; }
+        .filter-all { border-color: #64748b; color: #94a3b8; }
+        .filter-all.active { background: #64748b; }
+        .filter-high { border-color: #ef4444; color: #ef4444; }
+        .filter-high.active { background: #ef4444; }
+        .filter-medium { border-color: #f59e0b; color: #f59e0b; }
+        .filter-medium.active { background: #f59e0b; }
+        .filter-low { border-color: #3b82f6; color: #3b82f6; }
+        .filter-low.active { background: #3b82f6; }
+
+        /* ========== Phase 3: 점수 그래프 ========== */
+        .chart-section { background: rgba(15, 23, 42, 0.7); border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .chart-title { font-size: 0.95rem; font-weight: 700; color: #10b981; display: flex; align-items: center; gap: 8px; }
+        .chart-tabs { display: flex; gap: 6px; }
+        .chart-tab { padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; background: rgba(71, 85, 105, 0.3); color: #94a3b8; border: none; transition: all 0.3s; }
+        .chart-tab.active { background: #10b981; color: white; }
+        .chart-container { height: 160px; display: flex; align-items: flex-end; justify-content: space-between; gap: 6px; padding: 10px 0; }
+        .chart-bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .chart-bar { width: 100%; max-width: 30px; border-radius: 4px 4px 0 0; transition: height 0.5s ease; position: relative; min-height: 4px; }
+        .chart-bar.high { background: linear-gradient(180deg, #10b981, #059669); }
+        .chart-bar.mid { background: linear-gradient(180deg, #f59e0b, #d97706); }
+        .chart-bar.low { background: linear-gradient(180deg, #ef4444, #dc2626); }
+        .chart-bar.empty { background: rgba(71, 85, 105, 0.3); }
+        .chart-bar::after { content: attr(data-score); position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: 700; color: #94a3b8; }
+        .chart-label { font-size: 0.6rem; color: #64748b; }
+        .pattern-box { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 10px; padding: 12px; margin-top: 12px; }
+        .pattern-title { font-size: 0.8rem; font-weight: 700; color: #8b5cf6; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .pattern-text { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
+
+        /* ========== Phase 3: 위험 경보 ========== */
+        .warning-alert { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15)); border: 2px solid #ef4444; border-radius: 12px; padding: 14px; margin-bottom: 15px; display: none; animation: pulse-warning 2s infinite; }
+        @keyframes pulse-warning { 0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } }
+        .warning-content { display: flex; align-items: center; gap: 12px; }
+        .warning-icon { font-size: 1.8rem; }
+        .warning-title { font-size: 0.9rem; font-weight: 700; color: #ef4444; }
+        .warning-text { font-size: 0.75rem; color: #fca5a5; margin-top: 4px; }
+
+        /* ========== Phase 4: AI 코칭 위젯 ========== */
+        .coaching-widget { background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15)); border: 2px solid #8b5cf6; border-radius: 14px; padding: 16px; margin-bottom: 15px; }
+        .coaching-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .coaching-icon { font-size: 1.5rem; }
+        .coaching-title { font-size: 0.95rem; font-weight: 700; color: #8b5cf6; }
+        .coaching-question { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; line-height: 1.6; margin-bottom: 12px; }
+        .coaching-textarea { width: 100%; padding: 12px; border: 2px solid rgba(139, 92, 246, 0.3); border-radius: 10px; background: rgba(15, 23, 42, 0.8); color: #e2e8f0; font-size: 0.85rem; min-height: 80px; resize: vertical; }
+        .coaching-textarea:focus { outline: none; border-color: #8b5cf6; }
+        .coaching-textarea::placeholder { color: #64748b; }
+        .coaching-actions { display: flex; gap: 10px; margin-top: 12px; }
+        .coaching-btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .coaching-save { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+        .coaching-save:hover { transform: scale(1.05); }
+        .coaching-skip { background: rgba(71, 85, 105, 0.5); color: #94a3b8; }
+        .coaching-skip:hover { background: rgba(71, 85, 105, 0.8); }
+
+        /* ========== Phase 4: 인사이트 저장소 개선 ========== */
+        .insights-section { background: rgba(15, 23, 42, 0.7); border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .insights-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .insights-title { font-size: 0.95rem; font-weight: 700; color: #10b981; display: flex; align-items: center; gap: 8px; }
+        .insights-count { font-size: 0.7rem; color: #64748b; background: rgba(16, 185, 129, 0.2); padding: 3px 10px; border-radius: 12px; }
+        .insight-card { background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; padding: 12px; margin-bottom: 10px; border-radius: 0 8px 8px 0; }
+        .insight-card-text { font-size: 0.8rem; color: #94a3b8; line-height: 1.6; margin-bottom: 8px; }
+        .insight-card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; color: #64748b; }
+        .insight-tag { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 10px; }
+        .insights-empty { text-align: center; padding: 25px; color: #64748b; font-size: 0.85rem; }
+
         @media (max-width: 768px) {
             .day-grid { grid-template-columns: 1fr; }
             .alive-grid { grid-template-columns: repeat(3, 1fr); }
@@ -164,7 +289,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div><h1>🤖 성재님 성장 센터 18.1</h1><p class="subtitle">펼침/닫힘 상태 기억 | 섹션 순서 재배열 | 질문 루팅 | 루틴 분리 | localStorage 상태 저장</p></div>
+            <div><h1>🤖 성재님 성장 센터 19.0</h1><p class="subtitle">🚀 단축키 시스템 | TOP 3 하이라이트 | 점수 그래프 | AI 코칭 | 인사이트 저장소</p></div>
             <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
         </div>
 
@@ -176,6 +301,108 @@
             <div class="score-feedback">
                 <div class="feedback-title">💡 자비스 피드백</div>
                 <div class="feedback-text" id="feedback-text">점수를 선택하면 오늘의 하루에 대한 피드백을 드려요.</div>
+            </div>
+        </div>
+
+        <!-- 🎯 원클릭 템플릿 (Phase 1) -->
+        <div class="template-buttons">
+            <button class="template-btn template-morning" onclick="applyTemplate('morning')">
+                <span class="template-icon">🌅</span>
+                <span>아침 루틴</span>
+                <span class="template-label">06:00-12:00</span>
+            </button>
+            <button class="template-btn template-noon" onclick="applyTemplate('noon')">
+                <span class="template-icon">🌤️</span>
+                <span>점심 체크</span>
+                <span class="template-label">12:00-18:00</span>
+            </button>
+            <button class="template-btn template-evening" onclick="applyTemplate('evening')">
+                <span class="template-icon">🌙</span>
+                <span>저녁 회고</span>
+                <span class="template-label">18:00-24:00</span>
+            </button>
+        </div>
+
+        <!-- 🔥 오늘의 TOP 3 (Phase 2) -->
+        <div class="top3-section">
+            <div class="top3-header">
+                <span class="top3-title">🔥 오늘의 TOP 3</span>
+                <span class="top3-badge" id="top3-badge">0/0 완료</span>
+            </div>
+            <div class="top3-progress">
+                <div class="top3-progress-fill" id="top3-progress" style="width: 0%"></div>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn filter-all active" onclick="filterTasks('all')">전체</button>
+                <button class="filter-btn filter-high" onclick="filterTasks('high')">🔴 긴급</button>
+                <button class="filter-btn filter-medium" onclick="filterTasks('medium')">🟠 중요</button>
+                <button class="filter-btn filter-low" onclick="filterTasks('low')">🔵 보통</button>
+            </div>
+            <div class="top3-list" id="top3-list">
+                <!-- JavaScript로 렌더링 -->
+            </div>
+            <div class="top3-add">
+                <input type="text" class="top3-input" id="top3-input" placeholder="새 할 일 추가..." onkeypress="if(event.key==='Enter')addTask()">
+                <select class="top3-select" id="top3-priority">
+                    <option value="high">🔴 긴급</option>
+                    <option value="medium">🟠 중요</option>
+                    <option value="low">🔵 보통</option>
+                </select>
+                <button class="top3-btn" onclick="addTask()">추가</button>
+            </div>
+        </div>
+
+        <!-- ⚠️ 위험 경보 (Phase 3) -->
+        <div class="warning-alert" id="warning-alert">
+            <div class="warning-content">
+                <span class="warning-icon">⚠️</span>
+                <div>
+                    <div class="warning-title" id="warning-title">3일 연속 6점 이하!</div>
+                    <div class="warning-text" id="warning-text">충분한 휴식을 취하고 재충전하세요. 건강이 최우선입니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📈 점수 추이 그래프 (Phase 3) -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <span class="chart-title">📈 점수 추이</span>
+                <div class="chart-tabs">
+                    <button class="chart-tab active" onclick="showChart(7)">7일</button>
+                    <button class="chart-tab" onclick="showChart(30)">30일</button>
+                </div>
+            </div>
+            <div class="chart-container" id="chart-container">
+                <!-- JavaScript로 렌더링 -->
+            </div>
+            <div class="pattern-box">
+                <div class="pattern-title">💡 패턴 분석</div>
+                <div class="pattern-text" id="pattern-text">점수 데이터가 쌓이면 패턴을 분석해드려요.</div>
+            </div>
+        </div>
+
+        <!-- 💡 AI 코칭 위젯 (Phase 4) -->
+        <div class="coaching-widget">
+            <div class="coaching-header">
+                <span class="coaching-icon">💡</span>
+                <span class="coaching-title">오늘의 질문</span>
+            </div>
+            <div class="coaching-question" id="coaching-question">오늘 하루 중 가장 기뻤던 순간은 무엇인가요?</div>
+            <textarea class="coaching-textarea" id="coaching-answer" placeholder="생각을 자유롭게 적어보세요..."></textarea>
+            <div class="coaching-actions">
+                <button class="coaching-btn coaching-save" onclick="saveCoaching()">💾 저장</button>
+                <button class="coaching-btn coaching-skip" onclick="skipCoaching()">다음 질문</button>
+            </div>
+        </div>
+
+        <!-- 🔗 인사이트 저장소 (Phase 4) -->
+        <div class="insights-section">
+            <div class="insights-header">
+                <span class="insights-title">🔗 최근 인사이트</span>
+                <span class="insights-count" id="insights-count">0개</span>
+            </div>
+            <div id="insights-list">
+                <div class="insights-empty">아직 저장된 인사이트가 없습니다.<br>위의 코칭 질문에 답변하면 자동으로 저장됩니다!</div>
             </div>
         </div>
 
@@ -1372,6 +1599,339 @@
                 closeNewsModal();
             }
         }
+
+        // ========== Phase 1: 단축키 시스템 ==========
+        const shortcuts = {
+            'n': () => {
+                const input = document.querySelector('.add-task-input');
+                if (input) input.focus();
+            },
+            's': () => {
+                const slider = document.getElementById('score-slider');
+                if (slider) slider.focus();
+            },
+            'r': () => {
+                const routineSection = document.querySelector('.routine-section');
+                if (routineSection) {
+                    routineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            },
+            '?': () => {
+                const guide = document.getElementById('shortcuts-content');
+                if (guide) {
+                    guide.classList.toggle('show');
+                }
+            }
+        };
+
+        document.addEventListener('keydown', function(e) {
+            // input, textarea에서는 단축키 비활성
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            const key = e.key.toLowerCase();
+            if (shortcuts[key]) {
+                e.preventDefault();
+                shortcuts[key]();
+            }
+        });
+
+        // ========== Phase 1: 원클릭 템플릿 ==========
+        const routineQuestions = {
+            morning: [
+                '🌅 문제 정의: 내가 풀 문제가 뭐지?',
+                '🌅 환경 세팅: 어떻게 준비할까?',
+                '🌅 순서: 뭘 먼저 하면 쉬워질까?'
+            ],
+            noon: [
+                '🌤️ 오전 업무 회고',
+                '🌤️ 살아있음 체크',
+                '🌤️ 남은 시간: 뭘 집중할까?'
+            ],
+            evening: [
+                '🌙 오늘 살아있었나?',
+                '🌙 뭘 배웠나? 내일 뭘 개선할까?',
+                '🌙 목표에 얼마나 다가갔나?'
+            ]
+        };
+
+        function applyTemplate(type) {
+            const container = document.getElementById('routine-container');
+            if (!container) return;
+            
+            const questions = routineQuestions[type] || [];
+            container.innerHTML = questions.map(q => 
+                `<div class="routine-card" style="border-color: ${type === 'morning' ? '#f59e0b' : type === 'noon' ? '#3b82f6' : type === 'evening' ? '#8b5cf6' : '#10b981'}">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: ${type === 'morning' ? '#f59e0b' : type === 'noon' ? '#3b82f6' : ' #8b5cf6'}; margin-bottom: 8px;">${q}</div>
+                </div>`
+            ).join('');
+        }
+
+        // ========== Phase 1: 단축키 가이드 토글 ==========
+        function toggleShortcuts() {
+            const content = document.getElementById('shortcuts-content');
+            if (content) {
+                content.classList.toggle('show');
+            }
+        }
+
+        // ========== Phase 2: TOP 3 하이라이트 시스템 ==========
+        let tasks = JSON.parse(localStorage.getItem('top3Tasks') || '[]');
+        let currentFilter = 'all';
+
+        function renderTasks() {
+            const container = document.getElementById('top3-list');
+            if (!container) return;
+
+            const filtered = currentFilter === 'all' ? tasks : tasks.filter(t => t.priority === currentFilter);
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-size: 0.85rem;">할 일이 없습니다. 위에서 추가해보세요! 🎯</div>';
+            } else {
+                container.innerHTML = filtered.map((task, idx) => `
+                    <div class="top3-item priority-${task.priority} ${task.completed ? 'completed' : ''}" data-id="${task.id}">
+                        <span class="top3-rank rank-${idx + 1}">${idx + 1}</span>
+                        <span class="top3-text">${task.text}</span>
+                        <button class="top3-check ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')">${task.completed ? '✓' : ''}</button>
+                        <span class="top3-delete" onclick="deleteTask('${task.id}')">×</span>
+                    </div>
+                `).join('');
+            }
+            updateProgress();
+        }
+
+        function addTask() {
+            const input = document.getElementById('top3-input');
+            const priority = document.getElementById('top3-priority');
+            if (!input || !input.value.trim()) return;
+
+            const newTask = {
+                id: Date.now().toString(),
+                text: input.value.trim(),
+                priority: priority ? priority.value : 'medium',
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+
+            tasks.unshift(newTask);
+            if (tasks.length > 10) tasks = tasks.slice(0, 10); // 최대 10개
+            saveTasks();
+            renderTasks();
+            input.value = '';
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        function filterTasks(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filter-${filter}`)?.classList.add('active');
+            renderTasks();
+        }
+
+        function updateProgress() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.completed).length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            const badge = document.getElementById('top3-badge');
+            const progress = document.getElementById('top3-progress');
+            
+            if (badge) badge.textContent = `${completed}/${total} 완료`;
+            if (progress) progress.style.width = `${percentage}%`;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('top3Tasks', JSON.stringify(tasks));
+        }
+
+        // ========== Phase 3: 점수 그래프 시스템 ==========
+        function showChart(days) {
+            document.querySelectorAll('.chart-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const container = document.getElementById('chart-container');
+            if (!container) return;
+
+            const scores = [];
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const saved = localStorage.getItem('score_' + dateStr);
+                const score = saved ? JSON.parse(saved).score : null;
+                scores.push({ date: dateStr, score });
+            }
+
+            const maxHeight = 120;
+            container.innerHTML = scores.map(s => {
+                const score = s.score;
+                const height = score !== null ? (score / 10) * maxHeight : 4;
+                const colorClass = score === null ? 'empty' : (score >= 7 ? 'high' : score >= 4 ? 'mid' : 'low');
+                const date = new Date(s.date);
+                const label = `${date.getMonth() + 1}/${date.getDate()}`;
+                
+                return `
+                    <div class="chart-bar-wrapper">
+                        <div class="chart-bar ${colorClass}" style="height: ${height}px" data-score="${score !== null ? score.toFixed(1) : '-'}"></div>
+                        <div class="chart-label">${label}</div>
+                    </div>
+                `;
+            }).join('');
+
+            analyzePattern(scores);
+            checkWarning(scores);
+        }
+
+        function analyzePattern(scores) {
+            const validScores = scores.filter(s => s.score !== null);
+            const patternEl = document.getElementById('pattern-text');
+            if (!patternEl || validScores.length < 3) {
+                if (patternEl) patternEl.textContent = '더 많은 데이터가 필요합니다. 매일 점수를 기록해주세요!';
+                return;
+            }
+
+            const avg = validScores.reduce((sum, s) => sum + s.score, 0) / validScores.length;
+            const highDays = validScores.filter(s => s.score >= 8).length;
+            const lowDays = validScores.filter(s => s.score <= 4).length;
+
+            let insight = '';
+            if (avg >= 7) {
+                insight = `🌟 평균 ${avg.toFixed(1)}점! 좋은 흐름을 유지하고 있어요. ${highDays}일은 8점 이상이었어요!`;
+            } else if (avg >= 5) {
+                insight = `📊 평균 ${avg.toFixed(1)}점. 꾸준히 유지 중이에요. 작은 변화가 큰 차이를 만들어요!`;
+            } else {
+                insight = `💪 평균 ${avg.toFixed(1)}점. 힘든 시기를 보내고 있네요. 작은 것부터 시작해보세요!`;
+            }
+
+            patternEl.textContent = insight;
+        }
+
+        function checkWarning(scores) {
+            const warningEl = document.getElementById('warning-alert');
+            if (!warningEl) return;
+
+            const recent3 = scores.slice(-3).filter(s => s.score !== null);
+            if (recent3.length >= 3 && recent3.every(s => s.score <= 6)) {
+                warningEl.style.display = 'block';
+            } else {
+                warningEl.style.display = 'none';
+            }
+        }
+
+        // ========== Phase 4: AI 코칭 시스템 ==========
+        const coachingQuestions = [
+            '오늘 하루 중 가장 기뻤던 순간은 무엇인가요?',
+            '내일 꼭 하고 싶은 한 가지는 무엇인가요?',
+            '최근에 배운 것 중 가장 인상 깊었던 건 무엇인가요?',
+            '지금 가장 감사한 것 세 가지를 말해보세요.',
+            '오늘 나를 성장시킨 경험은 무엇이었나요?',
+            '지금 마음이 어떤가요? 솔직하게 표현해보세요.',
+            '이번 주 목표 중 가장 중요한 것은 무엇인가요?',
+            '최근 극복한 어려움이 있다면 무엇인가요?',
+            '지금 당장 바꾸고 싶은 습관 하나는?',
+            '오늘 누군가에게 도움을 준 일이 있나요?'
+        ];
+
+        let currentQuestionIndex = parseInt(localStorage.getItem('coachingIndex') || '0');
+
+        function initCoaching() {
+            const questionEl = document.getElementById('coaching-question');
+            if (questionEl) {
+                questionEl.textContent = coachingQuestions[currentQuestionIndex % coachingQuestions.length];
+            }
+        }
+
+        function saveCoaching() {
+            const answerEl = document.getElementById('coaching-answer');
+            const questionEl = document.getElementById('coaching-question');
+            if (!answerEl || !answerEl.value.trim()) return;
+
+            const insight = {
+                id: Date.now().toString(),
+                question: questionEl ? questionEl.textContent : '',
+                answer: answerEl.value.trim(),
+                date: new Date().toISOString()
+            };
+
+            let insights = JSON.parse(localStorage.getItem('insights') || '[]');
+            insights.unshift(insight);
+            if (insights.length > 20) insights = insights.slice(0, 20);
+            localStorage.setItem('insights', JSON.stringify(insights));
+
+            answerEl.value = '';
+            skipCoaching();
+            renderInsights();
+            alert('✅ 인사이트가 저장되었습니다!');
+        }
+
+        function skipCoaching() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % coachingQuestions.length;
+            localStorage.setItem('coachingIndex', currentQuestionIndex.toString());
+            initCoaching();
+        }
+
+        function renderInsights() {
+            const container = document.getElementById('insights-list');
+            const countEl = document.getElementById('insights-count');
+            if (!container) return;
+
+            const insights = JSON.parse(localStorage.getItem('insights') || '[]');
+            
+            if (countEl) countEl.textContent = `${insights.length}개`;
+
+            if (insights.length === 0) {
+                container.innerHTML = '<div class="insights-empty">아직 저장된 인사이트가 없습니다.<br>위의 코칭 질문에 답변하면 자동으로 저장됩니다!</div>';
+                return;
+            }
+
+            container.innerHTML = insights.slice(0, 5).map(ins => {
+                const date = new Date(ins.date);
+                const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+                return `
+                    <div class="insight-card">
+                        <div class="insight-card-text">${ins.answer}</div>
+                        <div class="insight-card-meta">
+                            <span class="insight-tag">💭 ${ins.question.slice(0, 20)}...</span>
+                            <span>${dateStr}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========== 초기화 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTasks();
+            showChart(7);
+            initCoaching();
+            renderInsights();
+        });
+
+        // 단축키 업데이트
+        shortcuts['n'] = () => {
+            const input = document.getElementById('top3-input');
+            if (input) {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => input.focus(), 300);
+            }
+        };
+        shortcuts['t'] = () => {
+            const section = document.querySelector('.top3-section');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
     </script>
 
     <!-- 상세 정보 모달 -->
@@ -1397,6 +1957,19 @@
             <div class="modal-body" id="newsModalBody">
                 로딩 중...
             </div>
+        </div>
+    </div>
+
+    <!-- ⌨️ 단축키 가이드 (Phase 1) -->
+    <div class="shortcuts-guide">
+        <button class="shortcuts-toggle" onclick="toggleShortcuts()">⌨️</button>
+        <div class="shortcuts-content" id="shortcuts-content">
+            <div class="shortcuts-title">⌨️ 단축키 가이드</div>
+            <div class="shortcut-item"><span class="shortcut-key">N</span><span class="shortcut-desc">새 할 일 추가</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">S</span><span class="shortcut-desc">점수 입력으로 이동</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">R</span><span class="shortcut-desc">루틴 섹션으로 이동</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">T</span><span class="shortcut-desc">TOP 3로 이동</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">?</span><span class="shortcut-desc">단축키 가이드 토글</span></div>
         </div>
     </div>
 </body>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성재님 성장 센터 19.0</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; min-height: 100vh; padding: 15px; }
+        .container { max-width: 1400px; margin: 0 auto; padding-bottom: 80px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(71, 85, 105, 0.5); flex-wrap: wrap; gap: 10px; }
+        h1 { font-size: 1.4rem; color: #10b981; }
+        .subtitle { font-size: 0.75rem; color: #94a3b8; margin-top: 3px; }
+        .section { margin-bottom: 15px; }
+        .card { background: rgba(30, 41, 59, 0.9); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+        .section-title { font-size: 0.9rem; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+
+        .score-input-card { background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%); border: 2px solid #10b981; border-radius: 14px; padding: 20px; margin-bottom: 15px; }
+        .score-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .score-title { font-size: 1.1rem; font-weight: 700; color: #10b981; }
+        .score-display { font-size: 2.5rem; font-weight: 800; color: #f1f5f9; text-align: center; margin: 15px 0; }
+        .score-slider { width: 100%; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 25%, #eab308 50%, #84cc16 75%, #10b981 100%); outline: none; -webkit-appearance: none; cursor: pointer; }
+        .score-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: #f1f5f9; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .score-feedback { background: rgba(15, 23, 42, 0.8); border-radius: 10px; padding: 15px; margin-top: 15px; min-height: 80px; }
+        .feedback-title { font-size: 0.8rem; font-weight: 700; color: #8b5cf6; margin-bottom: 8px; }
+        .feedback-text { font-size: 0.85rem; color: #94a3b8; line-height: 1.6; }
+
+        .top-three-section { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%); border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .top-three-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .top-three-title { font-size: 1rem; font-weight: 700; color: #f59e0b; }
+        .progress-info { font-size: 0.75rem; color: #94a3b8; }
+        .progress-bar-bg { width: 120px; height: 6px; background: rgba(71, 85, 105, 0.3); border-radius: 3px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 3px; transition: width 0.3s ease; }
+        .filter-buttons { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .filter-btn { background: rgba(71, 85, 105, 0.5); border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.7rem; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+        .filter-btn:hover, .filter-btn.active { color: white; }
+        .filter-btn.filter-all.active { background: #64748b; }
+        .filter-btn.filter-urgent.active { background: #ef4444; }
+        .filter-btn.filter-important.active { background: #f59e0b; }
+        .filter-btn.filter-normal.active { background: #3b82f6; }
+        .top-three-list { min-height: 60px; }
+        .top-three-item { display: flex; align-items: center; gap: 10px; background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 4px solid; cursor: grab; transition: all 0.2s; }
+        .top-three-item:hover { transform: translateX(4px); }
+        .top-three-item.priority-urgent { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .top-three-item.priority-important { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .top-three-item.priority-normal { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .top-three-item.completed { opacity: 0.5; }
+        .top-three-item.completed .task-text { text-decoration: line-through; }
+        .top-three-item.dragging { opacity: 0.5; }
+        .task-checkbox { width: 20px; height: 20px; border-radius: 4px; border: 2px solid #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+        .task-checkbox.checked { background: #10b981; border-color: #10b981; }
+        .task-checkbox.checked::after { content: "✓"; color: white; font-size: 12px; }
+        .task-text { flex: 1; font-size: 0.85rem; }
+        .task-delete { color: #ef4444; cursor: pointer; font-size: 1rem; opacity: 0.5; }
+        .task-delete:hover { opacity: 1; }
+        .add-task-form { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .add-task-input { flex: 1; min-width: 150px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 6px; padding: 10px 12px; font-size: 0.8rem; color: #e2e8f0; }
+        .add-task-input:focus { outline: none; border-color: #3b82f6; }
+        .add-task-priority { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 6px; padding: 10px; font-size: 0.75rem; color: #e2e8f0; }
+        .add-task-btn { background: #10b981; border: none; border-radius: 6px; padding: 10px 16px; font-size: 0.8rem; color: white; cursor: pointer; }
+        .add-task-btn:hover { background: #059669; }
+
+        .template-buttons { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .template-btn { background: rgba(15, 23, 42, 0.7); border: 2px solid; border-radius: 10px; padding: 10px 16px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .template-btn:hover { transform: translateY(-2px); }
+        .template-btn.morning { border-color: #f59e0b; color: #f59e0b; }
+        .template-btn.afternoon { border-color: #3b82f6; color: #3b82f6; }
+        .template-btn.evening { border-color: #8b5cf6; color: #8b5cf6; }
+
+        .graph-section { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        .graph-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .graph-title { font-size: 0.9rem; font-weight: 700; color: #10b981; }
+        .graph-tabs { display: flex; gap: 6px; }
+        .graph-tab { background: rgba(71, 85, 105, 0.5); border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.7rem; color: #94a3b8; cursor: pointer; }
+        .graph-tab.active { background: #10b981; color: white; }
+        .graph-container { height: 120px; display: flex; align-items: flex-end; gap: 4px; padding: 10px 0; }
+        .graph-bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; }
+        .graph-bar { width: 100%; border-radius: 3px 3px 0 0; transition: height 0.3s ease; min-height: 4px; cursor: pointer; }
+        .graph-bar.high { background: linear-gradient(180deg, #10b981, #059669); }
+        .graph-bar.mid { background: linear-gradient(180deg, #f59e0b, #d97706); }
+        .graph-bar.low { background: linear-gradient(180deg, #ef4444, #dc2626); }
+        .graph-label { font-size: 0.5rem; color: #64748b; margin-top: 4px; }
+        .pattern-insight { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(245, 158, 11, 0.1)); border-radius: 8px; padding: 12px; margin-top: 12px; border-left: 3px solid #10b981; }
+        .pattern-title { font-size: 0.75rem; font-weight: 700; color: #10b981; margin-bottom: 6px; }
+        .pattern-text { font-size: 0.7rem; color: #94a3b8; line-height: 1.5; }
+        .warning-alert { background: rgba(239, 68, 68, 0.2); border: 2px solid #ef4444; border-radius: 8px; padding: 12px; margin-top: 12px; display: none; align-items: center; gap: 10px; animation: pulse 2s infinite; }
+        .warning-alert.show { display: flex; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .warning-text { font-size: 0.75rem; color: #ef4444; font-weight: 600; }
+
+        .coaching-widget { background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15)); border-radius: 12px; padding: 16px; margin-bottom: 15px; border: 2px solid rgba(139, 92, 246, 0.3); }
+        .coaching-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .coaching-title { font-size: 0.9rem; font-weight: 700; color: #8b5cf6; }
+        .coaching-question { font-size: 0.85rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 12px; font-style: italic; }
+        .coaching-answer { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: #e2e8f0; resize: vertical; min-height: 60px; margin-bottom: 10px; }
+        .coaching-answer:focus { outline: none; border-color: #8b5cf6; }
+        .coaching-actions { display: flex; gap: 8px; }
+        .coaching-btn { border: none; border-radius: 6px; padding: 8px 16px; font-size: 0.75rem; cursor: pointer; }
+        .coaching-btn.save { background: #10b981; color: white; }
+        .coaching-btn.skip { background: #64748b; color: #e2e8f0; }
+
+        .insights-widget { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        .insights-title { font-size: 0.85rem; font-weight: 700; color: #f59e0b; margin-bottom: 12px; }
+        .insight-item { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; }
+        .insight-text { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
+        .insight-date { font-size: 0.65rem; color: #64748b; margin-top: 4px; }
+
+        .collapse-section { margin-bottom: 12px; }
+        .collapse-header { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
+        .collapse-header:hover { background: rgba(30, 41, 59, 0.9); }
+        .collapse-title { font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .collapse-icon { font-size: 1rem; transition: transform 0.3s; }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .collapse-content.open { max-height: 2000px; }
+        .collapse-inner { padding: 14px; background: rgba(15, 23, 42, 0.5); border-radius: 0 0 10px 10px; }
+
+        .alive-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        .alive-item { text-align: center; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+        .alive-item[data-level="high"] { border-color: #10b981; background: rgba(16, 185, 129, 0.2); }
+        .alive-item[data-level="low"] { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .alive-icon { font-size: 1.2rem; }
+        .alive-label { font-size: 0.6rem; color: #64748b; margin-top: 4px; }
+        .alive-value { font-size: 0.75rem; font-weight: 700; margin-top: 4px; }
+
+        .routine-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .routine-modal.show { display: flex; }
+        .routine-modal-content { background: linear-gradient(135deg, #0f172a, #1e293b); border-radius: 12px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .routine-modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
+        .routine-modal-title.morning { color: #f59e0b; }
+        .routine-modal-title.afternoon { color: #3b82f6; }
+        .routine-modal-title.evening { color: #8b5cf6; }
+        .routine-question { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8; }
+        .routine-close { background: #64748b; border: none; border-radius: 6px; padding: 10px 20px; color: white; cursor: pointer; margin-top: 12px; }
+
+        .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .news-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.3s; }
+        .news-card:hover { background: rgba(30, 41, 59, 0.8); transform: translateY(-2px); }
+        .news-source { font-size: 0.7rem; font-weight: 700; }
+        .ai-news { color: #3b82f6; }
+        .trading-news { color: #10b981; }
+        .tech-news { color: #f59e0b; }
+        .news-item { font-size: 0.7rem; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
+
+        .growth-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .growth-item { text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .growth-item:hover { background: rgba(30, 41, 59, 0.8); transform: translateY(-2px); }
+        .growth-value { font-size: 1.5rem; font-weight: 700; color: #10b981; }
+        .growth-label { font-size: 0.65rem; color: #64748b; margin-top: 4px; }
+
+        .hardware-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .hardware-item { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+        .hardware-icon { font-size: 1.5rem; }
+        .hardware-info { flex: 1; }
+        .hardware-label { font-size: 0.7rem; color: #64748b; font-weight: 700; }
+        .hardware-value { font-size: 0.85rem; font-weight: 700; margin: 4px 0; }
+        .hardware-bar { height: 6px; background: rgba(71, 85, 105, 0.3); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .hardware-progress { height: 100%; border-radius: 3px; }
+        .hardware-status { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; }
+        .status-good { color: #10b981; }
+        .progress-good { background: linear-gradient(90deg, #10b981, #34d399); }
+        .indicator-online { background: #10b981; box-shadow: 0 0 6px #10b981; }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: linear-gradient(135deg, #0f172a, #1e293b); margin: 5% auto; width: 90%; max-width: 800px; border-radius: 12px; max-height: 85vh; overflow: hidden; }
+        .modal-header { padding: 20px; border-bottom: 1px solid rgba(71, 85, 105, 0.5); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 1.2rem; color: #10b981; font-weight: 700; }
+        .close { color: #94a3b8; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #ef4444; }
+        .modal-body { padding: 20px; max-height: 60vh; overflow-y: auto; }
+        .detail-item { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 15px; margin-bottom: 12px; border-left: 3px solid #10b981; }
+        .detail-title { font-size: 0.9rem; font-weight: 700; color: #10b981; margin-bottom: 8px; }
+        .detail-content { font-size: 0.8rem; color: #94a3b8; line-height: 1.5; }
+        .skill-item { border-color: #3b82f6; }
+
+        .shortcut-guide { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
+        .shortcut-toggle { background: linear-gradient(135deg, #8b5cf6, #3b82f6); border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        .shortcut-toggle:hover { transform: scale(1.1); }
+        .shortcut-content { display: none; position: absolute; bottom: 60px; right: 0; background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(139, 92, 246, 0.5); border-radius: 12px; padding: 16px; min-width: 260px; }
+        .shortcut-content.show { display: block; }
+        .shortcut-content h3 { font-size: 0.9rem; color: #8b5cf6; margin-bottom: 12px; text-align: center; }
+        .shortcut-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.3); }
+        .shortcut-item:last-child { border-bottom: none; }
+        .shortcut-key { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; border-radius: 4px; padding: 3px 8px; font-size: 0.75rem; font-weight: 700; color: #3b82f6; }
+        .shortcut-desc { font-size: 0.7rem; color: #94a3b8; }
+
+        .weekly-report { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.15)); border-radius: 12px; padding: 16px; margin-bottom: 15px; border: 2px solid rgba(16, 185, 129, 0.3); display: none; }
+        .weekly-report.show { display: block; }
+        .report-title { font-size: 0.9rem; font-weight: 700; color: #10b981; margin-bottom: 12px; }
+        .report-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.2); font-size: 0.75rem; color: #94a3b8; }
+
+        @media (max-width: 768px) {
+            .alive-grid { grid-template-columns: repeat(3, 1fr); }
+            .news-grid { grid-template-columns: 1fr; }
+            .growth-stats { grid-template-columns: repeat(2, 1fr); }
+            .hardware-stats { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { width: 95%; margin: 10% auto; }
+            .shortcut-content { right: -10px; min-width: 240px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div><h1>🚀 성재님 성장 센터 19.0</h1><p class="subtitle">단축키(N/S/R/?) | TOP 3 | 그래프 | AI 코칭 | 인사이트</p></div>
+            <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
+        </div>
+
+        <div class="template-buttons">
+            <button class="template-btn morning" onclick="showRoutine('morning')">🌅 아침</button>
+            <button class="template-btn afternoon" onclick="showRoutine('afternoon')">🌤️ 점심</button>
+            <button class="template-btn evening" onclick="showRoutine('evening')">🌙 저녁</button>
+        </div>
+
+        <div class="score-input-card" id="score-section">
+            <div class="score-header"><span class="score-title">📊 오늘의 하루 점수</span><span id="score-emoji" style="font-size: 1.5rem;">😐</span></div>
+            <div class="score-display"><span id="score-value">5.0</span> / 10</div>
+            <input type="range" class="score-slider" id="score-slider" min="0" max="10" step="0.5" value="5">
+            <div class="score-feedback"><div class="feedback-title">💡 자비스 피드백</div><div class="feedback-text" id="feedback-text">점수를 선택하면 피드백을 드려요.</div></div>
+        </div>
+
+        <div class="top-three-section">
+            <div class="top-three-header">
+                <span class="top-three-title">🔥 오늘의 TOP 3 할 일</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="progress-info" id="progress-info">0/0</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div></div>
+                </div>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn filter-all active" onclick="filterTasks('all')">전체</button>
+                <button class="filter-btn filter-urgent" onclick="filterTasks('urgent')">🔴 긴급</button>
+                <button class="filter-btn filter-important" onclick="filterTasks('important')">🟠 중요</button>
+                <button class="filter-btn filter-normal" onclick="filterTasks('normal')">🔵 보통</button>
+            </div>
+            <div class="top-three-list" id="top-three-list"></div>
+            <div class="add-task-form">
+                <input type="text" class="add-task-input" id="new-task-input" placeholder="새 할 일 추가 (N키)">
+                <select class="add-task-priority" id="new-task-priority">
+                    <option value="urgent">🔴 긴급</option>
+                    <option value="important">🟠 중요</option>
+                    <option value="normal" selected>🔵 보통</option>
+                </select>
+                <button class="add-task-btn" onclick="addTask()">추가</button>
+            </div>
+        </div>
+
+        <div class="graph-section">
+            <div class="graph-header">
+                <span class="graph-title">📈 점수 추이</span>
+                <div class="graph-tabs">
+                    <button class="graph-tab active" onclick="showGraph(7)">7일</button>
+                    <button class="graph-tab" onclick="showGraph(30)">30일</button>
+                </div>
+            </div>
+            <div class="graph-container" id="graph-container"></div>
+            <div class="pattern-insight" id="pattern-insight">
+                <div class="pattern-title">🎯 패턴 분석</div>
+                <div class="pattern-text" id="pattern-text">데이터가 쌓이면 패턴을 분석해드려요.</div>
+            </div>
+            <div class="warning-alert" id="warning-alert">
+                <span>⚠️</span>
+                <span class="warning-text">3일 연속 6점 이하입니다. 컨디션 점검이 필요해요!</span>
+            </div>
+        </div>
+
+        <div class="coaching-widget">
+            <div class="coaching-header"><span style="font-size:1.5rem">💡</span><span class="coaching-title">오늘의 질문</span></div>
+            <div class="coaching-question" id="coaching-question">오늘 하루 중 가장 기뻤던 순간은?</div>
+            <textarea class="coaching-answer" id="coaching-answer" placeholder="답변을 적어보세요..."></textarea>
+            <div class="coaching-actions">
+                <button class="coaching-btn save" onclick="saveCoachingAnswer()">💾 저장</button>
+                <button class="coaching-btn skip" onclick="skipQuestion()">⏭️ 건너뛰기</button>
+            </div>
+        </div>
+
+        <div class="insights-widget">
+            <div class="insights-title">💎 최근 인사이트</div>
+            <div id="insights-list"></div>
+        </div>
+
+        <div class="weekly-report" id="weekly-report">
+            <div class="report-title">📊 주간 리포트</div>
+            <div id="weekly-report-content"></div>
+        </div>
+
+        <div class="section"><div class="card"><div class="section-title">❤️ 살아있음 체크</div><div class="alive-grid"><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🧠</div><div class="alive-label">생각</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">⚡</div><div class="alive-label">에너지</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🎯</div><div class="alive-label">몰입</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">😊</div><div class="alive-label">기분</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">💪</div><div class="alive-label">신체</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🌊</div><div class="alive-label">호기심</div><div class="alive-value">중간</div></div></div></div></div>
+
+        <div class="collapse-section" id="routine-section">
+            <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">🔄 루틴</span><span class="collapse-icon">▼</span></div>
+            <div class="collapse-content open"><div class="collapse-inner" id="routine-container"></div></div>
+        </div>
+
+        <div class="collapse-section">
+            <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">📡 최신 뉴스</span><span class="collapse-icon">▼</span></div>
+            <div class="collapse-content"><div class="collapse-inner"><div class="news-grid"><div class="news-card"><div class="news-source ai-news">🤖 AI</div><div class="news-item">• Claude 4 출시</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• BTC 신고가</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• M4 맥북 발표</div></div></div></div></div>
+        </div>
+
+        <div class="section"><div class="card"><div class="section-title">📊 성장 통계</div><div class="growth-stats"><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">스킬</div></div><div class="growth-item"><div class="growth-value">48</div><div class="growth-label">완료 작업</div></div><div class="growth-item"><div class="growth-value">19.0</div><div class="growth-label">버전</div></div><div class="growth-item"><div class="growth-value" id="insight-count">0</div><div class="growth-label">인사이트</div></div></div></div></div>
+
+        <div class="section"><div class="card"><div class="section-title">⚡ 하드웨어</div><div class="hardware-stats"><div class="hardware-item"><div class="hardware-icon">🖥️</div><div class="hardware-info"><div class="hardware-label">CPU</div><div class="hardware-value status-good" id="cpu-usage">25%</div><div class="hardware-bar"><div class="hardware-progress progress-good" style="width:25%"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💾</div><div class="hardware-info"><div class="hardware-label">RAM</div><div class="hardware-value status-good" id="ram-usage">45%</div><div class="hardware-bar"><div class="hardware-progress progress-good" style="width:45%"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💽</div><div class="hardware-info"><div class="hardware-label">디스크</div><div class="hardware-value status-good" id="disk-usage">52%</div><div class="hardware-bar"><div class="hardware-progress progress-good" style="width:52%"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">🌐</div><div class="hardware-info"><div class="hardware-label">Gateway</div><div class="hardware-value status-good">온라인</div><div class="hardware-status indicator-online"></div></div></div></div></div></div>
+    </div>
+
+    <div class="shortcut-guide">
+        <button class="shortcut-toggle" onclick="toggleShortcuts()">⌨️</button>
+        <div class="shortcut-content" id="shortcut-content">
+            <h3>⌨️ 단축키</h3>
+            <div class="shortcut-item"><span class="shortcut-key">N</span><span class="shortcut-desc">새 할 일 추가</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">S</span><span class="shortcut-desc">점수 슬라이더</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">R</span><span class="shortcut-desc">루틴 섹션</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">/</span><span class="shortcut-desc">스킬 검색</span></div>
+            <div class="shortcut-item"><span class="shortcut-key">?</span><span class="shortcut-desc">이 가이드</span></div>
+        </div>
+    </div>
+
+    <div class="routine-modal" id="routine-modal">
+        <div class="routine-modal-content">
+            <h2 class="routine-modal-title" id="routine-modal-title">🌅 모닝 루틴</h2>
+            <div id="routine-modal-questions"></div>
+            <button class="routine-close" onclick="closeRoutineModal()">닫기</button>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><span class="modal-title" id="modalTitle">상세</span><span class="close" onclick="closeModal()">&times;</span></div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <div id="skillSearchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><span class="modal-title">🔍 스킬 검색</span><span class="close" onclick="closeSkillSearch()">&times;</span></div>
+            <div class="modal-body">
+                <input type="text" class="add-task-input" id="skill-search-input" placeholder="스킬 이름 검색..." style="width:100%;margin-bottom:15px" oninput="searchSkills()">
+                <div id="skill-search-results"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+const feedbacks = {
+    0: { emoji: '😭', text: '정말 힘든 하루였군요... 내일은 나아질 거예요!' },
+    2: { emoji: '😢', text: '힘들었지만 포기하지 않으신 게 대단해요!' },
+    4: { emoji: '😐', text: '평범한 하루네요. 내일은 특별한 걸 시도해봐요!' },
+    6: { emoji: '🙂', text: '좋아요! 오늘 잘하신 일 3가지 생각해보세요.' },
+    8: { emoji: '😄', text: '훌륭한 하루! 이 에너지 그대로 유지하세요!' },
+    10: { emoji: '🤩', text: '완벽한 하루! 🎉 정말 대단해요!' }
+};
+
+const coachingQuestions = [
+    "오늘 하루 중 가장 기뻤던 순간은?",
+    "내일 개선하고 싶은 한 가지는?",
+    "오늘 감사한 것 3가지는?",
+    "이번 주 가장 큰 성취는?",
+    "지금 가장 중요한 목표는?",
+    "오늘 배운 것 중 기억하고 싶은 건?",
+    "스트레스를 줄이려면 무엇을 바꿔야 할까?",
+    "내 에너지를 가장 높이는 활동은?"
+];
+
+const routineQuestions = {
+    morning: ["1. 오늘 가장 중요한 일 하나는?", "2. 에너지 레벨은 어때요?", "3. 환경 세팅 완료했나요?"],
+    afternoon: ["1. 오전 목표 달성했나요?", "2. 점심 후 집중력은?", "3. 남은 시간 뭘 집중할까요?"],
+    evening: ["1. 오늘 살아있었나요?", "2. 뭘 배웠나요?", "3. 내일 뭘 개선할까요?"]
+};
+
+const skills = ["continuous-learning-v2", "auto-backup", "notion-logger", "telegram-notifier", "system-monitor", "claude-api", "gpt-integration", "prompt-optimizer", "data-analyzer", "report-generator", "focus-session", "task-manager", "time-tracker", "habit-tracker", "goal-setter", "email-automation", "slack-integration", "discord-bot", "log-analyzer", "security-scanner"];
+
+let topThree = JSON.parse(localStorage.getItem('topThree') || '[]');
+let dailyScores = JSON.parse(localStorage.getItem('dailyScores') || '{}');
+let insights = JSON.parse(localStorage.getItem('insights') || '[{"text":"말이 코드보다 기하급수적으로 더 큰 가치","date":"2026-02-03"}]');
+let coachingAnswers = JSON.parse(localStorage.getItem('coachingAnswers') || '[]');
+let currentFilter = 'all';
+
+function getToday() { return new Date().toISOString().split('T')[0]; }
+
+function updateTime() {
+    const now = new Date();
+    document.getElementById('current-time').textContent = now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' KST';
+    updateRoutineDisplay(now);
+}
+
+function updateRoutineDisplay(now) {
+    const hour = now.getHours();
+    let html = '';
+    if (hour >= 6 && hour < 12) html = '<div style="color:#f59e0b;font-weight:700;margin-bottom:8px">🌅 오전 루틴</div>' + routineQuestions.morning.map(q => '<div style="font-size:0.8rem;color:#94a3b8;padding:4px 0">' + q + '</div>').join('');
+    else if (hour >= 12 && hour < 18) html = '<div style="color:#3b82f6;font-weight:700;margin-bottom:8px">🌤️ 오후 루틴</div>' + routineQuestions.afternoon.map(q => '<div style="font-size:0.8rem;color:#94a3b8;padding:4px 0">' + q + '</div>').join('');
+    else html = '<div style="color:#8b5cf6;font-weight:700;margin-bottom:8px">🌙 저녁 루틴</div>' + routineQuestions.evening.map(q => '<div style="font-size:0.8rem;color:#94a3b8;padding:4px 0">' + q + '</div>').join('');
+    document.getElementById('routine-container').innerHTML = html;
+}
+
+function saveScore(score) {
+    dailyScores[getToday()] = { score, timestamp: Date.now() };
+    localStorage.setItem('dailyScores', JSON.stringify(dailyScores));
+    updateGraph();
+    checkWarning();
+}
+
+function loadScore() {
+    const today = dailyScores[getToday()];
+    if (today) {
+        document.getElementById('score-slider').value = today.score;
+        document.getElementById('score-value').textContent = today.score.toFixed(1);
+        const fb = feedbacks[Math.floor(today.score / 2) * 2] || feedbacks[4];
+        document.getElementById('score-emoji').textContent = fb.emoji;
+        document.getElementById('feedback-text').textContent = fb.text;
+    }
+}
+
+document.getElementById('score-slider').addEventListener('input', function(e) {
+    const score = parseFloat(e.target.value);
+    document.getElementById('score-value').textContent = score.toFixed(1);
+    const fb = feedbacks[Math.floor(score / 2) * 2] || feedbacks[4];
+    document.getElementById('score-emoji').textContent = fb.emoji;
+    document.getElementById('feedback-text').textContent = fb.text;
+    saveScore(score);
+});
+
+function renderTopThree() {
+    const list = document.getElementById('top-three-list');
+    const filtered = currentFilter === 'all' ? topThree : topThree.filter(t => t.priority === currentFilter);
+    list.innerHTML = filtered.map((task, i) => `
+        <div class="top-three-item priority-${task.priority} ${task.completed ? 'completed' : ''}" draggable="true" data-id="${task.id}">
+            <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
+            <span class="task-text">${task.text}</span>
+            <span class="task-delete" onclick="deleteTask('${task.id}')">×</span>
+        </div>
+    `).join('') || '<div style="text-align:center;color:#64748b;padding:20px">할 일을 추가하세요 (N키)</div>';
+    updateProgress();
+    setupDragAndDrop();
+}
+
+function addTask() {
+    const input = document.getElementById('new-task-input');
+    const priority = document.getElementById('new-task-priority').value;
+    if (!input.value.trim()) return;
+    topThree.push({ id: Date.now().toString(), text: input.value.trim(), priority, completed: false });
+    localStorage.setItem('topThree', JSON.stringify(topThree));
+    input.value = '';
+    renderTopThree();
+}
+
+function toggleTask(id) {
+    const task = topThree.find(t => t.id === id);
+    if (task) task.completed = !task.completed;
+    localStorage.setItem('topThree', JSON.stringify(topThree));
+    renderTopThree();
+}
+
+function deleteTask(id) {
+    topThree = topThree.filter(t => t.id !== id);
+    localStorage.setItem('topThree', JSON.stringify(topThree));
+    renderTopThree();
+}
+
+function filterTasks(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-' + filter).classList.add('active');
+    renderTopThree();
+}
+
+function updateProgress() {
+    const total = topThree.length;
+    const done = topThree.filter(t => t.completed).length;
+    document.getElementById('progress-info').textContent = `${done}/${total}`;
+    document.getElementById('progress-fill').style.width = total ? (done/total*100) + '%' : '0%';
+}
+
+function setupDragAndDrop() {
+    const items = document.querySelectorAll('.top-three-item');
+    items.forEach(item => {
+        item.addEventListener('dragstart', () => item.classList.add('dragging'));
+        item.addEventListener('dragend', () => { item.classList.remove('dragging'); saveTaskOrder(); });
+    });
+    const list = document.getElementById('top-three-list');
+    list.addEventListener('dragover', e => {
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        const afterElement = getDragAfterElement(list, e.clientY);
+        if (afterElement) list.insertBefore(dragging, afterElement);
+        else list.appendChild(dragging);
+    });
+}
+
+function getDragAfterElement(container, y) {
+    const elements = [...container.querySelectorAll('.top-three-item:not(.dragging)')];
+    return elements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function saveTaskOrder() {
+    const ids = [...document.querySelectorAll('.top-three-item')].map(el => el.dataset.id);
+    topThree.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+    localStorage.setItem('topThree', JSON.stringify(topThree));
+}
+
+function showGraph(days) {
+    document.querySelectorAll('.graph-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    const container = document.getElementById('graph-container');
+    const dates = [];
+    for (let i = days - 1; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        dates.push(d.toISOString().split('T')[0]);
+    }
+    container.innerHTML = dates.map(date => {
+        const data = dailyScores[date];
+        const score = data ? data.score : 0;
+        const height = score * 10;
+        const cls = score >= 8 ? 'high' : score >= 5 ? 'mid' : 'low';
+        const label = days <= 7 ? ['일','월','화','수','목','금','토'][new Date(date).getDay()] : date.slice(5);
+        return `<div class="graph-bar-wrapper"><div class="graph-bar ${cls}" style="height:${height}%" title="${date}: ${score}점"></div><div class="graph-label">${label}</div></div>`;
+    }).join('');
+    analyzePattern();
+}
+
+function updateGraph() { showGraph(7); }
+
+function analyzePattern() {
+    const scores = Object.entries(dailyScores).sort((a,b) => b[0].localeCompare(a[0])).slice(0, 30);
+    const highDays = scores.filter(([,d]) => d.score >= 8).length;
+    const lowDays = scores.filter(([,d]) => d.score <= 5).length;
+    const avg = scores.length ? (scores.reduce((s,[,d]) => s + d.score, 0) / scores.length).toFixed(1) : 0;
+    document.getElementById('pattern-text').textContent = scores.length < 3 ? '데이터가 더 필요해요. 매일 점수를 기록해주세요!' : `평균 ${avg}점 | 고득점(8+): ${highDays}일 | 저득점(5-): ${lowDays}일`;
+}
+
+function checkWarning() {
+    const recent = Object.entries(dailyScores).sort((a,b) => b[0].localeCompare(a[0])).slice(0, 3);
+    const lowStreak = recent.length >= 3 && recent.every(([,d]) => d.score <= 6);
+    document.getElementById('warning-alert').classList.toggle('show', lowStreak);
+}
+
+function loadCoachingQuestion() {
+    const today = getToday();
+    const idx = parseInt(today.replace(/-/g, '')) % coachingQuestions.length;
+    document.getElementById('coaching-question').textContent = coachingQuestions[idx];
+}
+
+function saveCoachingAnswer() {
+    const answer = document.getElementById('coaching-answer').value.trim();
+    if (!answer) return;
+    const question = document.getElementById('coaching-question').textContent;
+    coachingAnswers.push({ question, answer, date: getToday() });
+    localStorage.setItem('coachingAnswers', JSON.stringify(coachingAnswers));
+    document.getElementById('coaching-answer').value = '';
+    alert('저장되었습니다! 💾');
+}
+
+function skipQuestion() {
+    const idx = Math.floor(Math.random() * coachingQuestions.length);
+    document.getElementById('coaching-question').textContent = coachingQuestions[idx];
+}
+
+function renderInsights() {
+    const list = document.getElementById('insights-list');
+    list.innerHTML = insights.slice(-3).reverse().map(i => `<div class="insight-item"><div class="insight-text">"${i.text}"</div><div class="insight-date">${i.date}</div></div>`).join('') || '<div style="color:#64748b;font-size:0.75rem">인사이트가 없습니다</div>';
+    document.getElementById('insight-count').textContent = insights.length;
+}
+
+function checkWeeklyReport() {
+    const now = new Date();
+    if (now.getDay() === 0 && now.getHours() >= 18) {
+        const report = document.getElementById('weekly-report');
+        const content = document.getElementById('weekly-report-content');
+        const weekScores = Object.entries(dailyScores).filter(([d]) => {
+            const date = new Date(d);
+            const diff = (now - date) / (1000 * 60 * 60 * 24);
+            return diff <= 7;
+        });
+        const avg = weekScores.length ? (weekScores.reduce((s,[,d]) => s + d.score, 0) / weekScores.length).toFixed(1) : '-';
+        const completed = topThree.filter(t => t.completed).length;
+        content.innerHTML = `<div class="report-stat"><span>평균 점수</span><span>${avg}점</span></div><div class="report-stat"><span>완료 작업</span><span>${completed}개</span></div><div class="report-stat"><span>기록 일수</span><span>${weekScores.length}일</span></div>`;
+        report.classList.add('show');
+    }
+}
+
+function showRoutine(type) {
+    const modal = document.getElementById('routine-modal');
+    const title = document.getElementById('routine-modal-title');
+    const questions = document.getElementById('routine-modal-questions');
+    const titles = { morning: '🌅 모닝 루틴', afternoon: '🌤️ 오후 루틴', evening: '🌙 이브닝 루틴' };
+    title.textContent = titles[type];
+    title.className = 'routine-modal-title ' + type;
+    questions.innerHTML = routineQuestions[type].map(q => `<div class="routine-question">${q}</div>`).join('');
+    modal.classList.add('show');
+}
+
+function closeRoutineModal() { document.getElementById('routine-modal').classList.remove('show'); }
+
+function toggleCollapse(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.collapse-icon');
+    content.classList.toggle('open');
+    icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function cycleAlive(item) {
+    const levels = ['low', 'mid', 'high'];
+    const labels = { low: '낮음', mid: '중간', high: '높음' };
+    const current = item.dataset.level;
+    const next = levels[(levels.indexOf(current) + 1) % 3];
+    item.dataset.level = next;
+    item.querySelector('.alive-value').textContent = labels[next];
+}
+
+function toggleShortcuts() { document.getElementById('shortcut-content').classList.toggle('show'); }
+
+function openModal(type) {
+    document.getElementById('modalTitle').textContent = '🛠️ 설치된 스킬';
+    document.getElementById('modalBody').innerHTML = skills.map(s => `<div class="detail-item skill-item"><div class="detail-title">${s}</div></div>`).join('');
+    document.getElementById('detailModal').style.display = 'block';
+}
+
+function closeModal() { document.getElementById('detailModal').style.display = 'none'; }
+
+function openSkillSearch() { document.getElementById('skillSearchModal').style.display = 'block'; document.getElementById('skill-search-input').focus(); }
+function closeSkillSearch() { document.getElementById('skillSearchModal').style.display = 'none'; }
+
+function searchSkills() {
+    const query = document.getElementById('skill-search-input').value.toLowerCase();
+    const results = skills.filter(s => s.toLowerCase().includes(query));
+    document.getElementById('skill-search-results').innerHTML = results.map(s => `<div class="detail-item skill-item"><div class="detail-title">${s}</div></div>`).join('') || '<div style="color:#64748b">검색 결과 없음</div>';
+}
+
+document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    switch(e.key.toLowerCase()) {
+        case 'n': document.getElementById('new-task-input').focus(); e.preventDefault(); break;
+        case 's': document.getElementById('score-slider').focus(); e.preventDefault(); break;
+        case 'r': document.getElementById('routine-section').scrollIntoView({ behavior: 'smooth' }); break;
+        case '/': openSkillSearch(); e.preventDefault(); break;
+        case '?': toggleShortcuts(); break;
+    }
+});
+
+document.getElementById('new-task-input').addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
+
+window.onclick = e => {
+    if (e.target.classList.contains('modal')) { closeModal(); closeSkillSearch(); }
+    if (e.target === document.getElementById('routine-modal')) closeRoutineModal();
+};
+
+updateTime(); setInterval(updateTime, 60000);
+loadScore(); renderTopThree(); updateGraph(); loadCoachingQuestion(); renderInsights(); checkWeeklyReport(); checkWarning();
+</script>
+</body>
+</html>

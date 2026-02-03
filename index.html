@@ -164,7 +164,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div><h1>🤖 성재님 성장 센터 16.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 | 도구 | 루틴 | 뉴스 | 시각화</p></div>
+            <div><h1>🤖 성재님 성장 센터 17.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 접이식 | 환경 세팅 우선순위 | 스킬 전체 보기 | 루틴 | 뉴스</p></div>
             <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
         </div>
 
@@ -180,26 +180,53 @@
         </div>
 
         <!-- 2. 어제/오늘/내일 -->
-        <div class="day-grid">
-            <div class="day-card yesterday-card">
-                <div class="day-title yesterday-title">📅 어제 돌아보기</div>
-                <div class="day-content">
-                    <div class="day-item">✅ 대시보드 10.0 완성</div>
-                    <div class="day-item">✅ 인지과학 평가</div>
-                    <div class="day-item">✅ 텐퍼센트커피 추천</div>
+        <div class="section">
+            <div class="card">
+                <div class="section-title">📅 시간 여행: 어제/오늘/내일</div>
+                
+                <!-- 어제 접이식 -->
+                <div class="collapse-section">
+                    <div class="collapse-header yesterday-card" onclick="toggleCollapse(this)" style="background: rgba(71, 85, 105, 0.2); border-left: 3px solid #64748b;">
+                        <span class="collapse-title yesterday-title">📅 어제 돌아보기</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
+                    <div class="collapse-content open">
+                        <div class="collapse-inner">
+                            <div class="day-item">✅ 성장 센터 16.0 업그레이드 완성</div>
+                            <div class="day-item">✅ 하루 점수 저장 기능 구현</div>
+                            <div class="day-item">✅ 스킬 카테고리 펼침 기능 추가</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="day-card today-card">
-                <div class="day-title today-title">🎯 오늘 해야 할 것</div>
-                <div class="day-content">
-                    <div class="day-item">1. 점심 먹기</div>
-                    <div class="day-item">2. 오후 업무 계획</div>
-                    <div class="day-item">3. 마케팅 스킬 매핑</div>
+                
+                <!-- 오늘 접이식 -->
+                <div class="collapse-section">
+                    <div class="collapse-header today-card" onclick="toggleCollapse(this)" style="background: rgba(16, 185, 129, 0.2); border-left: 3px solid #10b981;">
+                        <span class="collapse-title today-title">🎯 오늘 해야 할 것</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
+                    <div class="collapse-content open">
+                        <div class="collapse-inner">
+                            <div class="day-item">1. 성장 센터 17.0 업그레이드</div>
+                            <div class="day-item">2. 어제/오늘/내일 접이식 기능 추가</div>
+                            <div class="day-item">3. 환경 세팅 우선순위 질문 추가</div>
+                            <div class="day-item">4. 스킬 페이지 전체 보기 모달 개선</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="day-card tomorrow-card">
-                <div class="day-title tomorrow-title">📆 내일 일정</div>
-                <div class="day-content"><div class="day-item" id="tomorrow-schedule">로딩 중...</div></div>
+                
+                <!-- 내일 접이식 -->
+                <div class="collapse-section">
+                    <div class="collapse-header tomorrow-card" onclick="toggleCollapse(this)" style="background: rgba(59, 130, 246, 0.2); border-left: 3px solid #3b82f6;">
+                        <span class="collapse-title tomorrow-title">📆 내일 일정</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
+                    <div class="collapse-content open">
+                        <div class="collapse-inner">
+                            <div class="day-item" id="tomorrow-schedule">로딩 중...</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -210,7 +237,42 @@
         </div>
         <div class="collapse-section">
             <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">⚙️ 환경 세팅</span><span class="collapse-icon">▼</span></div>
-            <div class="collapse-content"><div class="collapse-inner"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;"><div style="padding: 10px; background: rgba(239, 68, 68, 0.1); border-radius: 8px;"><div style="font-size: 1.2rem;">🔕</div><div style="font-size: 0.75rem; font-weight: 700; color: #ef4444; margin: 6px 0;">알림 차단</div></div><div style="padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 8px;"><div style="font-size: 1.2rem;">🎧</div><div style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; margin: 6px 0;">집중 도구</div></div><div style="padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 8px;"><div style="font-size: 1.2rem;">📁</div><div style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; margin: 6px 0;">작업 공간</div></div></div></div></div>
+            <div class="collapse-content"><div class="collapse-inner">
+                <!-- 핵심 질문 -->
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%); border-radius: 10px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #f59e0b;">
+                    <div style="font-size: 0.9rem; font-weight: 700; color: #f59e0b; margin-bottom: 8px;">💎 핵심 질문</div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #10b981; margin-bottom: 6px;">"무엇을 먼저하면 다음에 복리로 효과가 커질까?"</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.5;">
+                        • 작은 노력이 기하급수적 결과를 만드는 것은?<br>
+                        • 한 번 세팅하면 계속 효과가 누적되는 것은?<br>
+                        • 미래의 내가 고마워할 투자는?
+                    </div>
+                </div>
+                
+                <!-- 환경 도구들 -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                    <div style="padding: 10px; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+                        <div style="font-size: 1.2rem;">🔕</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #ef4444; margin: 6px 0;">알림 차단</div>
+                        <div style="font-size: 0.65rem; color: #94a3b8;">집중력 1순위</div>
+                    </div>
+                    <div style="padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
+                        <div style="font-size: 1.2rem;">🎧</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; margin: 6px 0;">집중 도구</div>
+                        <div style="font-size: 0.65rem; color: #94a3b8;">환경 세팅</div>
+                    </div>
+                    <div style="padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 8px;">
+                        <div style="font-size: 1.2rem;">📁</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; margin: 6px 0;">작업 공간</div>
+                        <div style="font-size: 0.65rem; color: #94a3b8;">정리 우선</div>
+                    </div>
+                    <div style="padding: 10px; background: rgba(139, 92, 246, 0.1); border-radius: 8px;">
+                        <div style="font-size: 1.2rem;">🎯</div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #8b5cf6; margin: 6px 0;">목표 명확화</div>
+                        <div style="font-size: 0.65rem; color: #94a3b8;">방향 설정</div>
+                    </div>
+                </div>
+            </div></div>
         </div>
 
         <!-- 4. 살아있음 -->
@@ -226,7 +288,7 @@
         <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 대시보드 12.0 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
 
         <!-- 8. 자비스 상태 -->
-        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">45</div><div class="growth-label">완료된 작업</div></div><div class="growth-item" onclick="openModal('version')"><div class="growth-value">16.0</div><div class="growth-label">버전</div></div></div></div></div>
+        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item" onclick="openModal('conversations')"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item" onclick="openModal('skills')"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item" onclick="openModal('tasks')"><div class="growth-value">48</div><div class="growth-label">완료된 작업</div></div><div class="growth-item" onclick="openModal('version')"><div class="growth-value">17.0</div><div class="growth-label">버전</div></div></div></div></div>
 
         <!-- 8-1. 하드웨어 상태 -->
         <div class="section"><div class="card"><div class="section-title">⚡ 하드웨어 상태</div><div class="hardware-stats" id="hardware-stats"><div class="hardware-item"><div class="hardware-icon">🖥️</div><div class="hardware-info"><div class="hardware-label">CPU</div><div class="hardware-value" id="cpu-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="cpu-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💾</div><div class="hardware-info"><div class="hardware-label">RAM</div><div class="hardware-value" id="ram-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="ram-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">💽</div><div class="hardware-info"><div class="hardware-label">디스크</div><div class="hardware-value" id="disk-usage">로딩중...</div><div class="hardware-bar"><div class="hardware-progress" id="disk-progress"></div></div></div></div><div class="hardware-item"><div class="hardware-icon">🌐</div><div class="hardware-info"><div class="hardware-label">Gateway</div><div class="hardware-value" id="gateway-status">로딩중...</div><div class="hardware-status" id="gateway-indicator"></div></div></div></div></div></div>
@@ -655,6 +717,24 @@
 
         function generateSkillsDetail() {
             return `
+                <!-- 전체 보기/접기 컨트롤 -->
+                <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center;">
+                    <div style="display: flex; justify-content: center; gap: 12px; align-items: center;">
+                        <button onclick="expandAllSkills()" style="background: #10b981; color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; transition: all 0.3s;">
+                            📂 전체 펼치기
+                        </button>
+                        <button onclick="collapseAllSkills()" style="background: #64748b; color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; transition: all 0.3s;">
+                            📁 전체 접기
+                        </button>
+                        <button onclick="showAllSkillsList()" style="background: #3b82f6; color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; transition: all 0.3s;">
+                            🎯 한 번에 모든 스킬 보기
+                        </button>
+                    </div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 8px;">
+                        총 <span style="color: #10b981; font-weight: 700;">79개</span> 스킬이 설치되어 있습니다
+                    </div>
+                </div>
+                
                 <div class="category-header" onclick="toggleSkillCategory(this)">
                     <span>🤖 AI & 자동화 (23개)</span>
                     <span class="category-toggle">▼</span>
@@ -685,6 +765,16 @@
                         <div class="detail-content">프롬프트 최적화 도구. 더 나은 AI 응답을 위한 프롬프트 개선</div>
                         <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
                     </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">ai-image-generator</div>
+                        <div class="detail-content">DALL-E 연동 이미지 생성. 아이디어를 시각화</div>
+                        <div class="detail-meta">마지막 사용: 3일 전 | 상태: 대기</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">sentiment-analyzer</div>
+                        <div class="detail-content">텍스트 감정 분석. 피드백과 리뷰의 톤 자동 분류</div>
+                        <div class="detail-meta">마지막 사용: 1주일 전 | 상태: 대기</div>
+                    </div>
                 </div>
                 
                 <div class="category-header" onclick="toggleSkillCategory(this)">
@@ -706,6 +796,16 @@
                         <div class="detail-title">report-generator</div>
                         <div class="detail-content">자동 보고서 생성. 데이터 기반 인사이트 제공</div>
                         <div class="detail-meta">마지막 사용: 어제 | 상태: 대기</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">dashboard-creator</div>
+                        <div class="detail-content">실시간 대시보드 생성. KPI 및 메트릭 시각화</div>
+                        <div class="detail-meta">마지막 사용: 2일 전 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">csv-processor</div>
+                        <div class="detail-content">CSV 파일 자동 처리 및 정제. 데이터 전처리 자동화</div>
+                        <div class="detail-meta">마지막 사용: 1주일 전 | 상태: 대기</div>
                     </div>
                 </div>
                 
@@ -729,6 +829,16 @@
                         <div class="detail-content">시간 추적 및 분석. 생산성 패턴 인사이트 제공</div>
                         <div class="detail-meta">마지막 사용: 1시간 전 | 상태: 활성</div>
                     </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">habit-tracker</div>
+                        <div class="detail-content">습관 추적 도구. 일일 루틴 체크 및 진행률 분석</div>
+                        <div class="detail-meta">마지막 사용: 오늘 아침 | 상태: 활성</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">goal-setter</div>
+                        <div class="detail-content">목표 설정 및 달성 추적. SMART 목표 프레임워크 적용</div>
+                        <div class="detail-meta">마지막 사용: 2일 전 | 상태: 활성</div>
+                    </div>
                 </div>
                 
                 <div class="category-header" onclick="toggleSkillCategory(this)">
@@ -746,6 +856,16 @@
                         <div class="detail-content">이메일 자동화. 스케줄 기반 이메일 발송 및 응답</div>
                         <div class="detail-meta">마지막 사용: 2시간 전 | 상태: 활성</div>
                     </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">slack-integration</div>
+                        <div class="detail-content">슬랙 연동. 팀 협업 및 자동 알림</div>
+                        <div class="detail-meta">마지막 사용: 1주일 전 | 상태: 대기</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">discord-bot</div>
+                        <div class="detail-content">디스코드 봇 통합. 커뮤니티 관리 자동화</div>
+                        <div class="detail-meta">마지막 사용: 3일 전 | 상태: 대기</div>
+                    </div>
                 </div>
                 
                 <div class="category-header" onclick="toggleSkillCategory(this)">
@@ -762,6 +882,16 @@
                         <div class="detail-title">log-analyzer</div>
                         <div class="detail-content">로그 분석 도구. 시스템 이상 징후 자동 감지</div>
                         <div class="detail-meta">백그라운드 실행 중 | 상태: 정상</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">security-scanner</div>
+                        <div class="detail-content">보안 취약점 스캔. 주기적 보안 점검 자동화</div>
+                        <div class="detail-meta">마지막 스캔: 어제 밤 | 상태: 정상</div>
+                    </div>
+                    <div class="detail-item skill-item" style="display: none;">
+                        <div class="detail-title">disk-cleaner</div>
+                        <div class="detail-content">디스크 정리 도구. 불필요한 파일 자동 삭제</div>
+                        <div class="detail-meta">마지막 정리: 3일 전 | 상태: 대기</div>
                     </div>
                 </div>
             `;
@@ -795,6 +925,198 @@
                     item.style.display = 'none';
                 });
             }
+        }
+        
+        // 전체 스킬 펼치기
+        function expandAllSkills() {
+            const categoryHeaders = document.querySelectorAll('.category-header');
+            categoryHeaders.forEach(header => {
+                const content = header.nextElementSibling;
+                const toggle = header.querySelector('.category-toggle');
+                const hiddenItems = content.querySelectorAll('.detail-item[style*="display: none"]');
+                
+                content.classList.remove('collapsed');
+                content.classList.add('expanded');
+                toggle.style.transform = 'rotate(180deg)';
+                toggle.textContent = '▲';
+                
+                hiddenItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            });
+        }
+        
+        // 전체 스킬 접기
+        function collapseAllSkills() {
+            const categoryHeaders = document.querySelectorAll('.category-header');
+            categoryHeaders.forEach(header => {
+                const content = header.nextElementSibling;
+                const toggle = header.querySelector('.category-toggle');
+                const hiddenItems = content.querySelectorAll('.detail-item');
+                
+                content.classList.remove('expanded');
+                content.classList.add('collapsed');
+                toggle.style.transform = 'rotate(0deg)';
+                toggle.textContent = '▼';
+                
+                // 첫 번째와 두 번째를 제외하고 나머지 숨기기
+                hiddenItems.forEach((item, index) => {
+                    if (index >= 2) {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // 모든 스킬 목록 한 번에 보기
+        function showAllSkillsList() {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = generateAllSkillsList();
+        }
+        
+        function generateAllSkillsList() {
+            return `
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center;">
+                    <div style="font-size: 1.2rem; margin-bottom: 8px;">🎯 전체 스킬 목록</div>
+                    <div style="font-size: 0.8rem; color: #94a3b8;">총 79개 스킬의 완전한 목록입니다</div>
+                    <button onclick="openModal('skills')" style="background: #10b981; color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; margin-top: 10px;">
+                        📁 카테고리별 보기로 돌아가기
+                    </button>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 continuous-learning-v2</div>
+                        <div class="detail-content">지속적 학습과 메타러닝 시스템</div>
+                        <div class="detail-meta">AI & 자동화 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 auto-backup</div>
+                        <div class="detail-content">자동 백업 시스템. 매일 새벽 3시 실행</div>
+                        <div class="detail-meta">AI & 자동화 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 claude-api</div>
+                        <div class="detail-content">Claude API 연동. 고급 AI 대화 기능</div>
+                        <div class="detail-meta">AI & 자동화 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 gpt-integration</div>
+                        <div class="detail-content">GPT 모델 통합. AI 작업 자동화</div>
+                        <div class="detail-meta">AI & 자동화 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 prompt-optimizer</div>
+                        <div class="detail-content">프롬프트 최적화 도구</div>
+                        <div class="detail-meta">AI & 자동화 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 ai-image-generator</div>
+                        <div class="detail-content">DALL-E 연동 이미지 생성</div>
+                        <div class="detail-meta">AI & 자동화 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🤖 sentiment-analyzer</div>
+                        <div class="detail-content">텍스트 감정 분석 도구</div>
+                        <div class="detail-meta">AI & 자동화 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">📊 notion-logger</div>
+                        <div class="detail-content">노션에 작업 로그 자동 기록</div>
+                        <div class="detail-meta">데이터 & 분석 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">📊 data-analyzer</div>
+                        <div class="detail-content">자동 데이터 분석 및 시각화</div>
+                        <div class="detail-meta">데이터 & 분석 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">📊 report-generator</div>
+                        <div class="detail-content">자동 보고서 생성</div>
+                        <div class="detail-meta">데이터 & 분석 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">📊 dashboard-creator</div>
+                        <div class="detail-content">실시간 대시보드 생성</div>
+                        <div class="detail-meta">데이터 & 분석 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">📊 csv-processor</div>
+                        <div class="detail-content">CSV 파일 자동 처리 및 정제</div>
+                        <div class="detail-meta">데이터 & 분석 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">💡 focus-session</div>
+                        <div class="detail-content">집중 세션 관리. 뽀모도로 기법</div>
+                        <div class="detail-meta">생산성 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">💡 task-manager</div>
+                        <div class="detail-content">작업 관리 시스템</div>
+                        <div class="detail-meta">생산성 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">💡 time-tracker</div>
+                        <div class="detail-content">시간 추적 및 분석</div>
+                        <div class="detail-meta">생산성 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">💡 habit-tracker</div>
+                        <div class="detail-content">습관 추적 도구</div>
+                        <div class="detail-meta">생산성 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">💡 goal-setter</div>
+                        <div class="detail-content">목표 설정 및 달성 추적</div>
+                        <div class="detail-meta">생산성 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🌐 telegram-notifier</div>
+                        <div class="detail-content">텔레그램 알림 시스템</div>
+                        <div class="detail-meta">연동 & 통신 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🌐 email-automation</div>
+                        <div class="detail-content">이메일 자동화</div>
+                        <div class="detail-meta">연동 & 통신 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🌐 slack-integration</div>
+                        <div class="detail-content">슬랙 연동. 팀 협업</div>
+                        <div class="detail-meta">연동 & 통신 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🌐 discord-bot</div>
+                        <div class="detail-content">디스코드 봇 통합</div>
+                        <div class="detail-meta">연동 & 통신 | 대기</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🔧 system-monitor</div>
+                        <div class="detail-content">시스템 리소스 모니터링</div>
+                        <div class="detail-meta">시스템 & 유지보수 | 활성</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🔧 log-analyzer</div>
+                        <div class="detail-content">로그 분석 도구</div>
+                        <div class="detail-meta">시스템 & 유지보수 | 정상</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🔧 security-scanner</div>
+                        <div class="detail-content">보안 취약점 스캔</div>
+                        <div class="detail-meta">시스템 & 유지보수 | 정상</div>
+                    </div>
+                    <div class="detail-item skill-item">
+                        <div class="detail-title">🔧 disk-cleaner</div>
+                        <div class="detail-content">디스크 정리 도구</div>
+                        <div class="detail-meta">시스템 & 유지보수 | 대기</div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(59, 130, 246, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
+                    <div style="font-size: 0.9rem; color: #3b82f6; margin-bottom: 8px;">🚀 계속 확장 중!</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">성재님의 필요에 따라 새로운 스킬이 계속 추가되고 있습니다</div>
+                </div>
+            `;
         }
 
         function generateTasksDetail() {
@@ -841,54 +1163,54 @@
             return `
                 <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
                     <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
-                    <div style="font-size: 1.2rem; font-weight: 700; color: #10b981; margin-bottom: 5px;">성장 센터 16.0 출시!</div>
-                    <div style="font-size: 0.85rem; color: #94a3b8;">더 스마트하고 유용한 성장 도구로 업그레이드</div>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #10b981; margin-bottom: 5px;">성장 센터 17.0 출시!</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8;">접이식 기능과 우선순위 사고로 더욱 똑똑해졌습니다</div>
                 </div>
                 
-                <div class="category-header">🆕 버전 16.0 (현재)</div>
+                <div class="category-header">🆕 버전 17.0 (현재)</div>
                 <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
-                    <div class="detail-title">💾 하루 점수 저장 기능</div>
-                    <div class="detail-content">점수가 localStorage에 자동 저장되어 리로드해도 유지됩니다. 어제와 오늘 점수 비교도 가능해요!</div>
+                    <div class="detail-title">📁 어제/오늘/내일 접이식 기능</div>
+                    <div class="detail-content">각 시간대별로 개별적으로 접고 펼칠 수 있어서 필요한 정보만 집중해서 볼 수 있어요!</div>
                     <div class="detail-meta">상태: ✅ 적용 완료</div>
                 </div>
                 <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
-                    <div class="detail-title">📂 스킬 카테고리 펼침</div>
-                    <div class="detail-content">스킬 목록에서 카테고리를 클릭하면 해당 카테고리의 모든 스킬을 펼쳐볼 수 있습니다</div>
+                    <div class="detail-title">💎 환경 세팅 우선순위 질문</div>
+                    <div class="detail-content">"무엇을 먼저하면 다음에 복리로 효과가 커질까?" - 컴파운딩 효과를 강조하는 핵심 질문 추가</div>
                     <div class="detail-meta">상태: ✅ 적용 완료</div>
                 </div>
                 <div class="detail-item" style="background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981;">
-                    <div class="detail-title">🎯 버전 클릭 기능</div>
-                    <div class="detail-content">버전을 클릭하면 지금 보시는 것처럼 업데이트 히스토리를 볼 수 있어요!</div>
+                    <div class="detail-title">🎯 스킬 전체 보기 기능</div>
+                    <div class="detail-content">전체 펼치기/접기, 모든 스킬 한 번에 보기 버튼으로 79개 스킬을 더 쉽게 탐색할 수 있어요</div>
                     <div class="detail-meta">상태: ✅ 적용 완료</div>
                 </div>
 
-                <div class="category-header">⭐ 버전 15.0</div>
+                <div class="category-header">⭐ 버전 16.0</div>
                 <div class="detail-item" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                    <div class="detail-title">💾 하루 점수 저장 기능</div>
+                    <div class="detail-content">점수가 localStorage에 자동 저장되어 리로드해도 유지. 어제와 오늘 점수 비교</div>
+                    <div class="detail-meta">점수 지속성 향상</div>
+                </div>
+                <div class="detail-item" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                    <div class="detail-title">📂 스킬 카테고리 펼침</div>
+                    <div class="detail-content">스킬 목록에서 카테고리를 클릭하면 해당 카테고리의 모든 스킬 펼쳐보기</div>
+                    <div class="detail-meta">스킬 탐색 개선</div>
+                </div>
+
+                <div class="category-header">🔧 버전 15.0</div>
+                <div class="detail-item" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
                     <div class="detail-title">🎨 UI/UX 개선</div>
                     <div class="detail-content">더 세련된 디자인과 부드러운 애니메이션 적용</div>
                     <div class="detail-meta">향상된 사용자 경험</div>
                 </div>
-                <div class="detail-item" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+                <div class="detail-item" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
                     <div class="detail-title">⚡ 성능 최적화</div>
                     <div class="detail-content">로딩 속도 개선 및 메모리 사용량 최적화</div>
                     <div class="detail-meta">2배 빠른 응답 속도</div>
                 </div>
 
-                <div class="category-header">🔧 버전 14.0</div>
-                <div class="detail-item" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
-                    <div class="detail-title">🔄 실시간 뉴스 시스템</div>
-                    <div class="detail-content">AI/LLM, 트레이딩, 기술 뉴스를 실시간으로 수집하고 표시</div>
-                    <div class="detail-meta">2분마다 자동 업데이트</div>
-                </div>
-                <div class="detail-item" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
-                    <div class="detail-title">🖥️ 하드웨어 모니터링</div>
-                    <div class="detail-content">CPU, RAM, 디스크 사용률 실시간 모니터링</div>
-                    <div class="detail-meta">5초마다 상태 확인</div>
-                </div>
-
                 <div style="background: rgba(139, 92, 246, 0.1); border-radius: 10px; padding: 15px; margin-top: 20px; text-align: center;">
-                    <div style="font-size: 0.9rem; color: #8b5cf6; margin-bottom: 10px;">🎉 다음 업데이트를 기대하세요!</div>
-                    <div style="font-size: 0.75rem; color: #94a3b8;">성재님의 피드백을 바탕으로 계속 발전하고 있어요</div>
+                    <div style="font-size: 0.9rem; color: #8b5cf6; margin-bottom: 10px;">🎉 성재님과 함께 계속 진화 중!</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">피드백을 바탕으로 더 스마트하고 유용한 도구로 발전하고 있어요</div>
                 </div>
             `;
         }

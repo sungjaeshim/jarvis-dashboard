@@ -6,454 +6,240 @@
     <title>성재님 성장 센터</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
-            min-height: 100vh;
-            padding: 15px;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; min-height: 100vh; padding: 15px; }
         .container { max-width: 1400px; margin: 0 auto; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(71, 85, 105, 0.5); flex-wrap: wrap; gap: 10px; }
         h1 { font-size: 1.4rem; color: #10b981; }
         .subtitle { font-size: 0.75rem; color: #94a3b8; margin-top: 3px; }
         .section { margin-bottom: 15px; }
+        .card { background: rgba(30, 41, 59, 0.9); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
         .section-title { font-size: 0.9rem; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-        .card {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 12px;
-        }
 
-        /* 문제 정의 섹션 */
-        .problem-card {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
-            border: 2px solid #ef4444;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 12px;
-        }
-        .problem-title { font-size: 1rem; font-weight: 700; color: #ef4444; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .problem-question { font-size: 1rem; font-weight: 600; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px; }
-        .problem-questions { font-size: 0.85rem; color: #94a3b8; margin-top: 10px; }
-        .problem-questions li { margin-bottom: 6px; padding-left: 20px; position: relative; }
-        .problem-questions li::before { content: '→'; position: absolute; left: 0; color: #ef4444; }
+        /* 하루 점수 */
+        .score-input-card { background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%); border: 2px solid #10b981; border-radius: 14px; padding: 20px; margin-bottom: 15px; }
+        .score-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .score-title { font-size: 1.1rem; font-weight: 700; color: #10b981; }
+        .score-display { font-size: 2.5rem; font-weight: 800; color: #f1f5f9; text-align: center; margin: 15px 0; }
+        .score-slider { width: 100%; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 25%, #eab308 50%, #84cc16 75%, #10b981 100%); outline: none; -webkit-appearance: none; cursor: pointer; }
+        .score-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: #f1f5f9; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .score-feedback { background: rgba(15, 23, 42, 0.8); border-radius: 10px; padding: 15px; margin-top: 15px; min-height: 80px; }
+        .feedback-title { font-size: 0.8rem; font-weight: 700; color: #8b5cf6; margin-bottom: 8px; }
+        .feedback-text { font-size: 0.85rem; color: #94a3b8; line-height: 1.6; }
 
-        /* 환경 세팅 섹션 */
-        .env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
-        .env-card { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 12px; border-left: 4px solid #10b981; }
-        .env-icon { font-size: 1.2rem; margin-bottom: 6px; }
-        .env-title { font-size: 0.85rem; font-weight: 700; color: #10b981; margin-bottom: 6px; }
-        .env-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
-        .env-check { margin-top: 8px; font-size: 0.7rem; color: #64748b; }
+        /* 어제/오늘/내일 */
+        .day-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; }
+        .day-card { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 14px; border-top: 3px solid; }
+        .yesterday-card { border-color: #64748b; }
+        .today-card { border-color: #10b981; }
+        .tomorrow-card { border-color: #3b82f6; }
+        .day-title { font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .yesterday-title { color: #94a3b8; }
+        .today-title { color: #10b981; }
+        .tomorrow-title { color: #3b82f6; }
+        .day-content { font-size: 0.75rem; color: #94a3b8; line-height: 1.6; }
+        .day-item { padding: 6px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.3); }
+        .day-item:last-child { border-bottom: none; }
 
-        /* 순서 최적화 */
-        .order-card {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
-            border: 2px solid #8b5cf6;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .order-title { font-size: 0.95rem; font-weight: 700; color: #8b5cf6; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .order-list { list-style: none; }
-        .order-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; margin-bottom: 8px; }
-        .order-num { font-size: 1.2rem; font-weight: 700; color: #8b5cf6; width: 30px; }
-        .order-text { font-size: 0.8rem; flex: 1; }
-        .order-impact { font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.2); padding: 2px 6px; border-radius: 4px; }
+        /* 접이식 */
+        .collapse-section { margin-bottom: 12px; }
+        .collapse-header { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
+        .collapse-header:hover { background: rgba(30, 41, 59, 0.9); }
+        .collapse-title { font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .collapse-icon { font-size: 1rem; transition: transform 0.3s; }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .collapse-content.open { max-height: 2000px; }
+        .collapse-inner { padding: 14px; background: rgba(15, 23, 42, 0.5); border-radius: 0 0 10px 10px; }
 
-        /* 살아있음 체크 */
-        .alive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-        .alive-item { text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 10px; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; }
-        .alive-item:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
-        .alive-icon { font-size: 1.5rem; margin-bottom: 6px; }
-        .alive-label { font-size: 0.7rem; color: #94a3b8; }
-        .alive-value { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-top: 4px; }
+        /* 살아있음 */
+        .alive-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        .alive-item { text-align: center; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+        .alive-item[data-level="high"] { border-color: #10b981; background: rgba(16, 185, 129, 0.2); }
+        .alive-item[data-level="low"] { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .alive-icon { font-size: 1.2rem; }
+        .alive-label { font-size: 0.6rem; color: #64748b; margin-top: 4px; }
+        .alive-value { font-size: 0.75rem; font-weight: 700; margin-top: 4px; }
 
-        /* 오늘 집중 */
-        .focus-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
-            border: 2px solid #10b981;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 12px;
-        }
-        .focus-title { font-size: 1rem; font-weight: 700; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .focus-content { font-size: 1.1rem; font-weight: 600; color: #f1f5f9; line-height: 1.5; }
-        .focus-sub { font-size: 0.75rem; color: #94a3b8; margin-top: 8px; }
+        /* 루틴 */
+        .routine-card { background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 12px; border-left: 4px solid; margin-bottom: 10px; }
+        .morning-routine { border-color: #f59e0b; }
+        .afternoon-routine { border-color: #3b82f6; }
+        .evening-routine { border-color: #8b5cf6; }
+        .routine-time { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+        .morning-time { color: #f59e0b; }
+        .afternoon-time { color: #3b82f6; }
+        .evening-time { color: #8b5cf6; }
+        .routine-question { font-size: 0.8rem; font-weight: 600; }
 
-        /* 질문 루틴 */
-        .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
-        .question-card { background: rgba(15, 23, 42, 0.7); border-radius: 10px; padding: 12px; border-left: 4px solid; }
-        .morning-card { border-color: #f59e0b; }
-        .evening-card { border-color: #8b5cf6; }
-        .question-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-        .question-type { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
-        .morning-type { color: #f59e0b; }
-        .evening-type { color: #8b5cf6; }
-        .question-text { font-size: 0.8rem; font-weight: 600; }
+        /* 뉴스 */
+        .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .news-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
+        .news-source { font-size: 0.7rem; font-weight: 700; }
+        .ai-news { color: #3b82f6; }
+        .trading-news { color: #10b981; }
+        .tech-news { color: #f59e0b; }
+        .news-item { font-size: 0.7rem; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
 
-        /* 인사이트 확장 */
-        .insight-expansion { background: rgba(15, 23, 42, 0.6); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-        .insight-title { font-size: 0.8rem; font-weight: 700; color: #10b981; margin-bottom: 8px; }
-        .insight-content { font-size: 0.75rem; color: #94a3b8; margin-bottom: 10px; }
-        .expansion-list { list-style: none; }
-        .expansion-item { padding: 6px 10px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; margin-bottom: 6px; font-size: 0.7rem; border-left: 2px solid #8b5cf6; }
+        /* 작업 */
+        .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .work-card { background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; }
+        .work-title { font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; color: #94a3b8; }
+        .work-item { font-size: 0.7rem; padding: 4px 0; color: #64748b; }
+        .status-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; margin-left: 6px; }
+        .status-done { background: #059669; }
+        .status-progress { background: #d97706; }
+        .status-todo { background: #475569; }
 
-        /* 성장 점수 */
-        .score-bar { height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; margin-top: 6px; }
-        .score-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.5s; }
-        .score-header { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px; }
-        .score-name { color: #94a3b8; }
-        .score-value { font-weight: 700; }
+        /* 성장 */
+        .growth-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .growth-item { text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
+        .growth-value { font-size: 1.5rem; font-weight: 700; color: #10b981; }
+        .growth-label { font-size: 0.65rem; color: #64748b; margin-top: 4px; }
+
+        /* 인사이트 */
+        .insight-list { list-style: none; }
+        .insight-item { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; }
+        .insight-text { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
 
         @media (max-width: 768px) {
-            .env-grid { grid-template-columns: 1fr; }
-            .order-list { flex-direction: column; }
-            .order-item { flex-direction: column; text-align: center; }
-            .alive-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 480px) {
-            body { padding: 10px; }
-            h1 { font-size: 1.2rem; }
+            .day-grid { grid-template-columns: 1fr; }
+            .alive-grid { grid-template-columns: repeat(3, 1fr); }
+            .news-grid { grid-template-columns: 1fr; }
+            .growth-stats { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div>
-                <h1>🤖 성재님 성장 센터 11.0</h1>
-                <p class="subtitle">문제 정의 | 환경 세팅 | 순서 최적화 | 살아있음 체크</p>
-            </div>
-            <div style="text-align: right;">
-                <p style="color: #10b981; font-size: 0.8rem;">● 온라인</p>
-                <p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p>
+            <div><h1>🤖 성재님 성장 센터 12.0</h1><p class="subtitle">하루 점수 | 어제/오늘/내일 | 도구 | 루틴 | 뉴스 | 시각화</p></div>
+            <div style="text-align: right;"><p style="color: #10b981; font-size: 0.8rem;">● 온라인</p><p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p></div>
+        </div>
+
+        <!-- 1. 하루 점수 -->
+        <div class="score-input-card">
+            <div class="score-header"><span class="score-title">📊 오늘의 하루 점수</span><span id="score-emoji" style="font-size: 1.5rem;">😐</span></div>
+            <div class="score-display"><span id="score-value">5.0</span> / 10</div>
+            <input type="range" class="score-slider" id="score-slider" min="0" max="10" step="0.5" value="5">
+            <div class="score-feedback">
+                <div class="feedback-title">💡 자비스 피드백</div>
+                <div class="feedback-text" id="feedback-text">점수를 선택하면 오늘의 하루에 대한 피드백을 드려요.</div>
             </div>
         </div>
 
-        <!-- 1. 문제 정의 (5 Questions) -->
-        <div class="section">
-            <div class="problem-card">
-                <div class="problem-title">🎯 문제 정의 (Problem Definition)</div>
-                <div class="problem-question" id="problem-today">내가 풀려고 하는 문제가 정확히 뭔가?</div>
-                <div class="problem-questions">
-                    <ol>
-                        <li>이 문제를 왜 해결하려고 하는가?</li>
-                        <li>문제 정의가 명확한가? (말로 설명할 수 있는가?)</li>
-                        <li>다른 사람도 이 문제를 똑같이 이해하는가?</li>
-                        <li>문제 해결의 성공 기준이 명확한가?</li>
-                        <li>"Talk is cheap. Show me the talk" → 말이 코드보다 중요하다</li>
-                    </ol>
+        <!-- 2. 어제/오늘/내일 -->
+        <div class="day-grid">
+            <div class="day-card yesterday-card">
+                <div class="day-title yesterday-title">📅 어제 돌아보기</div>
+                <div class="day-content">
+                    <div class="day-item">✅ 대시보드 10.0 완성</div>
+                    <div class="day-item">✅ 인지과학 평가</div>
+                    <div class="day-item">✅ 텐퍼센트커피 추천</div>
                 </div>
+            </div>
+            <div class="day-card today-card">
+                <div class="day-title today-title">🎯 오늘 해야 할 것</div>
+                <div class="day-content">
+                    <div class="day-item">1. 점심 먹기</div>
+                    <div class="day-item">2. 오후 업무 계획</div>
+                    <div class="day-item">3. 마케팅 스킬 매핑</div>
+                </div>
+            </div>
+            <div class="day-card tomorrow-card">
+                <div class="day-title tomorrow-title">📆 내일 일정</div>
+                <div class="day-content"><div class="day-item" id="tomorrow-schedule">로딩 중...</div></div>
             </div>
         </div>
 
-        <!-- 2. 환경 세팅 (Environment Setup) -->
-        <div class="section">
-            <div class="section-title">⚙️ 환경 세팅 (Environment Setup)</div>
-            <div class="env-grid">
-                <div class="env-card">
-                    <div class="env-icon">🔕</div>
-                    <div class="env-title">알림 차단</div>
-                    <div class="env-desc">전화기 무음, 슬랙/카톡 알림 끄기</div>
-                    <div class="env-check">✅ 방해 요소 제거</div>
-                </div>
-                <div class="env-card">
-                    <div class="env-icon">🎧</div>
-                    <div class="env-title">집중 도구</div>
-                    <div class="env-desc">이어폰, 노이즈 캔슬링, 백색 소음</div>
-                    <div class="env-check">✅ 심리적 장벽 구축</div>
-                </div>
-                <div class="env-card">
-                    <div class="env-icon">📁</div>
-                    <div class="env-title">작업 공간</div>
-                    <div class="env-desc">필요한 탭만 열기, 클린 데스크</div>
-                    <div class="env-check">✅ 인지 부하 최소화</div>
-                </div>
-                <div class="env-card">
-                    <div class="env-icon">⏱️</div>
-                    <div class="env-title">타이머 설정</div>
-                    <div class="env-desc">25분 Pomodoro 또는 90분 Deep Work</div>
-                    <div class="env-check">✅ 시간 박스 명확화</div>
-                </div>
-                <div class="env-card">
-                    <div class="env-icon">💧</div>
-                    <div class="env-title">물 & 간식</div>
-                    <div class="env-desc">물 한 잔, 가벼운 간식 준비</div>
-                    <div class="env-check">✅ 기본 욕구 충족</div>
-                </div>
-                <div class="env-card">
-                    <div class="env-icon">🎯</div>
-                    <div class="env-title">RPM 전략</div>
-                    <div class="env-desc">목표, 맥락, 시작 지점 미리 정하기</div>
-                    <div class="env-check">✅ Save Point 설정</div>
-                </div>
-            </div>
+        <!-- 3. 접이식 도구 -->
+        <div class="collapse-section">
+            <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">🎯 문제 정의</span><span class="collapse-icon">▼</span></div>
+            <div class="collapse-content"><div class="collapse-inner"><div style="font-size: 0.85rem; font-weight: 700; color: #ef4444; margin-bottom: 10px;">"내가 풀려고 하는 문제가 정확히 뭔가?"</div><ul style="font-size: 0.8rem; color: #94a3b8; padding-left: 20px;"><li>이 문제를 왜 해결하려고 하는가?</li><li>문제 정의가 명확한가?</li><li>다른 사람도 똑같이 이해하는가?</li><li>성공 기준이 명확한가?</li></ul></div></div>
+        </div>
+        <div class="collapse-section">
+            <div class="collapse-header" onclick="toggleCollapse(this)"><span class="collapse-title">⚙️ 환경 세팅</span><span class="collapse-icon">▼</span></div>
+            <div class="collapse-content"><div class="collapse-inner"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;"><div style="padding: 10px; background: rgba(239, 68, 68, 0.1); border-radius: 8px;"><div style="font-size: 1.2rem;">🔕</div><div style="font-size: 0.75rem; font-weight: 700; color: #ef4444; margin: 6px 0;">알림 차단</div></div><div style="padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 8px;"><div style="font-size: 1.2rem;">🎧</div><div style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; margin: 6px 0;">집중 도구</div></div><div style="padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 8px;"><div style="font-size: 1.2rem;">📁</div><div style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; margin: 6px 0;">작업 공간</div></div></div></div></div>
         </div>
 
-        <!-- 3. 순서 최적화 (Order Optimization) -->
-        <div class="section">
-            <div class="order-card">
-                <div class="order-title">🔢 순서 최적화 (First Things First)</div>
-                <div class="order-list">
-                    <div class="order-item">
-                        <div class="order-num">1</div>
-                        <div class="order-text">가장 중요하고 어려운 것 먼저</div>
-                        <div class="order-impact">나머지가 쉬워짐</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-num">2</div>
-                        <div class="order-text">의사결정이 필요한 것 먼저</div>
-                        <div class="order-impact">에너지 높을 때 처리</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-num">3</div>
-                        <div class="order-text">다른 사람을 기다리는 것 먼저</div>
-                        <div class="order-impact">병목 제거</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-num">4</div>
-                        <div class="order-text">빠르게 끝낼 수 있는 것</div>
-                        <div class="order-impact">킬킬 미분 빌드업</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-num">5</div>
-                        <div class="order-text"> routine/자동화 가능한 것</div>
-                        <div class="order-impact">나중에 AI 위임</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- 4. 살아있음 -->
+        <div class="section"><div class="card"><div class="section-title">❤️ 살아있음 체크</div><div class="alive-grid"><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🧠</div><div class="alive-label">생각</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">⚡</div><div class="alive-label">에너지</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🎯</div><div class="alive-label">몰입</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">😊</div><div class="alive-label">기분</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">💪</div><div class="alive-label">신체</div><div class="alive-value">중간</div></div><div class="alive-item" data-level="mid" onclick="cycleAlive(this)"><div class="alive-icon">🌊</div><div class="alive-label">호기심</div><div class="alive-value">중간</div></div></div></div></div>
 
-        <!-- 4. 살아있음 체크 (Aliveness Check) -->
-        <div class="section">
-            <div class="section-title">❤️ 살아있음 체크 (Am I Alive?)</div>
-            <div class="alive-grid">
-                <div class="alive-item" onclick="toggleAlive(this)">
-                    <div class="alive-icon">🧠</div>
-                    <div class="alive-label">생각의 흐름</div>
-                    <div class="alive-value">중간</div>
-                </div>
-                <div class="alive-item" onclick="toggleAlive(this)">
-                    <div class="alive-icon">⚡</div>
-                    <div class="alive-label">에너지 레벨</div>
-                    <div class="alive-value">중간</div>
-                </div>
-                <div class="alive-item" onclick="toggleAlive(this)">
-                    <div class="alive-icon">🎯</div>
-                    <div class="alive-label">몰입 상태</div>
-                    <div class="alive-value">중간</div>
-                </div>
-                <div class="alive-item" onclick="toggleAlive(this)">
-                    <div class="alive-icon">😊</div>
-                    <div class="alive-label">기분 상태</div>
-                    <div class="alive-value">중간</div>
-                </div>
-                <div class="alive-item" onclick="toggleAlive(this)">
-                    <div class="alive-icon">💪</div>
-                    <div class="alive-label">신체 감각</div>
-                    <div class="alive-value">중간</div>
-                </div>
-                <div class="alive-item" onclick="toggleAlive(this)">
-                    <div class="alive-icon">🌊</div>
-                    <div class="alive-label">호기심</div>
-                    <div class="alive-value">중간</div>
-                </div>
-            </div>
-        </div>
+        <!-- 5. 루틴 -->
+        <div class="section"><div class="card"><div class="section-title">🌅🌤️🌙 질문 루틴 (한국 시간 기반)</div><div id="routine-container"></div></div></div>
 
-        <!-- 5. 오늘 집중할 것 1개 -->
-        <div class="section">
-            <div class="focus-card">
-                <div class="focus-title">🎯 오늘 집중할 것 (1 Thing)</div>
-                <div class="focus-content" id="focus-today">대시보드에 문제 정의, 환경 세팅, 순서, 살아있음 추가하기</div>
-                <div class="focus-sub">이것만 완료하면 오늘은 성공입니다. 다른 모든 것은 보너스입니다.</div>
-            </div>
-        </div>
+        <!-- 6. 뉴스 -->
+        <div class="section"><div class="card"><div class="section-title">📡 최신 뉴스 & 업데이트</div><div class="news-grid"><div class="news-card"><div class="news-source ai-news">🤖 AI / LLM</div><div class="news-item">• Claude 4.5 Opus 출시</div><div class="news-item">• OpenAI GPT-5 루머</div></div><div class="news-card"><div class="news-source trading-news">📈 트레이딩</div><div class="news-item">• 나스닥 5000달러</div><div class="news-item">• 비트코인 10만달러</div></div><div class="news-card"><div class="news-source tech-news">⚡ 기술</div><div class="news-item">• ClawdHub 업데이트</div><div class="news-item">• 텐퍼센트커피 신메뉴</div></div></div></div></div>
 
-        <!-- 6. 오전/저녁 질문 -->
-        <div class="section">
-            <div class="section-title">🌅🌙 질문 루틴 (Reflection Loop)</div>
-            <div class="question-grid">
-                <div class="question-card morning-card">
-                    <div class="question-header">
-                        <span>🌅</span>
-                        <span class="question-type morning-type">오전</span>
-                    </div>
-                    <div class="question-text">1. 문제 정의: 내가 풀 문제가 뭐지?</div>
-                </div>
-                <div class="question-card morning-card">
-                    <div class="question-header">
-                        <span>🌅</span>
-                        <span class="question-type morning-type">오전</span>
-                    </div>
-                    <div class="question-text">2. 환경 세팅: 어떻게 준비할까?</div>
-                </div>
-                <div class="question-card morning-card">
-                    <div class="question-header">
-                        <span>🌅</span>
-                        <span class="question-type morning-type">오전</span>
-                    </div>
-                    <div class="question-text">3. 순서: 뭘 먼저 하면 쉬워질까?</div>
-                </div>
-                <div class="question-card morning-card">
-                    <div class="question-header">
-                        <span>🌅</span>
-                        <span class="question-type morning-type">오전</span>
-                    </div>
-                    <div class="question-text">4. 오늘 어떤 버전의 나가 될까?</div>
-                </div>
-                <div class="question-card evening-card">
-                    <div class="question-header">
-                        <span>🌙</span>
-                        <span class="question-type evening-type">저녁</span>
-                    </div>
-                    <div class="question-text">5. 오늘 살아있었나? 어느 순간?</div>
-                </div>
-                <div class="question-card evening-card">
-                    <div class="question-header">
-                        <span>🌙</span>
-                        <span class="question-type evening-type">저녁</span>
-                    </div>
-                    <div class="question-text">6. 뭘 배웠가? 내일 뭘 개선할까?</div>
-                </div>
-            </div>
-        </div>
+        <!-- 7. 작업 -->
+        <div class="section"><div class="card"><div class="section-title">📋 작업 현황</div><div class="work-grid"><div class="work-card"><div class="work-title">✅ 완료</div><div class="work-item">• 대시보드 12.0 <span class="status-badge status-done">완료</span></div></div><div class="work-card"><div class="work-title">⏳ 진행 중</div><div class="work-item">• 마케팅 스킬 매핑 <span class="status-badge status-progress">진행</span></div></div><div class="work-card"><div class="work-title">📋 할 일</div><div class="work-item">• 아이디어 정원 기획 <span class="status-badge status-todo">대기</span></div></div></div></div></div>
 
-        <!-- 7. 인사이트 확장 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">💡 인사이트 확장 라이브러리</div>
-                <div class="insight-expansion">
-                    <div class="insight-title">문제 정의의 중요성</div>
-                    <div class="insight-content">Talk is cheap. Show me the talk. 말이 코드보다 기하급수적으로 더 큰 가치.</div>
-                    <ul class="expansion-list">
-                        <li class="expansion-item">💼 업무: 요구사항 명세 → 코딩</li>
-                        <li class="expansion-item">💰 투자: 투자 논리 → 매매</li>
-                        <li class="expansion-item">📝 글쓰기: 목적 → 콘텐츠</li>
-                    </ul>
-                </div>
-                <div class="insight-expansion">
-                    <div class="insight-title">환경 세팅 = 성과의 50%</div>
-                    <div class="insight-content">시작하기 전 환경을 세팅하면 뒤가 10배 쉬워진다.</div>
-                    <ul class="expansion-list">
-                        <li class="expansion-item">🏃 운동: 운동복, 신발, 물 세팅</li>
-                        <li class="expansion-item">💼 업무: 알림 차단, 탭 정리</li>
-                        <li class="expansion-item">📚 공부: 책, 필기도, 조명</li>
-                    </ul>
-                </div>
-                <div class="insight-expansion">
-                    <div class="insight-title">순서의 힘 (First Things First)</div>
-                    <div class="insight-content">가장 중요한 것을 먼저 하면 나머지가 쉬워진다. 역순은 3배 어렵다.</div>
-                    <ul class="expansion-list">
-                        <li class="expansion-item">💼 업무: 어려운 문제 → 쉬운 것</li>
-                        <li class="expansion-item">🏃 운동: 핵심 근력 → 스트레칭</li>
-                        <li class="expansion-item">📚 공부: 핵심 개념 → 응용</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <!-- 8. 자비스 상태 -->
+        <div class="section"><div class="card"><div class="section-title">🤖 자비스 상태 & 성장</div><div class="growth-stats"><div class="growth-item"><div class="growth-value">127</div><div class="growth-label">총 대화</div></div><div class="growth-item"><div class="growth-value">79</div><div class="growth-label">설치된 스킬</div></div><div class="growth-item"><div class="growth-value">45</div><div class="growth-label">완료된 작업</div></div><div class="growth-item"><div class="growth-value">12.0</div><div class="growth-label">버전</div></div></div></div></div>
 
-        <!-- 8. 성장 점수 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">📊 성장 점수 11.0</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-                    <div>
-                        <div class="score-header">
-                            <span class="score-name">메타인지</span>
-                            <span class="score-value" style="color: #10b981;">10/10</span>
-                        </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
-                    </div>
-                    <div>
-                        <div class="score-header">
-                            <span class="score-name">문제 정의</span>
-                            <span class="score-value" style="color: #10b981;">10/10</span>
-                        </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
-                    </div>
-                    <div>
-                        <div class="score-header">
-                            <span class="score-name">환경 세팅</span>
-                            <span class="score-value" style="color: #10b981;">10/10</span>
-                        </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
-                    </div>
-                    <div>
-                        <div class="score-header">
-                            <span class="score-name">순서 최적화</span>
-                            <span class="score-value" style="color: #10b981;">10/10</span>
-                        </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
-                    </div>
-                    <div>
-                        <div class="score-header">
-                            <span class="score-name">살아있음 체크</span>
-                            <span class="score-value" style="color: #10b981;">10/10</span>
-                        </div>
-                        <div class="score-bar"><div class="score-fill" style="width: 100%; background: #10b981;"></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. 자비스가 완료한 것 -->
-        <div class="section">
-            <div class="card">
-                <div class="section-title">✅ 자비스가 완료한 것 (오늘)</div>
-                <div class="order-list">
-                    <div class="order-item">
-                        <div class="order-text">성장 센터 10.0 완성</div>
-                        <div class="order-impact">완료</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-text">성재님 핵심 피드백 반영</div>
-                        <div class="order-impact">완료</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-text">성장 센터 11.0 업그레이드</div>
-                        <div class="order-impact">진행 중</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- 9. 인사이트 -->
+        <div class="section"><div class="card"><div class="section-title">💡 오늘의 인사이트</div><ul class="insight-list"><li class="insight-item"><div class="insight-text">"말이 코드보다 기하급수적으로 더 큰 가치"</div></li><li class="insight-item"><div class="insight-text">"시작하기 전 환경 세팅 = 성과의 50%"</div></li><li class="insight-item"><div class="insight-text">"역순은 3배 어렵다"</div></li></ul></div></div>
     </div>
-
     <script>
         function updateTime() {
             const now = new Date();
             const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
-            document.getElementById('current-time').textContent = kst.toLocaleString('ko-KR', {
-                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-            }) + ' KST';
+            document.getElementById('current-time').textContent = kst.toLocaleString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' KST';
+            updateTomorrowSchedule(kst);
+            updateRoutine(kst);
         }
+        function updateTomorrowSchedule(kst) {
+            const tomorrow = new Date(kst);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            document.getElementById('tomorrow-schedule').innerHTML = `<strong>${tomorrow.getMonth()+1}/${tomorrow.getDate()} (${dayNames[tomorrow.getDay()]}요일)</strong><br>• 특별한 일정 없음`;
+        }
+        function updateRoutine(kst) {
+            const hour = kst.getHours();
+            const container = document.getElementById('routine-container');
+            let html = '';
+            if (hour >= 6 && hour < 12) {
+                html += '<div class="routine-card morning-routine"><div class="routine-time morning-time">🌅 오전 (06:00 - 12:00)</div><div class="routine-question">1. 문제 정의: 내가 풀 문제가 뭐지?</div><div class="routine-question">2. 환경 세팅: 어떻게 준비할까?</div><div class="routine-question">3. 순서: 뭘 먼저 하면 쉬워질까?</div></div>';
+            }
+            if (hour >= 12 && hour < 18) {
+                html += '<div class="routine-card afternoon-routine"><div class="routine-time afternoon-time">🌤️ 오후 (12:00 - 18:00)</div><div class="routine-question">1. 오전 업무 회고</div><div class="routine-question">2. 살아있음 체크</div><div class="routine-question">3. 남은 시간: 뭘 집중할까?</div></div>';
+            }
+            if (hour >= 18 || hour < 6) {
+                html += '<div class="routine-card evening-routine"><div class="routine-time evening-time">🌙 저녁/새벽 (18:00 - 06:00)</div><div class="routine-question">1. 오늘 살아있었나?</div><div class="routine-question">2. 뭘 배웠나? 내일 뭘 개선할까?</div><div class="routine-question">3. 목표에 얼마나 다가갔나?</div></div>';
+            }
+            container.innerHTML = html;
+        }
+        function toggleCollapse(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.collapse-icon');
+            content.classList.toggle('open');
+            icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        function cycleAlive(item) {
+            const levels = ['low', 'mid', 'high'];
+            const labels = { low: '낮음', mid: '중간', high: '높음' };
+            const current = item.dataset.level;
+            const nextIndex = (levels.indexOf(current) + 1) % 3;
+            const next = levels[nextIndex];
+            item.dataset.level = next;
+            item.querySelector('.alive-value').textContent = labels[next];
+        }
+        const feedbacks = {
+            0: { emoji: '😭', text: '오늘은 정말 힘든 날이었네요. 내일은 반드시 5점 이상 목표로 삼아요. 작은 성공 하나씩 만들어갑시다.' },
+            2: { emoji: '😢', text: '힘들었지만 끝까지 완주하신 점 존경합니다. 오늘 배운 것을 내일로 가져가세요.' },
+            4: { emoji: '😐', text: '평범한 하루였네요. 내일은 작은 변화 하나라도 만들어보는 건 어떨까요?' },
+            6: { emoji: '🙂', text: '좋은 하루였네요! 오늘 성공한 것 3가지를 떠올려보세요. 내일도 이 기대 유지!' },
+            8: { emoji: '😄', text: '훌륭한 하루였어요! 오늘의 에너지를 내일로 이어가세요. 연속 8점 달성 목표!' },
+            10: { emoji: '🤩', text: '완벽한 하루였습니다! 이 감정을 기억하세요. 내일도 이 레벨 유지할 수 있도록 자신을 믿어주세요.' }
+        };
+        document.getElementById('score-slider').addEventListener('input', function(e) {
+            const score = parseFloat(e.target.value);
+            document.getElementById('score-value').textContent = score.toFixed(1);
+            const rounded = Math.round(score / 2) * 2;
+            const feedback = feedbacks[rounded] || feedbacks[4];
+            document.getElementById('score-emoji').textContent = feedback.emoji;
+            document.getElementById('feedback-text').textContent = feedback.text;
+        });
         updateTime();
         setInterval(updateTime, 60000);
-
-        function toggleAlive(element) {
-            const value = element.querySelector('.alive-value');
-            const current = value.textContent;
-            const states = ['낮음', '중간', '높음'];
-            const currentIndex = states.indexOf(current);
-            const nextIndex = (currentIndex + 1) % states.length;
-            value.textContent = states[nextIndex];
-
-            // 색상 업데이트
-            if (states[nextIndex] === '높음') {
-                element.style.borderColor = '#10b981';
-                element.style.background = 'rgba(16, 185, 129, 0.2)';
-            } else if (states[nextIndex] === '낮음') {
-                element.style.borderColor = '#ef4444';
-                element.style.background = 'rgba(239, 68, 68, 0.1)';
-            } else {
-                element.style.borderColor = 'transparent';
-                element.style.background = 'rgba(15, 23, 42, 0.6)';
-            }
-        }
     </script>
 </body>
 </html>

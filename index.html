@@ -11,48 +11,62 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #e2e8f0;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
-        .container { max-width: 1600px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(71, 85, 105, 0.5); }
-        h1 { font-size: 1.8rem; color: #10b981; }
-        .subtitle { font-size: 0.85rem; color: #94a3b8; margin-top: 5px; }
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(71, 85, 105, 0.5); flex-wrap: wrap; gap: 10px; }
+        h1 { font-size: 1.4rem; color: #10b981; }
+        .subtitle { font-size: 0.75rem; color: #94a3b8; margin-top: 3px; }
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 15px; }
         .full-width { grid-column: 1 / -1; }
         .card {
             background: rgba(30, 41, 59, 0.9);
             border: 1px solid rgba(59, 130, 246, 0.15);
             border-radius: 10px;
-            padding: 16px;
+            padding: 14px;
         }
-        .card-title { font-size: 0.9rem; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .card-title { font-size: 0.85rem; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .stat-box { background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; }
-        .stat-label { font-size: 0.7rem; color: #64748b; }
-        .stat-value { font-size: 1.2rem; font-weight: bold; color: #3b82f6; margin-top: 4px; }
+        .stat-label { font-size: 0.65rem; color: #64748b; }
+        .stat-value { font-size: 1.1rem; font-weight: bold; color: #3b82f6; margin-top: 3px; }
         .action-list { list-style: none; }
         .action-item { padding: 8px 0; border-bottom: 1px solid rgba(71, 85, 105, 0.3); display: flex; justify-content: space-between; align-items: center; }
         .action-item:last-child { border-bottom: none; }
-        .action-name { font-size: 0.8rem; }
-        .action-status { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; }
+        .action-name { font-size: 0.8rem; flex: 1; }
+        .action-status { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
         .status-done { background: #059669; }
         .status-progress { background: #d97706; }
         .status-todo { background: #475569; }
-        .timeline { position: relative; padding-left: 20px; }
-        .timeline-item { position: relative; padding-bottom: 15px; }
-        .timeline-item::before { content: ''; position: absolute; left: -20px; top: 4px; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; }
-        .timeline-item::after { content: ''; position: absolute; left: -17px; top: 12px; width: 2px; height: calc(100% - 4px); background: #1e40af; }
+        .timeline { position: relative; padding-left: 18px; }
+        .timeline-item { position: relative; padding-bottom: 12px; }
+        .timeline-item::before { content: ''; position: absolute; left: -18px; top: 4px; width: 6px; height: 6px; background: #3b82f6; border-radius: 50%; }
+        .timeline-item::after { content: ''; position: absolute; left: -15px; top: 10px; width: 2px; height: calc(100% - 4px); background: #1e40af; }
         .timeline-item:last-child::after { display: none; }
         .timeline-time { font-size: 0.7rem; color: #64748b; }
-        .timeline-content { font-size: 0.8rem; margin-top: 2px; }
-        .skill-tag { display: inline-block; padding: 2px 6px; background: #1e40af; border-radius: 4px; font-size: 0.65rem; margin-right: 4px; }
-        .progress-bar { height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .timeline-content { font-size: 0.75rem; margin-top: 2px; }
+        .skill-tag { display: inline-block; padding: 2px 5px; background: #1e40af; border-radius: 4px; font-size: 0.6rem; margin-right: 3px; }
+        .progress-bar { height: 5px; background: #1e293b; border-radius: 3px; overflow: hidden; margin-top: 5px; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.5s; }
-        .insight-box { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px; margin-top: 10px; font-size: 0.75rem; }
-        .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .metric-card { text-align: center; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
-        .metric-value { font-size: 1.4rem; font-weight: bold; }
-        .metric-label { font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+        .insight-box { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 8px; margin-top: 8px; font-size: 0.7rem; }
+        .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .metric-card { text-align: center; padding: 8px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; }
+        .metric-value { font-size: 1.2rem; font-weight: bold; }
+        .metric-label { font-size: 0.6rem; color: #64748b; margin-top: 2px; }
+
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            .metric-grid { grid-template-columns: repeat(2, 1fr); }
+            .stat-grid { grid-template-columns: 1fr; }
+            .main-grid { grid-template-columns: 1fr; }
+            .action-item { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .action-status { align-self: flex-end; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            h1 { font-size: 1.2rem; }
+            .card { padding: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -63,13 +77,12 @@
                 <p class="subtitle">메타인지 대시보드 | 무엇을 하고 있는지, 무엇을 해야 하는지</p>
             </div>
             <div style="text-align: right;">
-                <p style="color: #10b981; font-size: 0.85rem;">● 온라인</p>
-                <p style="font-size: 0.7rem; color: #64748b;" id="current-time">KST</p>
+                <p style="color: #10b981; font-size: 0.8rem;">● 온라인</p>
+                <p style="font-size: 0.65rem; color: #64748b;" id="current-time">KST</p>
             </div>
         </div>
 
-        <!-- 주요 지표 -->
-        <div class="card full-width" style="margin-bottom: 15px;">
+        <div class="card full-width" style="margin-bottom: 12px;">
             <div class="metric-grid">
                 <div class="metric-card">
                     <div class="metric-value" style="color: #3b82f6;">127</div>
@@ -91,7 +104,6 @@
         </div>
 
         <div class="main-grid">
-            <!-- 자비스 활동 요약 -->
             <div class="card">
                 <div class="card-title">🤖 자비스 활동 요약</div>
                 <div class="stat-grid">
@@ -114,7 +126,6 @@
                 </div>
             </div>
 
-            <!-- 내가 해야 할 것 -->
             <div class="card">
                 <div class="card-title">📋 내가 해야 할 것</div>
                 <ul class="action-list">
@@ -134,14 +145,9 @@
                         <span class="action-name">아이디어 정원 마케팅 기획</span>
                         <span class="action-status status-todo">대기</span>
                     </li>
-                    <li class="action-item">
-                        <span class="action-name">수동소득 파이프라인 연구</span>
-                        <span class="action-status status-todo">대기</span>
-                    </li>
                 </ul>
             </div>
 
-            <!-- 자비스가 한 것 -->
             <div class="card">
                 <div class="card-title">✅ 자비스가 완료한 것</div>
                 <ul class="action-list">
@@ -158,13 +164,12 @@
                         <span class="action-status status-done">완료</span>
                     </li>
                     <li class="action-item">
-                        <span class="action-name">data-viz 스킬 평가</span>
+                        <span class="action-name">Interruption Science 저장</span>
                         <span class="action-status status-done">완료</span>
                     </li>
                 </ul>
             </div>
 
-            <!-- 오늘의 타임라인 -->
             <div class="card full-width">
                 <div class="card-title">📅 오늘의 타임라인</div>
                 <div class="timeline">
@@ -198,35 +203,41 @@
                             <span class="skill-tag">agent-creator</span>
                         </div>
                     </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">03:15 - Interruption Science 저장</div>
+                        <div class="timeline-content">
+                            워크샵 정리 완료, 제2의 뇌에 인사이트 저장
+                            <span class="skill-tag">learning</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 학습 진행률 -->
             <div class="card">
                 <div class="card-title">📚 스킬 학습 진행률</div>
-                <div style="margin-bottom: 12px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                <div style="margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px;">
                         <span>마케팅</span>
                         <span>85%</span>
                     </div>
                     <div class="progress-bar"><div class="progress-fill" style="width: 85%; background: #10b981;"></div></div>
                 </div>
-                <div style="margin-bottom: 12px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                <div style="margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px;">
                         <span>투자</span>
                         <span>60%</span>
                     </div>
                     <div class="progress-bar"><div class="progress-fill" style="width: 60%; background: #3b82f6;"></div></div>
                 </div>
-                <div style="margin-bottom: 12px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                <div style="margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px;">
                         <span>자동화</span>
                         <span>90%</span>
                     </div>
                     <div class="progress-bar"><div class="progress-fill" style="width: 90%; background: #8b5cf6;"></div></div>
                 </div>
                 <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px;">
                         <span>건강</span>
                         <span>45%</span>
                     </div>
@@ -234,46 +245,21 @@
                 </div>
             </div>
 
-            <!-- 다음 학습 목표 -->
-            <div class="card">
-                <div class="card-title">🎯 다음 학습 목표</div>
-                <ul class="action-list">
-                    <li class="action-item">
-                        <span class="action-name">고급 CRO 기법</span>
-                        <span class="skill-tag">conversion</span>
-                    </li>
-                    <li class="action-item">
-                        <span class="action-name">Programmatic SEO</span>
-                        <span class="skill-tag">seo</span>
-                    </li>
-                    <li class="action-item">
-                        <span class="action-name">이메일 시퀀스 설계</span>
-                        <span class="skill-tag">email</span>
-                    </li>
-                    <li class="action-item">
-                        <span class="action-name">가격 심리학</span>
-                        <span class="skill-tag">pricing</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 주요 인사이트 -->
             <div class="card">
                 <div class="card-title">💡 주요 인사이트</div>
                 <div class="insight-box">
-                    <strong>대시보드 활용:</strong> 샘플 데이터가 아니라 실제 데이터를 연동해야 메타인지가 향상됨
+                    <strong>Interruption Science:</strong> 방해 관리 2단계 - Structuring(시스템 설계) + Coping(Mark, Park, Restart 복귀)
                 </div>
                 <div class="insight-box">
-                    <strong>마케팅 자동화:</strong> 33개 스킬을 18개 에이전트에 매핑하면 5개 새 에이전트 필요 (growth, content, pricing, analytics, social)
+                    <strong>RPM 전략:</strong> 목표, 맥락, 시작 지점을 정해두고 자리 벗어나면 전환비용 감소
                 </div>
                 <div class="insight-box">
-                    <strong>학습 패턴:</strong> 실제 프로젝트(대시보드)를 통해 스킬을 습득하는 것이 가장 효과적임
+                    <strong>김종욱 인사이트:</strong> "구조화하고 분해하면 대응방안이 나온다"
                 </div>
             </div>
         </div>
 
-        <!-- 시스템 리소스 -->
-        <div class="card full-width" style="margin-top: 15px;">
+        <div class="card full-width" style="margin-top: 12px;">
             <div class="card-title">⚙️ 시스템 리소스</div>
             <div class="stat-grid">
                 <div class="stat-box">

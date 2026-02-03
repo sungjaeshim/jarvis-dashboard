@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube 썸네일 뷰어</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen p-4">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-white mb-6">📺 YouTube 썸네일 뷰어</h1>
+
+        <!-- 입력 폼 -->
+        <div class="mb-6">
+            <div class="flex gap-2">
+                <input
+                    type="text"
+                    id="youtubeUrl"
+                    placeholder="YouTube URL 입력..."
+                    class="flex-1 bg-gray-800 text-white rounded px-4 py-3 border border-gray-700 focus:border-blue-500 outline-none"
+                >
+                <button
+                    onclick="fetchThumbnails()"
+                    class="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 font-medium"
+                >
+                    가져오기
+                </button>
+            </div>
+        </div>
+
+        <!-- 로딩 -->
+        <div id="loading" class="hidden text-center py-8">
+            <div class="text-blue-400">로딩 중...</div>
+        </div>
+
+        <!-- 결과 -->
+        <div id="result" class="hidden">
+            <!-- 영상 정보 -->
+            <div id="videoInfo" class="bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700">
+                <h2 id="videoTitle" class="text-xl font-bold text-white mb-2"></h2>
+                <div class="text-gray-400">
+                    <span id="videoChannel"></span> •
+                    <span id="videoDuration"></span>초
+                </div>
+            </div>
+
+            <!-- 썸네일 그리드 -->
+            <h3 class="text-lg font-bold text-white mb-4">📸 썸네일 (클릭하면 원본 크기)</h3>
+            <div id="thumbnails" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
+
+            <!-- 타임스탬프 -->
+            <h3 class="text-lg font-bold text-white mb-4">⏱ 추천 구간</h3>
+            <div id="timestamps" class="space-y-2"></div>
+        </div>
+
+        <!-- 에러 -->
+        <div id="error" class="hidden bg-red-500/20 border border-red-500 rounded-lg p-4 text-red-400"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://158.247.193.74:8084';
+
+        async function fetchThumbnails() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+
+            if (!url) {
+                showError('YouTube URL을 입력해주세요.');
+                return;
+            }
+
+            showLoading(true);
+            hideResult();
+            hideError();
+
+            try {
+                const response = await fetch(`${API_BASE}/api/youtube/thumbnails`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+
+                displayResult(data);
+            } catch (e) {
+                showError('요청 실패: ' + e.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayResult(data) {
+            // 영상 정보
+            document.getElementById('videoTitle').textContent = data.title;
+            document.getElementById('videoChannel').textContent = data.channel;
+            document.getElementById('videoDuration').textContent = data.duration;
+
+            // 썸네일
+            const thumbnailsDiv = document.getElementById('thumbnails');
+            thumbnailsDiv.innerHTML = data.thumbnails.map(thumb => `
+                <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
+                     onclick="window.open('${thumb.url}', '_blank')">
+                    <img src="${thumb.url}" alt="${thumb.name}" class="w-full">
+                    <div class="p-3">
+                        <div class="font-medium text-white">${thumb.name}</div>
+                        <div class="text-sm text-gray-400">${thumb.quality}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 타임스탬프
+            const timestampsDiv = document.getElementById('timestamps');
+            timestampsDiv.innerHTML = data.timestamps.map(ts => `
+                <div class="bg-gray-800 rounded px-4 py-2 border border-gray-700 flex items-center gap-3">
+                    <span class="text-blue-400 font-mono">${ts.formatted}</span>
+                    <span class="text-gray-400">${ts.description}</span>
+                    <a href="https://www.youtube.com/watch?v=${data.video_id}&t=${ts.seconds}"
+                       target="_blank"
+                       class="ml-auto text-sm text-blue-400 hover:text-blue-300">
+                        ▶ 이동
+                    </a>
+                </div>
+            `).join('');
+
+            showResult();
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('hidden', !show);
+        }
+
+        function showResult() {
+            document.getElementById('result').classList.remove('hidden');
+        }
+
+        function hideResult() {
+            document.getElementById('result').classList.add('hidden');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        // 엔터키로 검색
+        document.getElementById('youtubeUrl').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchThumbnails();
+        });
+    </script>
+</body>
+</html>

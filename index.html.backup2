@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자비스 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e5e7eb;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* 탭 네비게이션 스타일 */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(22, 33, 62, 0.6);
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .tab-button {
+            flex: 1;
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .tab-button:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #e5e7eb;
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* 탭 컨텐츠 */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        h1 { font-size: 2rem; color: #4ade80; }
+        .subtitle { color: #9ca3af; font-size: 0.9rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .card-label { font-size: 0.85rem; color: #9ca3af; margin-bottom: 8px; }
+        .card-value { font-size: 2.5rem; font-weight: bold; }
+        .card-value.blue { color: #60a5fa; }
+        .card-value.green { color: #4ade80; }
+        .card-value.purple { color: #a78bfa; }
+        .card-context, .card-trend { font-size: 0.85rem; color: #9ca3af; margin-top: 8px; }
+        .section {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .section-title { font-size: 1.25rem; margin-bottom: 16px; color: #e5e7eb; }
+        .collapsible-header { cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s; }
+        .collapsible-header:hover { color: #60a5fa; }
+        .collapsible-content { max-height: 2000px; overflow: hidden; transition: max-height 0.3s ease-in-out, opacity 0.2s; opacity: 1; }
+        .collapsible-content.collapsed { max-height: 0; opacity: 0; margin: 0; padding: 0; }
+        .collapse-icon { transition: transform 0.3s; font-size: 0.8rem; }
+        .collapse-icon.rotated { transform: rotate(180deg); }
+        
+        .loading { text-align: center; color: #9ca3af; padding: 40px; }
+        .error { color: #ef4444; padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; }
+        .status-indicator { display: inline-block; width: 10px; height: 10px; background: #4ade80; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        /* 제2의뇌 스타일 */
+        .sb-card { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 20px; transition: all 0.3s ease; cursor: pointer; }
+        .sb-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); }
+        .sb-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; margin-right: 6px; margin-bottom: 6px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; cursor: pointer; }
+        .sb-tag:hover { background: rgba(59, 130, 246, 0.3); }
+        .sb-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .sb-modal-overlay.active { display: flex; }
+        .sb-modal-content { background: #1e293b; border-radius: 16px; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .sb-search-input { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); color: #e2e8f0; padding: 12px 16px; border-radius: 8px; width: 100%; transition: border-color 0.2s; }
+        .sb-search-input:focus { outline: none; border-color: #3b82f6; }
+        .sb-search-input::placeholder { color: #64748b; }
+        .sb-date-filter { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); color: #e2e8f0; padding: 10px 14px; border-radius: 8px; }
+        .sb-btn-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; }
+        .sb-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
+        .sb-insight-content { line-height: 1.8; white-space: pre-wrap; }
+        .sb-stats-card { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 16px; text-align: center; }
+        .sb-insight-date { color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px; }
+        .sb-insight-title { font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 12px; line-height: 1.4; }
+        .sb-insight-preview { color: #94a3b8; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .sb-header-actions { display: flex; gap: 12px; margin-bottom: 24px; }
+        
+
+        /* 탭 네비게이션 */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(22, 33, 62, 0.6);
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .tab-button {
+            flex: 1;
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #e5e7eb;
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .header > div:last-child { align-self: flex-end; text-align: right; }
+            .tab-nav { flex-direction: column; }
+            .tab-button { width: 100%; }
+            .grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .tab-nav { flex-direction: column; }
+            .tab-button { width: 100%; }
+            .sb-header-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🤖 자비스 대시보드</h1>
+                <p class="subtitle" id="update-time">로딩 중...</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: #4ade80; font-weight: 600;"><span class="status-indicator"></span>온라인</p>
+                <p style="font-size: 0.85rem; color: #9ca3af;">KST (UTC+9)</p>
+            </div>
+        </div>
+
+        <!-- 탭 네비게이션 -->
+        <nav class="tab-nav">
+            <button class="tab-button active" onclick="switchTab('dashboard')">📊 대시보드</button>
+            <button class="tab-button" onclick="switchTab('second-brain')">🧠 제2의뇌</button>
+            <button class="tab-button" onclick="switchTab('growth')">📈 성장센터</button>
+        </nav>
+
+        <!-- 대시보드 탭 -->
+        <div id="tab-dashboard" class="tab-content active">
+                    <!-- 대시보드 탭 -->
+        <div id="tab-dashboard" class="tab-content active">
+        <div class="grid">
+                <div class="card">
+                    <div class="card-label">오늘의 작업</div>
+                    <div class="card-value blue" id="task-count">-</div>
+                    <div class="card-trend" id="task-trend">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">총 작업 시간</div>
+                    <div class="card-value green" id="total-time">-</div>
+                    <div class="card-context" id="time-context">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">시스템 상태</div>
+                    <div class="card-value purple" id="system-status">정상</div>
+                    <div class="card-context" id="system-details">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">서울 날씨</div>
+                    <div class="card-value blue" id="weather-temp">-</div>
+                    <div class="card-context" id="weather-desc">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">미세먼지</div>
+                    <div class="card-value purple" id="air-quality">-</div>
+                    <div class="card-context" id="air-details">-</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📋 작업 목록</h2>
+                <div id="task-list"><div class="loading">로딩 중...</div></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🎯 목표 진행률</h2>
+                <div id="goal-list"><div class="loading">로딩 중...</div></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📈 주간 작업 시간</h2>
+                <div class="chart-container" id="weekly-chart" style="display: flex; align-items: flex-end; height: 150px; gap: 10px; position: relative;">
+                    <div class="loading">로딩 중...</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8rem; color: #9ca3af;">
+                    <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 제2의뇌 탭 -->
+        <div id="tab-second-brain" class="tab-content">
+            <div class="section">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">🧠 제2의뇌</h2>
+                        <p class="text-slate-400 mt-1">Second Brain Viewer</p>
+                    </div>
+                    <div class="sb-header-actions">
+                        <button onclick="sbShowStats()" class="sb-btn-primary text-sm">📊 통계</button>
+                    </div>
+                </div>
+
+                <!-- 검색 및 필터 -->
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="flex-1">
+                        <input type="text" id="sbSearchInput" class="sb-search-input" placeholder="🔍 검색어 입력 (키워드, 태그...)" onkeypress="if(event.key === 'Enter') sbSearchInsights()">
+                    </div>
+                    <select id="sbDateFilter" class="sb-date-filter" onchange="sbLoadInsights()"><option value="">📅 전체 기간</option></select>
+                    <button onclick="sbSearchInsights()" class="sb-btn-primary">검색</button>
+                </div>
+
+                <!-- 빠른 태그 -->
+                <div id="sbQuickTags" class="flex flex-wrap gap-2 mb-6">
+                    <span class="text-slate-500 text-sm">인기 태그:</span>
+                    <span class="sb-tag" onclick="sbSearchByTag('#시스템')">시스템</span>
+                    <span class="sb-tag" onclick="sbSearchByTag('#투자')">투자</span>
+                    <span class="sb-tag" onclick="sbSearchByTag('#자동화')">자동화</span>
+                    <span class="sb-tag" onclick="sbSearchByTag('#AI')">AI</span>
+                    <span class="sb-tag" onclick="sbSearchByTag('#한국어')">한국어</span>
+                </div>
+
+                <!-- 통계 카드 -->
+                <div id="sbStatsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 hidden">
+                    <div class="sb-stats-card"><div class="text-2xl font-bold text-blue-400" id="sbStatTotal">-</div><div class="text-sm text-slate-400">총 인사이트</div></div>
+                    <div class="sb-stats-card"><div class="text-2xl font-bold text-green-400" id="sbStatTags">-</div><div class="text-sm text-slate-400">태그 수</div></div>
+                    <div class="sb-stats-card"><div class="text-2xl font-bold text-purple-400" id="sbStatRange">-</div><div class="text-sm text-slate-400">기간</div></div>
+                    <div class="sb-stats-card"><div class="text-2xl font-bold text-yellow-400" id="sbStatShowing">-</div><div class="text-sm text-slate-400">표시 중</div></div>
+                </div>
+
+                <!-- 검색 결과 정보 -->
+                <div id="sbResultInfo" class="mb-4 text-slate-400 text-sm"></div>
+
+                <!-- 인사이트 카드 그리드 -->
+                <div id="sbInsightsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="loading col-span-full"><div class="animate-pulse">로딩 중...</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 상세 보기 모달 (제2의뇌) -->
+        <div id="sbDetailModal" class="sb-modal-overlay" onclick="sbCloseModal(event)">
+            <div class="sb-modal-content" onclick="event.stopPropagation()">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div id="sbModalDate" class="text-sm text-slate-400 mb-2"></div>
+                            <h2 id="sbModalTitle" class="text-xl font-bold text-white"></h2>
+                        </div>
+                        <button onclick="sbCloseModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+                    </div>
+                    <div id="sbModalTags" class="mb-4"></div>
+                    <div id="sbModalContent" class="sb-insight-content text-slate-300"></div>
+                    <div class="mt-6 pt-4 border-t border-slate-700 text-sm text-slate-500">
+                        출처: <span id="sbModalSource"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer" style="text-align: center; color: #6b7280; font-size: 0.85rem; margin-top: 40px;">
+            <p>🔄 30초마다 자동 갱신 | 📊 노션 + 자동 연동 | 🤖 자비스 (Jarvis)</p>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 공통 ====================
+        const DASHBOARD_API_BASE = '/api';
+        const SECOND_BRAIN_API_BASE = '/api/memory';
+        const DAILY_GOAL_MINUTES = 180;
+        const DAILY_GOAL_TASKS = 8;
+
+        // 탭 전환
+        function switchTab(tabName) {
+            // 모든 탭 비활성화
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            
+            // 선택한 탭 활성화
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // 제2의뇌 탭이면 데이터 로드
+            if (tabName === 'second-brain') {
+                if (window.sbAllInsights && window.sbAllInsights.length === 0) {
+                    sbLoadDates();
+                    sbLoadInsights();
+                    sbLoadStats();
+                }
+            }
+        }
+
+        // ==================== 대시보드 ====================
+        function getKSTDate(offset = 0) {
+            const now = new Date();
+            const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+            kst.setDate(kst.getDate() + offset);
+            return kst;
+        }
+
+        function formatKSTDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        async function loadDashboard() {
+            try {
+                const summaryRes = await fetch(`${DASHBOARD_API_BASE}/dashboard`);
+                const summaryData = await summaryRes.json();
+
+                const todayTaskCount = summaryData.summary.task_count;
+                const todayMinutes = summaryData.summary.total_minutes;
+
+                document.getElementById('task-count').textContent = todayTaskCount + '건';
+                document.getElementById('total-time').textContent = todayMinutes + '분';
+
+                const yesterdayRes = await fetch(`${DASHBOARD_API_BASE}/dashboard/yesterday`);
+                const yesterdayData = yesterdayRes.ok ? await yesterdayRes.json() : null;
+                renderTaskTrend(todayTaskCount, yesterdayData);
+                renderTimeContext(todayMinutes, DAILY_GOAL_MINUTES);
+
+                const tasksRes = await fetch(`${DASHBOARD_API_BASE}/tasks`);
+                const tasksData = await tasksRes.json();
+                renderTasks(tasksData.tasks);
+
+                const goalsRes = await fetch(`${DASHBOARD_API_BASE}/goals`);
+                const goalsData = await goalsRes.json();
+                renderGoals(goalsData.goals);
+
+                const weeklyRes = await fetch(`${DASHBOARD_API_BASE}/weekly`);
+                const weeklyData = await weeklyRes.json();
+                renderWeekly(weeklyData.weekly);
+
+                updateTime();
+
+            } catch (error) {
+                console.error('로딩 오류:', error);
+            }
+        }
+
+        function renderTaskTrend(todayCount, yesterdayData) {
+            const trendEl = document.getElementById('task-trend');
+            if (!yesterdayData || !yesterdayData.summary) { trendEl.textContent = '-'; return; }
+            const yesterdayCount = yesterdayData.summary.task_count || 0;
+            const diff = todayCount - yesterdayCount;
+            if (diff > 0) { trendEl.innerHTML = `<span style="color: #4ade80;">▲ 어제보다 ${diff}건</span>`; }
+            else if (diff < 0) { trendEl.innerHTML = `<span style="color: #f87171;">▼ 어제보다 ${Math.abs(diff)}건</span>`; }
+            else { trendEl.innerHTML = `<span style="color: #9ca3af;">- 어제와 같음</span>`; }
+        }
+
+        function renderTimeContext(todayMinutes, goalMinutes) {
+            const contextEl = document.getElementById('time-context');
+            if (todayMinutes === null || todayMinutes === undefined) { contextEl.textContent = '정보 없음'; return; }
+            const percentage = Math.min(Math.round((todayMinutes / goalMinutes) * 100), 100);
+            const remaining = Math.max(goalMinutes - todayMinutes, 0);
+            if (todayMinutes >= goalMinutes) { contextEl.innerHTML = `<span style="color: #4ade80;">✓ 목표 달성!</span>`; }
+            else { contextEl.textContent = `목표 ${goalMinutes}분 중 ${percentage}% | 남은 ${remaining}분`; }
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('task-list');
+            if (tasks.length === 0) { container.innerHTML = '<p style="color: #9ca3af; text-align: center;">오늘의 작업이 없습니다.</p>'; return; }
+            container.innerHTML = tasks.map(task => {
+                const startTime = new Date(task.start_time);
+                const endTime = new Date(task.end_time);
+                const timeStr = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')} - ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+                const duration = Math.floor(task.duration_seconds / 60);
+                return `<div class="card" style="margin-bottom: 12px; padding: 16px; border-left: 3px solid #60a5fa;">
+                    <div style="font-weight: 600;">${task.name}<span class="task-source ${task.source}">${task.source === 'notion' ? '노션' : '수동'}</span></div>
+                    <div style="font-size: 0.85rem; color: #9ca3af;">${timeStr} (${duration}분)</div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderGoals(goals) {
+            const container = document.getElementById('goal-list');
+            container.innerHTML = goals.map(goal => {
+                const percentage = Math.min((goal.current_value / goal.target_value) * 100, 100);
+                return `<div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+                        <span>${goal.name}</span>
+                        <span style="color: #60a5fa;">${goal.current_value}${goal.unit || ''} / ${goal.target_value}${goal.unit || ''}</span>
+                    </div>
+                    <div style="height: 8px; background: rgba(55, 65, 81, 0.5); border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); width: ${percentage}%; border-radius: 4px; transition: width 0.5s;"></div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderWeekly(weekly) {
+            const container = document.getElementById('weekly-chart');
+            const maxMinutes = Math.max(...weekly.map(d => d.minutes), 1);
+            const avgMinutes = weekly.reduce((a, b) => a + b.minutes, 0) / 7;
+            const avgTopPercent = 100 - (avgMinutes / maxMinutes * 100);
+            
+            let html = `<div class="avg-line" style="position: absolute; top: ${avgTopPercent}%; border-top: 2px dashed #6b7280; width: 100%;"></div>`;
+            html += `<div class="avg-label" style="position: absolute; right: 0; top: ${avgTopPercent}%; transform: translateY(-100%); font-size: 0.75rem; color: #6b7280;">평균 ${Math.round(avgMinutes)}분</div>`;
+            
+            const maxVal = Math.max(...weekly.map(d => d.minutes));
+            const minVal = Math.min(...weekly.map(d => d.minutes));
+            
+            html += weekly.map(day => {
+                const height = (day.minutes / maxMinutes) * 100;
+                const isMax = day.minutes === maxVal;
+                const isMin = day.minutes === minVal && day.minutes > 0;
+                const extraClass = isMax ? 'max-value' : (isMin ? 'min-value' : '');
+                return `<div class="chart-bar ${extraClass}" style="height: ${Math.max(height, 5)}%; flex: 1; background: ${isMax ? '#4ade80' : 'linear-gradient(to top, #3b82f6, #60a5fa)'}; border-radius: 4px; position: relative; ${isMin ? 'opacity: 0.6;' : ''}"></div>`;
+            }).join('');
+            
+            container.innerHTML = html;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+            const timeStr = kstTime.toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            document.getElementById('update-time').textContent = '마지막 갱신: ' + timeStr;
+        }
+
+        // ==================== 제2의뇌 ====================
+        window.sbAllInsights = [];
+
+        async function sbLoadDates() {
+            try {
+                const res = await fetch(`${SECOND_BRAIN_API_BASE}/api/memory/dates`);
+                const data = await res.json();
+                const select = document.getElementById('sbDateFilter');
+                select.innerHTML = '<option value="">📅 전체 기간</option>';
+                data.dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.value = date;
+                    option.textContent = date;
+                    select.appendChild(option);
+                });
+            } catch (error) { console.error('날짜 로드 실패:', error); }
+        }
+
+        async function sbLoadInsights() {
+            const dateFilter = document.getElementById('sbDateFilter').value;
+            const resultInfo = document.getElementById('sbResultInfo');
+            const grid = document.getElementById('sbInsightsGrid');
+            grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">로딩 중...</div></div>';
+            
+            try {
+                let url = `${SECOND_BRAIN_API_BASE}/api/memory?limit=50`;
+                if (dateFilter) url += `&date=${dateFilter}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                window.sbAllInsights = data.insights;
+                sbRenderInsights(window.sbAllInsights);
+                resultInfo.textContent = `총 ${data.count}개의 인사이트`;
+                document.getElementById('sbStatShowing').textContent = data.count;
+            } catch (error) {
+                console.error('로드 실패:', error);
+                grid.innerHTML = '<div class="error col-span-full text-center text-red-400">데이터를 불러오지 못했습니다.</div>';
+            }
+        }
+
+        async function sbSearchInsights() {
+            const query = document.getElementById('sbSearchInput').value.trim();
+            const grid = document.getElementById('sbInsightsGrid');
+            const resultInfo = document.getElementById('sbResultInfo');
+            if (!query) { sbLoadInsights(); return; }
+            grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">검색 중...</div></div>';
+            
+            try {
+                const res = await fetch(`${SECOND_BRAIN_API_BASE}/api/memory/search?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                sbRenderInsights(data.insights);
+                resultInfo.textContent = `"${query}" 검색 결과: ${data.count}개`;
+                document.getElementById('sbStatShowing').textContent = data.count;
+            } catch (error) {
+                console.error('검색 실패:', error);
+                grid.innerHTML = '<div class="error col-span-full text-center text-red-400">검색에 실패했습니다.</div>';
+            }
+        }
+
+        function sbSearchByTag(tag) {
+            document.getElementById('sbSearchInput').value = tag;
+            sbSearchInsights();
+        }
+
+        async function sbLoadStats() {
+            try {
+                const res = await fetch(`${SECOND_BRAIN_API_BASE}/api/memory/stats`);
+                const data = await res.json();
+                document.getElementById('sbStatTotal').textContent = data.total_insights;
+                document.getElementById('sbStatTags').textContent = data.total_tags;
+                if (data.date_range.earliest && data.date_range.latest) {
+                    document.getElementById('sbStatRange').textContent = `${data.date_range.earliest.substring(5)} ~ ${data.date_range.latest.substring(5)}`;
+                }
+                const tagsContainer = document.getElementById('sbQuickTags');
+                if (data.top_tags && data.top_tags.length > 0) {
+                    let tagsHtml = '<span class="text-slate-500 text-sm">인기 태그:</span>';
+                    data.top_tags.slice(0, 8).forEach(([tag, count]) => {
+                        tagsHtml += `<span class="sb-tag" onclick="sbSearchByTag('#${tag}')">#${tag} (${count})</span>`;
+                    });
+                    tagsContainer.innerHTML = tagsHtml;
+                }
+            } catch (error) { console.error('통계 로드 실패:', error); }
+        }
+
+        function sbShowStats() {
+            document.getElementById('sbStatsContainer').classList.toggle('hidden');
+        }
+
+        function sbRenderInsights(insights) {
+            const grid = document.getElementById('sbInsightsGrid');
+            if (insights.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12">검색 결과가 없습니다.</div>';
+                return;
+            }
+            grid.innerHTML = insights.map(insight => `
+                <div class="sb-card" onclick="sbShowDetail('${insight.id}')">
+                    <div class="sb-insight-date">📅 ${insight.date}</div>
+                    <div class="sb-insight-title">${sbEscapeHtml(insight.title)}</div>
+                    <div class="sb-insight-preview">${sbEscapeHtml(sbGetPreview(insight.content))}</div>
+                    <div style="margin-top: 12px;">
+                        ${insight.tags.slice(0, 4).map(tag => `<span class="sb-tag">#${tag}</span>`).join('')}
+                        ${insight.tags.length > 4 ? `<span class="sb-tag">+${insight.tags.length - 4}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function sbShowDetail(id) {
+            const insight = window.sbAllInsights.find(i => i.id === id);
+            if (!insight) return;
+            document.getElementById('sbModalDate').textContent = `📅 ${insight.date}`;
+            document.getElementById('sbModalTitle').textContent = insight.title;
+            document.getElementById('sbModalContent').innerHTML = sbFormatContent(insight.content);
+            document.getElementById('sbModalSource').textContent = insight.source;
+            document.getElementById('sbModalTags').innerHTML = insight.tags.map(tag => `<span class="sb-tag">#${tag}</span>`).join('');
+            document.getElementById('sbDetailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function sbCloseModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('sbDetailModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function sbGetPreview(content) {
+            let preview = content.replace(/^#+\s/gm, '').replace(/^[-*+]\s/gm, '').replace(/^\d+\.\s/gm, '').replace(/\n/g, ' ').trim();
+            if (preview.length > 150) preview = preview.substring(0, 150) + '...';
+            return preview;
+        }
+
+        function sbFormatContent(content) {
+            return content
+                .replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold text-blue-400 mt-4 mb-2">$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold text-blue-400 mt-6 mb-3">$1</h2>')
+                .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold text-white mt-6 mb-4">$1</h1>')
+                .replace(/^\- (.+)$/gm, '<li class="ml-4">$1</li>')
+                .replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4">$2</li>')
+                .replace(/\

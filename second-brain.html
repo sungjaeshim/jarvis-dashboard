@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 제2의뇌 - Second Brain Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .search-input {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        .date-filter {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            color: #64748b;
+            padding: 40px;
+        }
+
+        .insight-content {
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .stats-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .insight-date {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .insight-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .insight-preview {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 20px;
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 헤더 -->
+        <header class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        🧠 제2의뇌
+                    </h1>
+                    <p class="text-slate-400 mt-1">Second Brain Viewer</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="showStats()" class="btn-primary text-sm">
+                        📊 통계
+                    </button>
+                    <a href="/index.html" class="btn-primary text-sm" style="text-decoration: none;">
+                        🏠 대시보드
+                    </a>
+                </div>
+            </div>
+
+            <!-- 검색 및 필터 -->
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <div class="flex-1">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="🔍 검색어 입력 (키워드, 태그...)"
+                        onkeypress="if(event.key === 'Enter') searchInsights()"
+                    >
+                </div>
+                <select id="dateFilter" class="date-filter" onchange="loadInsights()">
+                    <option value="">📅 전체 기간</option>
+                </select>
+                <button onclick="searchInsights()" class="btn-primary">
+                    검색
+                </button>
+            </div>
+
+            <!-- 빠른 태그 -->
+            <div id="quickTags" class="flex flex-wrap gap-2 mb-6">
+                <span class="text-slate-500 text-sm">인기 태그:</span>
+                <span class="tag cursor-pointer hover:bg-blue-500/30" onclick="searchByTag('#시스템')">시스템</span>
+                <span class="tag cursor-pointer hover:bg-blue-500/30" onclick="searchByTag('#투자')">투자</span>
+                <span class="tag cursor-pointer hover:bg-blue-500/30" onclick="searchByTag('#자동화')">자동화</span>
+                <span class="tag cursor-pointer hover:bg-blue-500/30" onclick="searchByTag('#AI')">AI</span>
+                <span class="tag cursor-pointer hover:bg-blue-500/30" onclick="searchByTag('#한국어')">한국어</span>
+            </div>
+        </header>
+
+        <!-- 통계 카드 -->
+        <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 hidden">
+            <div class="stats-card">
+                <div class="text-2xl font-bold text-blue-400" id="statTotal">-</div>
+                <div class="text-sm text-slate-400">총 인사이트</div>
+            </div>
+            <div class="stats-card">
+                <div class="text-2xl font-bold text-green-400" id="statTags">-</div>
+                <div class="text-sm text-slate-400">태그 수</div>
+            </div>
+            <div class="stats-card">
+                <div class="text-2xl font-bold text-purple-400" id="statRange">-</div>
+                <div class="text-sm text-slate-400">기간</div>
+            </div>
+            <div class="stats-card">
+                <div class="text-2xl font-bold text-yellow-400" id="statShowing">-</div>
+                <div class="text-sm text-slate-400">표시 중</div>
+            </div>
+        </div>
+
+        <!-- 검색 결과 정보 -->
+        <div id="resultInfo" class="mb-4 text-slate-400 text-sm"></div>
+
+        <!-- 인사이트 카드 그리드 -->
+        <div id="insightsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="loading col-span-full">
+                <div class="animate-pulse">로딩 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상세 보기 모달 -->
+    <div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <div id="modalDate" class="text-sm text-slate-400 mb-2"></div>
+                        <h2 id="modalTitle" class="text-xl font-bold text-white"></h2>
+                    </div>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div id="modalTags" class="mb-4"></div>
+                <div id="modalContent" class="insight-content text-slate-300"></div>
+                <div class="mt-6 pt-4 border-t border-slate-700 text-sm text-slate-500">
+                    출처: <span id="modalSource"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://158.247.193.74:8082';
+        let allInsights = [];
+        let currentSearch = '';
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDates();
+            loadInsights();
+            loadStats();
+        });
+
+        // 날짜 필터 로드
+        async function loadDates() {
+            try {
+                const res = await fetch(`${API_BASE}/api/memory/dates`);
+                const data = await res.json();
+                
+                const select = document.getElementById('dateFilter');
+                select.innerHTML = '<option value="">📅 전체 기간</option>';
+                
+                data.dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.value = date;
+                    option.textContent = date;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('날짜 로드 실패:', error);
+            }
+        }
+
+        // 인사이트 로드
+        async function loadInsights() {
+            const dateFilter = document.getElementById('dateFilter').value;
+            const resultInfo = document.getElementById('resultInfo');
+            const grid = document.getElementById('insightsGrid');
+            
+            grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">로딩 중...</div></div>';
+            
+            try {
+                let url = `${API_BASE}/api/memory?limit=50`;
+                if (dateFilter) {
+                    url += `&date=${dateFilter}`;
+                }
+                
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                allInsights = data.insights;
+                renderInsights(allInsights);
+                
+                resultInfo.textContent = `총 ${data.count}개의 인사이트`;
+                document.getElementById('statShowing').textContent = data.count;
+                
+            } catch (error) {
+                console.error('로드 실패:', error);
+                grid.innerHTML = '<div class="error col-span-full text-center text-red-400">데이터를 불러오지 못했습니다.</div>';
+            }
+        }
+
+        // 검색
+        async function searchInsights() {
+            const query = document.getElementById('searchInput').value.trim();
+            const grid = document.getElementById('insightsGrid');
+            const resultInfo = document.getElementById('resultInfo');
+            
+            if (!query) {
+                loadInsights();
+                return;
+            }
+            
+            grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">검색 중...</div></div>';
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/memory/search?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                
+                renderInsights(data.insights);
+                resultInfo.textContent = `"${query}" 검색 결과: ${data.count}개`;
+                document.getElementById('statShowing').textContent = data.count;
+                
+            } catch (error) {
+                console.error('검색 실패:', error);
+                grid.innerHTML = '<div class="error col-span-full text-center text-red-400">검색에 실패했습니다.</div>';
+            }
+        }
+
+        // 태그로 검색
+        function searchByTag(tag) {
+            document.getElementById('searchInput').value = tag;
+            searchInsights();
+        }
+
+        // 통계 로드
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/memory/stats`);
+                const data = await res.json();
+                
+                document.getElementById('statTotal').textContent = data.total_insights;
+                document.getElementById('statTags').textContent = data.total_tags;
+                
+                if (data.date_range.earliest && data.date_range.latest) {
+                    document.getElementById('statRange').textContent = `${data.date_range.earliest.substring(5)} ~ ${data.date_range.latest.substring(5)}`;
+                }
+                
+                // 인기 태그 업데이트
+                const tagsContainer = document.getElementById('quickTags');
+                if (data.top_tags && data.top_tags.length > 0) {
+                    let tagsHtml = '<span class="text-slate-500 text-sm">인기 태그:</span>';
+                    data.top_tags.slice(0, 8).forEach(([tag, count]) => {
+                        tagsHtml += `<span class="tag cursor-pointer hover:bg-blue-500/30" onclick="searchByTag('#${tag}')">#${tag} (${count})</span>`;
+                    });
+                    tagsContainer.innerHTML = tagsHtml;
+                }
+                
+            } catch (error) {
+                console.error('통계 로드 실패:', error);
+            }
+        }
+
+        // 통계 표시 토글
+        function showStats() {
+            const container = document.getElementById('statsContainer');
+            container.classList.toggle('hidden');
+        }
+
+        // 인사이트 렌더링
+        function renderInsights(insights) {
+            const grid = document.getElementById('insightsGrid');
+            
+            if (insights.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12">검색 결과가 없습니다.</div>';
+                return;
+            }
+            
+            grid.innerHTML = insights.map(insight => `
+                <div class="card" onclick="showDetail('${insight.id}')">
+                    <div class="insight-date">📅 ${insight.date}</div>
+                    <div class="insight-title">${escapeHtml(insight.title)}</div>
+                    <div class="insight-preview">${escapeHtml(getPreview(insight.content))}</div>
+                    <div class="mt-3">
+                        ${insight.tags.slice(0, 4).map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                        ${insight.tags.length > 4 ? `<span class="tag">+${insight.tags.length - 4}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 상세 보기
+        function showDetail(id) {
+            const insight = allInsights.find(i => i.id === id) || 
+                          findInsightById(id);
+            
+            if (!insight) return;
+            
+            document.getElementById('modalDate').textContent = `📅 ${insight.date}`;
+            document.getElementById('modalTitle').textContent = insight.title;
+            document.getElementById('modalContent').innerHTML = formatContent(insight.content);
+            document.getElementById('modalSource').textContent = insight.source;
+            document.getElementById('modalTags').innerHTML = insight.tags.map(tag => 
+                `<span class="tag">#${tag}</span>`
+            ).join('');
+            
+            document.getElementById('detailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 모달 닫기
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('detailModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 전체 인사이트에서 ID로 찾기
+        function findInsightById(id) {
+            // 검색 결과에 없으면 다시 로드
+            // 간단한 구현을 위해 id로 필터링
+            return allInsights.find(i => i.id === id);
+        }
+
+        // 내용 미리보기 추출
+        function getPreview(content) {
+            // 마크다운 헤딩, 불릿 등 제거하고 순수 텍스트 추출
+            let preview = content
+                .replace(/^#+\s/gm, '')
+                .replace(/^[-*+]\s/gm, '')
+                .replace(/^\d+\.\s/gm, '')
+                .replace(/\n/g, ' ')
+                .trim();
+            
+            // 150자로 제한
+            if (preview.length > 150) {
+                preview = preview.substring(0, 150) + '...';
+            }
+            
+            return preview;
+        }
+
+        // 내용 포맷팅 (마크다운 → HTML)
+        function formatContent(content) {
+            return content
+                .replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold text-blue-400 mt-4 mb-2">$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold text-blue-400 mt-6 mb-3">$1</h2>')
+                .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold text-white mt-6 mb-4">$1</h1>')
+                .replace(/^\- (.+)$/gm, '<li class="ml-4">$1</li>')
+                .replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4">$2</li>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`(.+?)`/g, '<code class="bg-slate-700 px-1 rounded">$1</code>')
+                .replace(/\n\n/g, '</p><p class="my-3">')
+                .replace(/\n/g, '<br>');
+        }
+
+        // HTML 이스케이프
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            if (e.key === '/' && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>

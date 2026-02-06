@@ -199,8 +199,14 @@
                         onkeypress="if(event.key === 'Enter') searchInsights()"
                     >
                 </div>
-                <select id="dateFilter" class="date-filter" onchange="loadInsights()">
-                    <option value="">📅 전체 기간</option>
+                <button id="sortBtn" onclick="toggleSort()" class="date-filter" style="cursor: pointer; min-width: 100px;">
+                    ⬇️ 최신순
+                </button>
+                <select id="periodFilter" class="date-filter" onchange="filterByPeriod()">
+                    <option value="all">📅 전체</option>
+                    <option value="7">최근 7일</option>
+                    <option value="30">최근 30일</option>
+                    <option value="90">최근 3개월</option>
                 </select>
                 <button onclick="searchInsights()" class="btn-primary">
                     검색
@@ -272,33 +278,71 @@
     <script>
         const API_BASE = 'http://158.247.193.74:8085';
         let allInsights = [];
+        let filteredInsights = [];
         let currentSearch = '';
+        let sortOrder = 'desc'; // 'desc' = 최신순, 'asc' = 오래된순
 
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            loadDates();
             loadInsights();
             loadStats();
         });
 
-        // 날짜 필터 로드
-        async function loadDates() {
-            try {
-                const res = await fetch(`${API_BASE}/api/second-brain/dates`);
-                const data = await res.json();
-                
-                const select = document.getElementById('dateFilter');
-                select.innerHTML = '<option value="">📅 전체 기간</option>';
-                
-                data.dates.forEach(date => {
-                    const option = document.createElement('option');
-                    option.value = date;
-                    option.textContent = date;
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error('날짜 로드 실패:', error);
+        // 정렬 토글
+        function toggleSort() {
+            sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+            const btn = document.getElementById('sortBtn');
+            btn.textContent = sortOrder === 'desc' ? '⬇️ 최신순' : '⬆️ 오래된순';
+            applyFiltersAndSort();
+        }
+
+        // 기간 필터 적용
+        function filterByPeriod() {
+            applyFiltersAndSort();
+        }
+
+        // 필터와 정렬 적용
+        function applyFiltersAndSort() {
+            const period = document.getElementById('periodFilter').value;
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            let insights = [...allInsights];
+            
+            // 검색 필터
+            if (query) {
+                insights = insights.filter(insight => 
+                    insight.title.toLowerCase().includes(query) ||
+                    insight.content.toLowerCase().includes(query) ||
+                    insight.tags.some(tag => tag.toLowerCase().includes(query))
+                );
             }
+            
+            // 기간 필터
+            if (period !== 'all') {
+                const days = parseInt(period);
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - days);
+                insights = insights.filter(i => {
+                    const date = new Date(i.date);
+                    return date >= cutoff;
+                });
+            }
+            
+            // 정렬
+            insights.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+            });
+            
+            filteredInsights = insights;
+            renderInsights(insights);
+            
+            const resultInfo = document.getElementById('resultInfo');
+            const sortLabel = sortOrder === 'desc' ? '최신순' : '오래된순';
+            resultInfo.textContent = query 
+                ? `"${query}" 검색 결과: ${insights.length}개 (${sortLabel})`
+                : `총 ${insights.length}개의 인사이트 (${sortLabel})`;
+            document.getElementById('statShowing').textContent = insights.length;
         }
 
         // 인사이트 로드 (내장 데이터)
@@ -314,12 +358,10 @@
                 const data = await res.json();
                 
                 allInsights = data.insights;
-                renderInsights(allInsights);
-                
-                resultInfo.textContent = `총 ${data.total_insights}개의 인사이트`;
-                document.getElementById('statShowing').textContent = data.total_insights;
                 document.getElementById('statTotal').textContent = data.total_insights;
                 document.getElementById('statTags').textContent = data.total_tags;
+                
+                applyFiltersAndSort(); // 정렬 적용
                 
             } catch (error) {
                 console.error('로드 실패:', error);
@@ -327,39 +369,9 @@
             }
         }
 
-        // 검색 (내장 데이터)
-        async function searchInsights() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            const grid = document.getElementById('insightsGrid');
-            const resultInfo = document.getElementById('resultInfo');
-            
-            if (!query) {
-                loadInsights();
-                return;
-            }
-            
-            grid.innerHTML = '<div class="loading col-span-full"><div class="animate-pulse">검색 중...</div></div>';
-            
-            try {
-                // 내장 데이터에서 검색
-                const res = await fetch('/data/second-brain-data.json');
-                const data = await res.json();
-                
-                // 검색 필터링
-                const results = data.insights.filter(insight => 
-                    insight.title.toLowerCase().includes(query) ||
-                    insight.content.toLowerCase().includes(query) ||
-                    insight.tags.some(tag => tag.toLowerCase().includes(query))
-                );
-                
-                renderInsights(results);
-                resultInfo.textContent = `"${query}" 검색 결과: ${results.length}개`;
-                document.getElementById('statShowing').textContent = results.length;
-                
-            } catch (error) {
-                console.error('검색 실패:', error);
-                grid.innerHTML = '<div class="error col-span-full text-center text-red-400">검색에 실패했습니다.</div>';
-            }
+        // 검색 (통합 필터 사용)
+        function searchInsights() {
+            applyFiltersAndSort();
         }
 
         // 태그로 검색
